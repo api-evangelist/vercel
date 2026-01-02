@@ -29,7 +29,7 @@ description: >-
   as well as other React, Vue, Angular, and static site projects. Vercel
   automates workflows for continuous deployment, edge caching, and serverless
   functions, so developers can push code changes and see them live almost
-  instantly. Its focus is on performance, collaboration, and simplicitymaking
+  instantly. Its focus is on performance, collaboration, and simplicity making
   it easy for teams to preview every pull request, collaborate on design and
   development, and deliver fast, reliable experiences to users worldwide.
 maintainers:
@@ -85,11 +85,11 @@ common:
     description: 'null'
     url: https://vercel.com/templates
     type: Templates
-  - name: Login  Vercel
+  - name: Login
     description: 'null'
     url: https://vercel.com/login
     type: Login
-  - name: Sign Up  Vercel
+  - name: Sign Up
     description: 'null'
     url: https://vercel.com/signup
     type: SignUp
