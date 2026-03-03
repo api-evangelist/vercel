@@ -79,6 +79,8 @@ common:
 created: '2025-02-08'
 modified: '2026-01-02'
 position: Consuming
+segments:
+  - Gateways
 description: >-
   Vercel is a cloud platform that helps developers build, deploy, and scale
   modern web applications quickly and efficiently. It provides an optimized
