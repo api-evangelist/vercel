@@ -10,7 +10,8 @@ apis:
     properties:
       - url: ' https://vercel.com/docs'
         type: Documentation
-    description: 'Vercel is a developer cloud to build and deploy web applications. '
+    description: >-
+      Vercel is a developer cloud to build and deploy web applications.
   - aid: vercel:vercel-rest-api
     name: Vercel REST API
     tags:
@@ -72,7 +73,7 @@ apis:
       zero markup on token pricing. Compatible with the AI SDK, OpenAI SDK, and
       Anthropic SDK.
   - aid: vercel:v0-platform-api
-    name: v0 Platform API
+    name: V0 Platform API
     tags:
       - AI
       - Code Generation
@@ -239,15 +240,12 @@ position: Consuming
 segments:
   - Gateways
 description: >-
-  Vercel is a cloud platform that helps developers build, deploy, and scale
-  modern web applications quickly and efficiently. It provides an optimized
-  hosting environment for frontend frameworks like Next.js (which it created),
-  as well as other React, Vue, Angular, and static site projects. Vercel
-  automates workflows for continuous deployment, edge caching, and serverless
-  functions, so developers can push code changes and see them live almost
-  instantly. Its focus is on performance, collaboration, and simplicitymaking it
-  easy for teams to preview every pull request, collaborate on design and
-  development, and deliver fast, reliable experiences to users worldwide.
+  Vercel is a cloud platform that helps developers build, deploy, and scale modern
+  web applications quickly and efficiently. It provides an optimized hosting environment
+  for frontend frameworks like Next.js (which it created), as well as other React,
+  Vue, Angular, and static site projects. Vercel automates workflows for continuous
+  deployment, edge caching, and serverless functions, so developers can push code
+  changes and see them live almost instantly.
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
