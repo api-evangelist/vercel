@@ -4,8 +4,7 @@ url: >-
 apis:
   - aid: vercel:vercel
     name: Vercel
-    tags:
-      - API
+    tags: []
     humanURL: ' https://vercel.com/docs'
     properties:
       - url: ' https://vercel.com/docs'
@@ -15,17 +14,17 @@ apis:
   - aid: vercel:vercel-rest-api
     name: Vercel REST API
     tags:
-      - Deployments
-      - Domains
-      - Projects
-      - Teams
-      - DNS
-      - Certificates
-      - Edge Config
-      - Environment Variables
-      - Webhooks
       - Access Groups
       - Billing
+      - Certificates
+      - Deployments
+      - DNS
+      - Domains
+      - Edge Config
+      - Environment Variables
+      - Projects
+      - Teams
+      - Webhooks
     humanURL: https://vercel.com/docs/rest-api/reference
     properties:
       - url: https://vercel.com/docs/rest-api/reference
@@ -76,8 +75,8 @@ apis:
     name: V0 Platform API
     tags:
       - AI
-      - Code Generation
       - App Builder
+      - Code Generation
     humanURL: https://v0.dev/docs
     properties:
       - url: https://v0.dev/docs
@@ -94,8 +93,8 @@ apis:
 name: Vercel
 tags:
   - AI Gateways
-  - Observability
   - Gateways
+  - Observability
 type: Contract
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party
