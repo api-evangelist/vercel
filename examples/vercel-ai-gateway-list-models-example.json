@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://ai-gateway.vercel.sh/v1/models",
+    "headers": {
+      "Authorization": "Bearer your_ai_gateway_api_key",
+      "Content-Type": "application/json"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "data": [
+        {
+          "id": "anthropic/claude-opus-4.6",
+          "object": "model",
+          "created": 1746000000,
+          "owned_by": "anthropic"
+        },
+        {
+          "id": "anthropic/claude-sonnet-4.6",
+          "object": "model",
+          "created": 1746000000,
+          "owned_by": "anthropic"
+        },
+        {
+          "id": "openai/gpt-4o",
+          "object": "model",
+          "created": 1746000000,
+          "owned_by": "openai"
+        },
+        {
+          "id": "openai/o3-mini",
+          "object": "model",
+          "created": 1746000000,
+          "owned_by": "openai"
+        },
+        {
+          "id": "google/gemini-2.0-flash",
+          "object": "model",
+          "created": 1746000000,
+          "owned_by": "google"
+        },
+        {
+          "id": "openai/text-embedding-3-small",
+          "object": "model",
+          "created": 1746000000,
+          "owned_by": "openai"
+        }
+      ]
+    }
+  }
+}

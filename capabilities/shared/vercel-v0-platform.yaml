@@ -1,0 +1,155 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Vercel v0 Platform API"
+  description: >-
+    The v0 Platform API provides programmatic access to v0's AI-powered web app
+    generation pipeline. Generate full-stack Next.js applications from natural
+    language prompts, iterate via follow-up messages, and receive structured
+    code files with preview URLs.
+  tags:
+    - Vercel
+    - v0
+    - AI
+    - Code Generation
+    - App Builder
+  created: "2026-05-03"
+  modified: "2026-05-03"
+
+binds:
+  - namespace: env
+    keys:
+      V0_API_KEY: V0_API_KEY
+
+capability:
+  consumes:
+    - type: http
+      namespace: vercel-v0
+      baseUri: https://v0.dev/api
+      description: "Vercel v0 AI-powered app generation API"
+      authentication:
+        type: bearer
+        token: "{{V0_API_KEY}}"
+      resources:
+        - name: chat
+          path: /v1/chat
+          description: "AI app generation chat sessions"
+          operations:
+            - name: create-chat
+              method: POST
+              description: "Generate a web app from a natural language prompt"
+              inputParameters: []
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  message: "{{tools.message}}"
+                  system: "{{tools.system}}"
+
+        - name: chat-by-id
+          path: /v1/chat/{chatId}
+          description: "Individual chat session management"
+          operations:
+            - name: get-chat
+              method: GET
+              description: "Get details for an existing v0 chat session"
+              inputParameters:
+                - name: chatId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Chat session ID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: continue-chat
+              method: POST
+              description: "Continue an existing chat session with a follow-up message"
+              inputParameters:
+                - name: chatId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Chat session ID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  message: "{{tools.message}}"
+
+  exposes:
+    - type: rest
+      port: 8101
+      namespace: vercel-v0-rest
+      resources:
+        - path: /v1/generations
+          name: generations
+          description: "App generation sessions"
+          operations:
+            - method: POST
+              name: create-generation
+              description: "Generate a web app from a natural language prompt"
+
+        - path: /v1/generations/{chatId}
+          name: generation-by-id
+          description: "Individual generation management"
+          operations:
+            - method: GET
+              name: get-generation
+              description: "Get generated code and preview for a session"
+            - method: POST
+              name: iterate-generation
+              description: "Iterate on a generated app with follow-up instructions"
+
+    - type: mcp
+      port: 9101
+      namespace: vercel-v0-mcp
+      transport: http
+      tools:
+        - name: generate-app
+          description: "Generate a full-stack web application from a natural language prompt using v0"
+          hints:
+            readOnly: false
+            idempotent: false
+          call: "vercel-v0.create-chat"
+          with:
+            message: "tools.message"
+            system: "tools.system"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-generated-app
+          description: "Get the generated code and preview URL for a v0 app generation session"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "vercel-v0.get-chat"
+          with:
+            chatId: "tools.chatId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: iterate-app
+          description: "Iterate on a generated v0 app with follow-up instructions (add dark mode, fix responsive layout, etc.)"
+          hints:
+            readOnly: false
+            idempotent: false
+          call: "vercel-v0.continue-chat"
+          with:
+            chatId: "tools.chatId"
+            message: "tools.message"
+          outputParameters:
+            - type: object
+              mapping: "$."

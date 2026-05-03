@@ -1,0 +1,221 @@
+openapi: 3.1.0
+info:
+  title: Vercel v0 Platform API
+  description: >-
+    The v0 Platform API provides programmatic access to v0's AI-powered app
+    generation pipeline. It is a REST interface wrapping v0's full code generation
+    lifecycle from prompt to project to code files to deployment. Capabilities include
+    generating full-stack web apps from natural language prompts, structured parsing
+    of generated code, automatic error fixing, and linking with rendered previews.
+    Requires a v0 API key and a Premium or Team plan.
+  version: 1.0.0
+  contact:
+    name: Vercel Support
+    url: https://vercel.com/help
+  termsOfService: https://vercel.com/legal/terms
+servers:
+  - url: https://v0.dev/api
+    description: v0 Platform API
+tags:
+  - name: Chats
+    description: AI-powered app generation via chat sessions
+  - name: Projects
+    description: Project management and deployment
+paths:
+  /v1/chat:
+    post:
+      operationId: createChat
+      summary: Create Chat
+      description: >-
+        Start a new v0 chat session to generate a web application from a natural
+        language prompt. Returns generated code, a preview URL, and project details.
+      tags:
+        - Chats
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateChatRequest'
+      responses:
+        '200':
+          description: Chat response with generated code and preview
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+  /v1/chat/{chatId}:
+    post:
+      operationId: continueChat
+      summary: Continue Chat
+      description: >-
+        Continue an existing v0 chat session with a follow-up message to iterate
+        on the generated application.
+      tags:
+        - Chats
+      parameters:
+        - name: chatId
+          in: path
+          required: true
+          description: Existing chat session ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContinueChatRequest'
+      responses:
+        '200':
+          description: Updated chat response with revised code
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    get:
+      operationId: getChat
+      summary: Get Chat
+      description: Returns details and generated code for an existing v0 chat session.
+      tags:
+        - Chats
+      parameters:
+        - name: chatId
+          in: path
+          required: true
+          description: Chat session ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Chat details and generated code
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: v0 API key (V0_API_KEY from v0.app settings)
+  schemas:
+    CreateChatRequest:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: Natural language prompt describing the app to generate
+          example: "Build a todo app with Next.js and Tailwind CSS with local storage persistence"
+        system:
+          type: string
+          description: Optional system instructions to guide code generation
+        modelConfiguration:
+          type: object
+          description: Model configuration options
+          properties:
+            model:
+              type: string
+              description: AI model to use for generation
+    ContinueChatRequest:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: Follow-up instruction or refinement request
+          example: "Add dark mode support and mobile responsive layout"
+    ChatResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Chat session unique identifier
+        url:
+          type: string
+          format: uri
+          description: URL to the v0 chat in the browser
+        previewUrl:
+          type: string
+          format: uri
+          description: URL to the rendered preview of the generated app
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeneratedFile'
+          description: Generated code files
+        title:
+          type: string
+          description: Auto-generated title for the chat
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    GeneratedFile:
+      type: object
+      properties:
+        path:
+          type: string
+          description: File path within the project (e.g., 'app/page.tsx')
+        content:
+          type: string
+          description: File content (source code)
+        language:
+          type: string
+          description: Programming language or file type
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+            code:
+              type: string
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    PaymentRequired:
+      description: Premium or Team plan required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Chat session not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimitExceeded:
+      description: API rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+security:
+  - BearerAuth: []

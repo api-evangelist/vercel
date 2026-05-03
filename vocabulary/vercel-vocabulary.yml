@@ -1,0 +1,139 @@
+title: Vercel Vocabulary
+description: >-
+  Domain vocabulary for Vercel covering cloud deployment, edge computing, AI
+  development tools, frontend framework concepts, and the Vercel platform.
+created: '2026-05-03'
+modified: '2026-05-03'
+terms:
+  - term: Deployment
+    definition: >-
+      An immutable build of a project hosted on Vercel's infrastructure. Each
+      push to a connected Git branch creates a new deployment with a unique URL.
+    tags:
+      - Deployments
+      - Infrastructure
+
+  - term: Edge Function
+    definition: >-
+      Serverless functions that run on Vercel's Edge Network, closer to users
+      than traditional serverless functions. Built on the Edge Runtime for
+      ultra-low latency responses.
+    tags:
+      - Serverless
+      - Edge Computing
+
+  - term: Edge Network
+    definition: >-
+      Vercel's globally distributed infrastructure that routes requests to the
+      nearest point of presence for optimal performance.
+    tags:
+      - Infrastructure
+      - CDN
+
+  - term: Preview Deployment
+    definition: >-
+      An automatically generated deployment for each pull request or branch,
+      allowing teams to review changes before merging to production.
+    tags:
+      - Deployments
+      - CI/CD
+
+  - term: Vercel AI Gateway
+    definition: >-
+      A unified API gateway that provides access to hundreds of AI models from
+      multiple providers (Anthropic, OpenAI, Google, Meta, Mistral) through a
+      single OpenAI-compatible endpoint at ai-gateway.vercel.sh.
+    tags:
+      - AI Gateway
+      - LLM
+      - Models
+
+  - term: v0
+    definition: >-
+      Vercel's AI-powered application generator that creates full-stack Next.js
+      web applications from natural language prompts. Provides a chat interface
+      and programmatic API.
+    tags:
+      - AI
+      - Code Generation
+      - App Builder
+
+  - term: Next.js
+    definition: >-
+      The React framework created and maintained by Vercel for building
+      full-stack web applications. Vercel provides optimized hosting and build
+      infrastructure for Next.js projects.
+    tags:
+      - Framework
+      - React
+      - Full Stack
+
+  - term: Vercel AI SDK
+    definition: >-
+      A TypeScript toolkit for building AI-powered applications with Next.js,
+      Vue, Svelte, and Node.js. Provides a unified API to call any LLM via
+      the AI Gateway.
+    tags:
+      - SDK
+      - AI
+      - TypeScript
+
+  - term: Edge Config
+    definition: >-
+      A global data store for feature flags, A/B tests, and configuration that
+      can be read at the edge with near-zero latency.
+    tags:
+      - Configuration
+      - Edge Computing
+
+  - term: Vercel CLI
+    definition: >-
+      The command-line interface for managing Vercel projects, deployments,
+      domains, DNS, and environment variables from the terminal.
+    tags:
+      - CLI
+      - Developer Tools
+
+  - term: Serverless Function
+    definition: >-
+      Node.js, Python, Ruby, or Go functions deployed as API endpoints on
+      Vercel's serverless infrastructure. Automatically scales and has no
+      cold-start on the Edge Runtime.
+    tags:
+      - Serverless
+      - API
+
+  - term: Provider Routing
+    definition: >-
+      AI Gateway feature allowing requests to be routed across multiple AI
+      providers with automatic fallback, or sorted by cost, latency
+      (time-to-first-token), or throughput (tokens-per-second).
+    tags:
+      - AI Gateway
+      - Routing
+      - Reliability
+
+  - term: Vercel Firewall
+    definition: >-
+      A Web Application Firewall (WAF) embedded in the Vercel Edge Network to
+      protect applications from malicious attacks and unauthorized access.
+    tags:
+      - Security
+      - WAF
+
+  - term: Environment Variable
+    definition: >-
+      Configuration values stored securely in Vercel and injected into
+      deployments at build time or runtime. Supports preview, development,
+      and production environments.
+    tags:
+      - Configuration
+      - Security
+
+  - term: Team
+    definition: >-
+      A collaborative workspace in Vercel that groups projects, members,
+      and billing. Supports role-based access control.
+    tags:
+      - Organization
+      - Access Control

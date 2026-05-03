@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://v0.dev/api/v1/chat",
+    "headers": {
+      "Authorization": "Bearer your_v0_api_key",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "message": "Build a todo app with Next.js and Tailwind CSS with local storage persistence and dark mode support"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "chat_x1y2z3a4b5",
+      "url": "https://v0.dev/chat/x1y2z3a4b5",
+      "previewUrl": "https://v0-preview.vercel.app/x1y2z3a4b5",
+      "title": "Todo App with Dark Mode",
+      "files": [
+        {
+          "path": "app/page.tsx",
+          "content": "// Generated Next.js page component\n'use client'\nimport { useState, useEffect } from 'react'\n// ... generated code",
+          "language": "typescript"
+        },
+        {
+          "path": "app/layout.tsx",
+          "content": "// Generated layout with Tailwind",
+          "language": "typescript"
+        },
+        {
+          "path": "tailwind.config.ts",
+          "content": "// Tailwind config with dark mode",
+          "language": "typescript"
+        },
+        {
+          "path": "package.json",
+          "content": "{ \"name\": \"todo-app\", \"version\": \"1.0.0\" }",
+          "language": "json"
+        }
+      ],
+      "createdAt": "2026-05-03T12:00:00Z",
+      "updatedAt": "2026-05-03T12:00:10Z"
+    }
+  }
+}

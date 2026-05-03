@@ -1,0 +1,46 @@
+{
+  "title": "Vercel AI Gateway Chat Completion Structure",
+  "description": "Structural documentation for a Vercel AI Gateway chat completion request",
+  "type": "object",
+  "fields": [
+    { "name": "model", "type": "string", "description": "provider/model-name e.g. anthropic/claude-opus-4.6" },
+    {
+      "name": "messages",
+      "type": "array",
+      "description": "Conversation messages",
+      "items": {
+        "type": "object",
+        "fields": [
+          { "name": "role", "type": "string", "description": "system, user, assistant, or tool" },
+          { "name": "content", "type": "string|array", "description": "Text or multi-modal content array" }
+        ]
+      }
+    },
+    { "name": "stream", "type": "boolean", "description": "Enable SSE streaming" },
+    { "name": "temperature", "type": "number", "description": "Sampling temperature 0-2" },
+    { "name": "max_tokens", "type": "integer", "description": "Maximum tokens to generate" },
+    {
+      "name": "providerOptions",
+      "type": "object",
+      "description": "Provider routing configuration",
+      "fields": [
+        {
+          "name": "gateway",
+          "type": "object",
+          "fields": [
+            { "name": "order", "type": "array", "description": "Provider fallback chain" },
+            { "name": "sort", "type": "string", "description": "cost, ttft, or tps" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "provider",
+      "type": "object",
+      "description": "Provider shorthand",
+      "fields": [
+        { "name": "sort", "type": "string", "description": "cost, ttft, or tps" }
+      ]
+    }
+  ]
+}

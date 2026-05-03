@@ -1,0 +1,158 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Vercel AI Gateway API"
+  description: >-
+    The Vercel AI Gateway provides a unified OpenAI-compatible API to access
+    hundreds of AI models from providers including Anthropic, OpenAI, Google,
+    Meta, and Mistral through a single endpoint. Features provider routing,
+    automatic fallbacks, spend monitoring, and zero markup pricing.
+  tags:
+    - Vercel
+    - AI Gateway
+    - LLM
+    - Models
+    - OpenAI Compatible
+  created: "2026-05-03"
+  modified: "2026-05-03"
+
+binds:
+  - namespace: env
+    keys:
+      AI_GATEWAY_API_KEY: AI_GATEWAY_API_KEY
+
+capability:
+  consumes:
+    - type: http
+      namespace: vercel-ai-gateway
+      baseUri: https://ai-gateway.vercel.sh
+      description: "Vercel AI Gateway — unified LLM API across providers"
+      authentication:
+        type: bearer
+        token: "{{AI_GATEWAY_API_KEY}}"
+      resources:
+        - name: models
+          path: /v1/models
+          description: "Available AI models"
+          operations:
+            - name: list-models
+              method: GET
+              description: "List all available AI models across all providers"
+              inputParameters: []
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: chat-completions
+          path: /v1/chat/completions
+          description: "Chat completions across AI providers"
+          operations:
+            - name: create-chat-completion
+              method: POST
+              description: "Create a chat completion using any model via the AI Gateway"
+              inputParameters: []
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  model: "{{tools.model}}"
+                  messages: "{{tools.messages}}"
+                  stream: "{{tools.stream}}"
+                  temperature: "{{tools.temperature}}"
+                  max_tokens: "{{tools.max_tokens}}"
+
+        - name: embeddings
+          path: /v1/embeddings
+          description: "Text embeddings"
+          operations:
+            - name: create-embedding
+              method: POST
+              description: "Create text embeddings using any embedding model"
+              inputParameters: []
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  model: "{{tools.model}}"
+                  input: "{{tools.input}}"
+
+  exposes:
+    - type: rest
+      port: 8100
+      namespace: vercel-ai-gateway-rest
+      resources:
+        - path: /v1/models
+          name: models
+          description: "Available AI models"
+          operations:
+            - method: GET
+              name: list-models
+              description: "List AI models"
+
+        - path: /v1/chat/completions
+          name: chat-completions
+          description: "Chat completions"
+          operations:
+            - method: POST
+              name: create-chat-completion
+              description: "Create chat completion"
+
+        - path: /v1/embeddings
+          name: embeddings
+          description: "Text embeddings"
+          operations:
+            - method: POST
+              name: create-embedding
+              description: "Create embedding"
+
+    - type: mcp
+      port: 9100
+      namespace: vercel-ai-gateway-mcp
+      transport: http
+      tools:
+        - name: list-models
+          description: "List all AI models available via the Vercel AI Gateway"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "vercel-ai-gateway.list-models"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: chat-completion
+          description: "Send a chat message to any AI model via the Vercel AI Gateway"
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "vercel-ai-gateway.create-chat-completion"
+          with:
+            model: "tools.model"
+            messages: "tools.messages"
+            temperature: "tools.temperature"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: create-embedding
+          description: "Create text embeddings using any embedding model via the Vercel AI Gateway"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "vercel-ai-gateway.create-embedding"
+          with:
+            model: "tools.model"
+            input: "tools.input"
+          outputParameters:
+            - type: object
+              mapping: "$."

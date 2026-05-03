@@ -1,0 +1,203 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Vercel AI Development Platform"
+  description: >-
+    Unified workflow capability for AI-powered application development using Vercel's
+    AI platform. Enables developers and AI agents to generate full-stack web
+    applications via v0, query and compare AI models via the AI Gateway, and create
+    text embeddings for semantic search and retrieval applications. Designed for
+    developers building AI-native applications on the Vercel platform.
+  tags:
+    - Vercel
+    - AI
+    - Code Generation
+    - LLM
+    - AI Gateway
+    - Developer Tools
+  created: "2026-05-03"
+  modified: "2026-05-03"
+
+binds:
+  - namespace: env
+    keys:
+      AI_GATEWAY_API_KEY: AI_GATEWAY_API_KEY
+      V0_API_KEY: V0_API_KEY
+
+capability:
+  consumes:
+    - import: vercel-ai-gateway
+      location: ./shared/vercel-ai-gateway.yaml
+    - import: vercel-v0
+      location: ./shared/vercel-v0-platform.yaml
+
+  exposes:
+    - type: rest
+      port: 8080
+      namespace: vercel-ai-dev-api
+      description: "Unified REST API for AI-powered app development on Vercel."
+      resources:
+        - path: /v1/models
+          name: models
+          description: "AI models available via Vercel AI Gateway"
+          operations:
+            - method: GET
+              name: list-models
+              description: "List all AI models available across providers"
+              call: "vercel-ai-gateway.list-models"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/completions
+          name: completions
+          description: "AI chat completions via unified gateway"
+          operations:
+            - method: POST
+              name: create-completion
+              description: "Create a chat completion using any model"
+              call: "vercel-ai-gateway.create-chat-completion"
+              with:
+                model: "rest.model"
+                messages: "rest.messages"
+                temperature: "rest.temperature"
+                max_tokens: "rest.max_tokens"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/embeddings
+          name: embeddings
+          description: "Text embeddings for semantic search"
+          operations:
+            - method: POST
+              name: create-embedding
+              description: "Create text embeddings"
+              call: "vercel-ai-gateway.create-embedding"
+              with:
+                model: "rest.model"
+                input: "rest.input"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/apps
+          name: apps
+          description: "AI-generated web applications via v0"
+          operations:
+            - method: POST
+              name: generate-app
+              description: "Generate a full-stack web app from a prompt"
+              call: "vercel-v0.create-chat"
+              with:
+                message: "rest.message"
+                system: "rest.system"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/apps/{chatId}
+          name: app-by-id
+          description: "Manage generated applications"
+          operations:
+            - method: GET
+              name: get-app
+              description: "Get generated app code and preview"
+              call: "vercel-v0.get-chat"
+              with:
+                chatId: "rest.chatId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: iterate-app
+              description: "Iterate on a generated app with follow-up instructions"
+              call: "vercel-v0.continue-chat"
+              with:
+                chatId: "rest.chatId"
+                message: "rest.message"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9090
+      namespace: vercel-ai-dev-mcp
+      transport: http
+      description: "MCP server for AI-assisted web development on the Vercel platform."
+      tools:
+        - name: list-ai-models
+          description: "List all AI models available via the Vercel AI Gateway (Anthropic, OpenAI, Google, Meta, Mistral, and more)"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "vercel-ai-gateway.list-models"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: chat-with-model
+          description: "Send a chat completion request to any AI model via the Vercel AI Gateway"
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "vercel-ai-gateway.create-chat-completion"
+          with:
+            model: "tools.model"
+            messages: "tools.messages"
+            temperature: "tools.temperature"
+            max_tokens: "tools.max_tokens"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: create-embedding
+          description: "Create text embeddings for semantic search or retrieval using any embedding model"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "vercel-ai-gateway.create-embedding"
+          with:
+            model: "tools.model"
+            input: "tools.input"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: generate-web-app
+          description: "Generate a full-stack Next.js web application from a natural language description using v0"
+          hints:
+            readOnly: false
+            idempotent: false
+          call: "vercel-v0.create-chat"
+          with:
+            message: "tools.message"
+            system: "tools.system"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-generated-app
+          description: "Get the code files and preview URL for a v0 generated application"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "vercel-v0.get-chat"
+          with:
+            chatId: "tools.chatId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: iterate-web-app
+          description: "Refine a v0 generated application with follow-up instructions (e.g., add dark mode, fix responsive layout, add authentication)"
+          hints:
+            readOnly: false
+            idempotent: false
+          call: "vercel-v0.continue-chat"
+          with:
+            chatId: "tools.chatId"
+            message: "tools.message"
+          outputParameters:
+            - type: object
+              mapping: "$."

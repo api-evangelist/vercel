@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://ai-gateway.vercel.sh/v1/chat/completions",
+    "headers": {
+      "Authorization": "Bearer your_ai_gateway_api_key",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "model": "anthropic/claude-opus-4.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Write a one-sentence bedtime story about a unicorn."
+        }
+      ],
+      "stream": false
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "chatcmpl_a1b2c3d4e5",
+      "object": "chat.completion",
+      "created": 1746302400,
+      "model": "anthropic/claude-opus-4.6",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "Once upon a time, a rainbow-maned unicorn named Luna danced through a field of silver moonflowers until she fell asleep beneath the stars."
+          },
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 18,
+        "completion_tokens": 34,
+        "total_tokens": 52
+      }
+    }
+  }
+}

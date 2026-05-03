@@ -1,0 +1,50 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "vercel": "https://vercel.com/vocab/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "Deployment": "vercel:Deployment",
+    "Project": "vercel:Project",
+    "Domain": "vercel:Domain",
+    "EdgeFunction": "vercel:EdgeFunction",
+    "AIModel": "vercel:AIModel",
+    "ChatSession": "vercel:ChatSession",
+    "GeneratedApp": "vercel:GeneratedApp",
+
+    "deploymentId": "schema:identifier",
+    "projectId": "schema:identifier",
+    "projectName": "schema:name",
+    "teamId": "schema:identifier",
+    "teamSlug": "schema:identifier",
+    "framework": "vercel:framework",
+    "deploymentUrl": "schema:url",
+    "previewUrl": "schema:url",
+    "productionUrl": "schema:url",
+
+    "modelId": "schema:identifier",
+    "provider": "schema:provider",
+    "modelName": "schema:name",
+    "contextWindow": "vercel:contextWindow",
+    "inputTokenPrice": "schema:price",
+    "outputTokenPrice": "schema:price",
+
+    "chatId": "schema:identifier",
+    "message": "schema:text",
+    "generatedFiles": "schema:hasPart",
+    "filePath": "schema:name",
+    "fileContent": "schema:text",
+
+    "region": "schema:addressRegion",
+    "buildDuration": "schema:duration",
+    "status": "schema:status",
+    "createdAt": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "updatedAt": {
+      "@id": "schema:dateModified",
+      "@type": "xsd:dateTime"
+    }
+  }
+}

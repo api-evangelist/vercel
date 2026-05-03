@@ -64,6 +64,9 @@ apis:
         type: Documentation
       - url: https://vercel.com/docs/ai-gateway/usage
         type: UsageBilling
+      - url: >-
+          https://raw.githubusercontent.com/api-evangelist/vercel/refs/heads/main/openapi/vercel-ai-gateway-openapi.yml
+        type: OpenAPI
     description: >-
       The Vercel AI Gateway provides a unified API to access hundreds of AI
       models from multiple providers through a single endpoint at
@@ -83,6 +86,9 @@ apis:
         type: Documentation
       - url: https://github.com/vercel/v0-sdk
         type: GitHubOrganization
+      - url: >-
+          https://raw.githubusercontent.com/api-evangelist/vercel/refs/heads/main/openapi/vercel-v0-platform-openapi.yml
+        type: OpenAPI
     description: >-
       The v0 Platform API provides programmatic access to v0's AI-powered app
       generation pipeline. It is a REST interface that wraps v0's full code
@@ -234,7 +240,7 @@ common:
       Complete reference documentation for the Vercel REST API covering all
       endpoint categories.
 created: '2025-02-08'
-modified: '2026-03-03'
+modified: '2026-05-03'
 position: Consuming
 segments:
   - Gateways

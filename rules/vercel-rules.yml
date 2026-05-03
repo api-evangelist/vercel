@@ -1,0 +1,117 @@
+extends: spectral:oas
+rules:
+  # Vercel APIs use Bearer token authentication
+  vercel-bearer-auth:
+    description: Vercel APIs must use Bearer token authentication
+    message: Security scheme must use Bearer scheme
+    severity: error
+    given: "$.components.securitySchemes[*]"
+    then:
+      field: scheme
+      function: pattern
+      functionOptions:
+        match: "^bearer$"
+
+  # All operations must have operationId
+  vercel-operation-id-required:
+    description: All operations must define an operationId
+    message: Operation must have an operationId
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: operationId
+      function: truthy
+
+  # operationId should be camelCase
+  vercel-operation-id-camel-case:
+    description: operationId should use camelCase
+    message: "operationId '{{value}}' should use camelCase"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].operationId"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[a-z][a-zA-Z0-9]*$"
+
+  # Summaries must be Title Case
+  vercel-summary-title-case:
+    description: Operation summaries must use Title Case
+    message: "Summary '{{value}}' must use Title Case"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].summary"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[A-Z][a-zA-Z]*(\\s[A-Z][a-zA-Z]*)*$"
+
+  # All operations need summaries
+  vercel-summary-required:
+    description: All operations must have a summary
+    message: Operation must have a summary
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: summary
+      function: truthy
+
+  # API Gateway endpoints use /v1/ prefix
+  vercel-ai-gateway-path-version:
+    description: AI Gateway paths must use /v1/ prefix
+    message: "Path '{{value}}' must start with /v1/"
+    severity: warn
+    given: "$.paths[*]~"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^/v1/"
+
+  # Must define 401 response
+  vercel-401-response:
+    description: All operations must document 401 Unauthorized response
+    message: Operation must define a 401 response
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete].responses"
+    then:
+      field: "401"
+      function: truthy
+
+  # Must define 429 rate limit response for AI APIs
+  vercel-429-response:
+    description: Operations should document 429 rate limit response
+    message: Operation should define a 429 Too Many Requests response
+    severity: warn
+    given: "$.paths[*][post].responses"
+    then:
+      field: "429"
+      function: truthy
+
+  # Use kebab-case for path segments
+  vercel-path-kebab-case:
+    description: Path segments should use kebab-case
+    message: "Path segment should use kebab-case"
+    severity: warn
+    given: "$.paths[*]~"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^(/v[0-9]+)?(/[a-z0-9-]+(/{[a-zA-Z]+})?)*$"
+
+  # Contact info required
+  vercel-info-contact:
+    description: API info must include contact information
+    message: API info must include contact details
+    severity: warn
+    given: "$.info"
+    then:
+      field: contact
+      function: truthy
+
+  # Servers must be defined
+  vercel-servers-defined:
+    description: API must define server URLs
+    message: API must define at least one server
+    severity: error
+    given: "$"
+    then:
+      field: servers
+      function: truthy

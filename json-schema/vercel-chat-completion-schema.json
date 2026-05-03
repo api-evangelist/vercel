@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/vercel/main/json-schema/vercel-chat-completion-schema.json",
+  "title": "Vercel AI Gateway Chat Completion Request",
+  "description": "Schema for a chat completion request to the Vercel AI Gateway (OpenAI-compatible format).",
+  "type": "object",
+  "required": ["model", "messages"],
+  "properties": {
+    "model": {
+      "type": "string",
+      "description": "Model identifier in provider/model-name format (e.g., 'anthropic/claude-opus-4.6')",
+      "examples": ["anthropic/claude-opus-4.6", "openai/gpt-4o", "google/gemini-2.0-flash"]
+    },
+    "messages": {
+      "type": "array",
+      "description": "Conversation messages",
+      "items": {
+        "type": "object",
+        "required": ["role", "content"],
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": ["system", "user", "assistant", "tool"],
+            "description": "Message role"
+          },
+          "content": {
+            "oneOf": [
+              { "type": "string" },
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": { "type": "string", "enum": ["text", "image_url"] },
+                    "text": { "type": "string" },
+                    "image_url": {
+                      "type": "object",
+                      "properties": {
+                        "url": { "type": "string" },
+                        "detail": { "type": "string", "enum": ["auto", "low", "high"] }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "stream": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to stream the response via SSE"
+    },
+    "temperature": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 2,
+      "description": "Sampling temperature"
+    },
+    "max_tokens": {
+      "type": "integer",
+      "description": "Maximum tokens to generate"
+    },
+    "providerOptions": {
+      "type": "object",
+      "description": "Gateway provider routing options",
+      "properties": {
+        "gateway": {
+          "type": "object",
+          "properties": {
+            "order": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Ordered provider fallback chain"
+            },
+            "sort": {
+              "type": "string",
+              "enum": ["cost", "ttft", "tps"]
+            }
+          }
+        }
+      }
+    },
+    "provider": {
+      "type": "object",
+      "description": "Provider shorthand options",
+      "properties": {
+        "sort": {
+          "type": "string",
+          "enum": ["cost", "ttft", "tps"],
+          "description": "Sort providers by cost, time-to-first-token, or tokens-per-second"
+        }
+      }
+    }
+  }
+}
