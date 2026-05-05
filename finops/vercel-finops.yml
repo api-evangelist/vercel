@@ -1,0 +1,76 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Vercel
+providerId: vercel
+created: '2026-05-04'
+modified: '2026-05-04'
+reconciled: true
+tags:
+  - FinOps
+  - FOCUS
+  - Hosting
+description: FOCUS-aligned FinOps for Vercel.
+sources:
+  - https://vercel.com/pricing
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Vercel Inc.
+serviceCategory: Edge Hosting
+billingModel:
+  pricingCategory: Subscription + Usage-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+focusColumns:
+  ServiceName: Vercel
+  ServiceCategory: Edge Hosting
+  ProviderName: Vercel
+  PublisherName: Vercel Inc.
+  BillingCurrency: USD
+meters:
+  - name: developer_seats
+    unit: seat-month
+    aggregation: max
+  - name: bandwidth
+    unit: GB
+    aggregation: sum
+    dimensions:
+      - project
+      - edge_region
+  - name: edge_requests
+    unit: request
+    aggregation: sum
+  - name: fn_invocations
+    unit: invocation
+    aggregation: sum
+    dimensions:
+      - project
+      - function
+  - name: active_cpu_hours
+    unit: cpu-hour
+    aggregation: sum
+  - name: provisioned_memory
+    unit: GB-hour
+    aggregation: sum
+  - name: image_transformations
+    unit: transformation
+    aggregation: sum
+  - name: blob_storage
+    unit: GB-month
+    aggregation: max
+  - name: kv_requests
+    unit: request
+    aggregation: sum
+principles:
+  - name: Visibility
+    description: Use Usage page and per-project breakdown; configure billing alerts at $X/day.
+  - name: Allocation
+    description: One project per app/feature; teams for cost-center isolation.
+  - name: Optimization
+    description: Cache aggressively at the edge; downgrade ISR frequency; profile fn duration.
+  - name: Accountability
+    description: Hard spend limits per team; weekly usage review during high-velocity periods.

@@ -1,0 +1,220 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Vercel
+providerId: vercel
+created: '2026-05-04'
+modified: '2026-05-04'
+reconciled: true
+tags:
+  - Hosting
+  - Edge
+  - Serverless
+  - Frontend
+description: Vercel hosting, serverless functions, edge network, storage. Hobby is non-commercial.
+sources:
+  - https://vercel.com/pricing
+plans:
+  - id: vercel-hobby
+    name: Hobby
+    type: freemium
+    description: Free for personal/non-commercial use.
+    entries:
+      - label: Bandwidth
+        name: bandwidth
+        type: quota
+        metric: GB
+        limit: 100
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+      - label: Edge requests
+        name: edge_requests
+        type: quota
+        metric: request
+        limit: 1000000
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+      - label: Function invocations
+        name: fn
+        type: quota
+        metric: invocation
+        limit: 1000000
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+      - label: Active CPU
+        name: cpu
+        type: quota
+        metric: hour
+        limit: 4
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+      - label: Provisioned memory
+        name: memory
+        type: quota
+        metric: GB-hour
+        limit: 360
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+      - label: Image transformations
+        name: images
+        type: quota
+        metric: transform
+        limit: 5000
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+      - label: Blob storage
+        name: blob
+        type: quota
+        metric: GB
+        limit: 1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+    elements:
+      - name: Personal use only
+      - name: Auto-pause after inactivity
+      - name: Community support
+  - id: vercel-pro
+    name: Pro
+    type: paid
+    description: $20/user/month with $20 usage credits included.
+    entries:
+      - label: Per developer (seat)
+        name: seat
+        type: subscription
+        metric: user
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '20.00'
+        userMultiplied: true
+      - label: Usage credits included
+        name: credits
+        type: quota
+        metric: USD
+        limit: 20
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+      - label: Bandwidth included
+        name: bandwidth
+        type: quota
+        metric: TB
+        limit: 1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+      - label: Bandwidth overage
+        name: bw_extra
+        type: metered
+        metric: GB
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.15'
+        userMultiplied: false
+      - label: Edge requests included
+        name: edge_req
+        type: quota
+        metric: request
+        limit: 10000000
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+      - label: Edge request overage
+        name: edge_extra
+        type: metered
+        metric: request
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1000000
+        price: '2.00'
+        userMultiplied: false
+      - label: Function invocations
+        name: fn
+        type: metered
+        metric: invocation
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1000000
+        price: '0.60'
+        userMultiplied: false
+      - label: Active CPU
+        name: cpu
+        type: metered
+        metric: hour
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.128'
+        userMultiplied: false
+      - label: Provisioned memory
+        name: memory
+        type: metered
+        metric: GB-hour
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.0106'
+        userMultiplied: false
+    elements:
+      - name: Commercial use
+      - name: Custom domains
+      - name: Image optimization
+      - name: Web Analytics
+      - name: Speed Insights
+      - name: Edge Config
+  - id: vercel-enterprise
+    name: Enterprise
+    type: enterprise
+    description: Custom limits; entry typically five figures annually.
+    entries:
+      - label: Annual minimum (custom)
+        name: minimum
+        type: subscription
+        metric: year
+        limit: -1
+        timeFrame: year
+        geo: global
+        unit: 1
+        price: custom
+        userMultiplied: false
+    elements:
+      - name: SAML SSO
+      - name: SOC 2 / ISO 27001 / HIPAA
+      - name: Audit log API
+      - name: Multi-region failover
+      - name: Dedicated infrastructure
+      - name: 99.99% SLA

@@ -1,0 +1,50 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Vercel
+providerId: vercel
+created: '2026-05-04'
+modified: '2026-05-04'
+reconciled: true
+tags:
+  - Rate Limiting
+  - Hosting
+description: Vercel REST API per-team rate limits.
+sources:
+  - https://vercel.com/pricing
+  - https://vercel.com/docs/rest-api
+headers:
+  limit: x-rate-limit-limit
+  remaining: x-rate-limit-remaining
+  reset: x-rate-limit-reset
+responseCodes:
+  throttled: 429
+limits:
+  - name: REST API (read)
+    scope: team
+    metric: requests_per_minute
+    limit: 1200
+    timeFrame: minute
+  - name: Deployments create
+    scope: team
+    metric: deployments_per_minute
+    limit: 60
+    timeFrame: minute
+  - name: Deployments per day (Hobby)
+    scope: user
+    metric: deployments_per_day
+    limit: 100
+    timeFrame: day
+  - name: Deployments per day (Pro)
+    scope: team
+    metric: deployments_per_day
+    limit: 6000
+    timeFrame: day
+  - name: Build concurrency (Hobby)
+    scope: user
+    metric: concurrent_builds
+    limit: 1
+  - name: Build concurrency (Pro)
+    scope: team
+    metric: concurrent_builds
+    limit: 12
