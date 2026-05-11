@@ -240,6 +240,21 @@ description: Vercel is a cloud platform that helps developers build, deploy, and
   (which it created), as well as other React, Vue, Angular, and static site projects. Vercel automates
   workflows for continuous deployment, edge caching, and serverless functions, so developers can push
   code changes and see them live almost instantly.
+integrations:
+  - name: AI xAI Grok by xAI
+  - name: Storage Prisma Instant Serverless Postgres
+  - name: Contentful CMS A modern content platform
+  - name: DatoCMS CMS User-friendly, performant Headless CMS
+  - name: Sitecore OrderCloud Commerce API-first B2X commerce
+  - name: Swell Commerce Future-proof headless commerce.
+  - name: Railway DevTools Configless infrastructure
+  - name: Knock Messaging Messaging API for developers
+  - name: Novu Messaging The OSS notification infrastructure
+  - name: Resend Messaging Email for developers
+  - name: shipshape Observability Blazing-fast deployment dashboards
+  - name: StepZen Storage GraphQL Made Easy
+  - name: Tinybird Storage Real-time analytics backend
+  - name: Tigris Storage Global object storage service
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
