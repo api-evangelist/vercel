@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Vercel AI Gateway API — Embeddings
+  description: 'Vercel AI Gateway API — Embeddings. 1 operations. Lead operation: Create Embedding. Self-contained Naftiko
+    capability covering one Vercel business surface.'
+  tags:
+  - Vercel
+  - Embeddings
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VERCEL_API_KEY: VERCEL_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: ai-gateway-embeddings
+    baseUri: https://ai-gateway.vercel.sh
+    description: Vercel AI Gateway API — Embeddings business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-embeddings
+      path: /v1/embeddings
+      operations:
+      - name: createembedding
+        method: POST
+        description: Create Embedding
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.VERCEL_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: ai-gateway-embeddings-rest
+    port: 8080
+    description: REST adapter for Vercel AI Gateway API — Embeddings. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/embeddings
+      name: v1-embeddings
+      description: REST surface for v1-embeddings.
+      operations:
+      - method: POST
+        name: createembedding
+        description: Create Embedding
+        call: ai-gateway-embeddings.createembedding
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: ai-gateway-embeddings-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Vercel AI Gateway API — Embeddings. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: create-embedding
+      description: Create Embedding
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: ai-gateway-embeddings.createembedding
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

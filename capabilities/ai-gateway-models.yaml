@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Vercel AI Gateway API — Models
+  description: 'Vercel AI Gateway API — Models. 1 operations. Lead operation: List Models. Self-contained Naftiko capability
+    covering one Vercel business surface.'
+  tags:
+  - Vercel
+  - Models
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VERCEL_API_KEY: VERCEL_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: ai-gateway-models
+    baseUri: https://ai-gateway.vercel.sh
+    description: Vercel AI Gateway API — Models business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-models
+      path: /v1/models
+      operations:
+      - name: listmodels
+        method: GET
+        description: List Models
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.VERCEL_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: ai-gateway-models-rest
+    port: 8080
+    description: REST adapter for Vercel AI Gateway API — Models. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/models
+      name: v1-models
+      description: REST surface for v1-models.
+      operations:
+      - method: GET
+        name: listmodels
+        description: List Models
+        call: ai-gateway-models.listmodels
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: ai-gateway-models-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Vercel AI Gateway API — Models. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: list-models
+      description: List Models
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: ai-gateway-models.listmodels
+      outputParameters:
+      - type: object
+        mapping: $.
