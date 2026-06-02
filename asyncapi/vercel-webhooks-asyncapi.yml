@@ -1,0 +1,2727 @@
+asyncapi: '2.6.0'
+info:
+  title: Vercel Webhooks
+  version: '2026-05-30'
+  description: |
+    AsyncAPI definition for Vercel's webhook surface. Vercel webhooks are
+    HTTP POST deliveries from Vercel to a subscriber-configured endpoint URL
+    registered either as an Account Webhook (Team Settings -> Webhooks) or
+    through a Vercel Integration (Integration Console).
+
+    Every delivery is a JSON document with a stable envelope:
+
+      {
+        "id":        "<eventId>",
+        "type":      "<event-type>",
+        "createdAt": <javascript-timestamp>,
+        "region":    "<RegionId or null>",
+        "payload":   { ... event specific ... }
+      }
+
+    Each delivery includes an `x-vercel-signature` header. Vercel signs the
+    raw request body with the webhook's secret using HMAC-SHA1 and sends
+    the hex-encoded digest in this header. Subscribers verify a delivery by
+    recomputing HMAC-SHA1 over the raw body with their secret and comparing
+    the result to `x-vercel-signature` using a constant-time comparison.
+    For Integration webhooks the secret is the Integration Secret (also
+    referred to as the Client Secret) from the Integration Console; for
+    Account webhooks the secret is the one shown once when the webhook is
+    created.
+
+    Sourced from:
+      - https://vercel.com/docs/webhooks
+      - https://vercel.com/docs/webhooks/webhooks-api
+      - https://vercel.com/docs/headers/request-headers#x-vercel-signature
+
+    Event types and payload fields that the Vercel documentation does not
+    describe are not invented here.
+  contact:
+    name: Vercel
+    url: https://vercel.com/docs/webhooks
+  license:
+    name: Vercel Terms of Service
+    url: https://vercel.com/legal/terms
+  tags:
+    - name: Vercel
+    - name: Webhooks
+    - name: Deployments
+    - name: Projects
+    - name: Domains
+    - name: Integrations
+    - name: Marketplace
+
+defaultContentType: application/json
+
+servers:
+  subscriber:
+    url: '{endpointUrl}'
+    protocol: https
+    description: |
+      The HTTPS endpoint that the subscriber configures on the Vercel
+      webhook. Vercel delivers all events the subscription opts into to
+      this URL via HTTP POST with a JSON body.
+    variables:
+      endpointUrl:
+        description: Subscriber-controlled URL configured on the Vercel webhook.
+        default: https://example.com/webhooks/vercel
+
+channels:
+  deployment.created:
+    description: A new deployment is initiated.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Deployment created
+      operationId: onDeploymentCreated
+      message:
+        $ref: '#/components/messages/DeploymentCreated'
+
+  deployment.ready:
+    description: A deployment is ready.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Deployment ready
+      operationId: onDeploymentReady
+      message:
+        $ref: '#/components/messages/DeploymentReady'
+
+  deployment.succeeded:
+    description: A deployment successfully built and any integration checks completed.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Deployment succeeded
+      operationId: onDeploymentSucceeded
+      message:
+        $ref: '#/components/messages/DeploymentSucceeded'
+
+  deployment.error:
+    description: A deployment failed.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Deployment failed
+      operationId: onDeploymentError
+      message:
+        $ref: '#/components/messages/DeploymentError'
+
+  deployment.canceled:
+    description: A deployment was canceled.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Deployment canceled
+      operationId: onDeploymentCanceled
+      message:
+        $ref: '#/components/messages/DeploymentCanceled'
+
+  deployment.promoted:
+    description: A deployment was promoted to production (manually or automatically). Does not include rollbacks.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Deployment promoted
+      operationId: onDeploymentPromoted
+      message:
+        $ref: '#/components/messages/DeploymentPromoted'
+
+  deployment.rollback:
+    description: Vercel accepted an instant rollback request.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Deployment rollback accepted
+      operationId: onDeploymentRollback
+      message:
+        $ref: '#/components/messages/DeploymentRollback'
+
+  deployment.cleanup:
+    description: A deployment is permanently deleted after the 30-day recovery period.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Deployment cleanup
+      operationId: onDeploymentCleanup
+      message:
+        $ref: '#/components/messages/DeploymentCleanup'
+
+  deployment.check-rerequested:
+    description: A user requested a failed deployment check to be re-run.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Deployment check re-requested
+      operationId: onDeploymentCheckRerequested
+      message:
+        $ref: '#/components/messages/DeploymentCheckRerequested'
+
+  deployment.integration.action.start:
+    description: A deployment started an integration action.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Deployment integration action started
+      operationId: onDeploymentIntegrationActionStart
+      message:
+        $ref: '#/components/messages/DeploymentIntegrationActionStart'
+
+  deployment.integration.action.cancel:
+    description: An integration action or its deployment was canceled.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Deployment integration action canceled
+      operationId: onDeploymentIntegrationActionCancel
+      message:
+        $ref: '#/components/messages/DeploymentIntegrationActionCancel'
+
+  deployment.integration.action.cleanup:
+    description: A deployment with an integration action is permanently deleted.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Deployment integration action cleanup
+      operationId: onDeploymentIntegrationActionCleanup
+      message:
+        $ref: '#/components/messages/DeploymentIntegrationActionCleanup'
+
+  domain.created:
+    description: A domain was created.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Domain created
+      operationId: onDomainCreated
+      message:
+        $ref: '#/components/messages/DomainCreated'
+
+  domain.auto-renew-changed:
+    description: A domain's auto-renew setting changed.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Domain auto-renew changed
+      operationId: onDomainAutoRenewChanged
+      message:
+        $ref: '#/components/messages/DomainAutoRenewChanged'
+
+  domain.certificate-add:
+    description: An SSL certificate was added for a domain.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Domain certificate added
+      operationId: onDomainCertificateAdd
+      message:
+        $ref: '#/components/messages/DomainCertificateAdd'
+
+  domain.certificate-add-failed:
+    description: Adding an SSL certificate for a domain failed.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Domain certificate add failed
+      operationId: onDomainCertificateAddFailed
+      message:
+        $ref: '#/components/messages/DomainCertificateAddFailed'
+
+  domain.certificate-deleted:
+    description: An SSL certificate for a domain was deleted.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Domain certificate deleted
+      operationId: onDomainCertificateDeleted
+      message:
+        $ref: '#/components/messages/DomainCertificateDeleted'
+
+  domain.certificate-renew:
+    description: An SSL certificate for a domain was renewed.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Domain certificate renewed
+      operationId: onDomainCertificateRenew
+      message:
+        $ref: '#/components/messages/DomainCertificateRenew'
+
+  domain.certificate-renew-failed:
+    description: Renewing an SSL certificate for a domain failed.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Domain certificate renew failed
+      operationId: onDomainCertificateRenewFailed
+      message:
+        $ref: '#/components/messages/DomainCertificateRenewFailed'
+
+  domain.dns-records-changed:
+    description: DNS records in a Vercel-hosted zone were changed.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Domain DNS records changed
+      operationId: onDomainDnsRecordsChanged
+      message:
+        $ref: '#/components/messages/DomainDnsRecordsChanged'
+
+  domain.renewal:
+    description: A domain was renewed.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Domain renewed
+      operationId: onDomainRenewal
+      message:
+        $ref: '#/components/messages/DomainRenewal'
+
+  domain.renewal-failed:
+    description: A domain renewal failed.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Domain renewal failed
+      operationId: onDomainRenewalFailed
+      message:
+        $ref: '#/components/messages/DomainRenewalFailed'
+
+  domain.transfer-in-started:
+    description: A domain transfer into Vercel was initiated.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Domain transfer-in started
+      operationId: onDomainTransferInStarted
+      message:
+        $ref: '#/components/messages/DomainTransferInStarted'
+
+  domain.transfer-in-completed:
+    description: A domain transfer into Vercel completed.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Domain transfer-in completed
+      operationId: onDomainTransferInCompleted
+      message:
+        $ref: '#/components/messages/DomainTransferInCompleted'
+
+  domain.transfer-in-failed:
+    description: A domain transfer into Vercel failed.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Domain transfer-in failed
+      operationId: onDomainTransferInFailed
+      message:
+        $ref: '#/components/messages/DomainTransferInFailed'
+
+  project.created:
+    description: A new project was created. Sent only when the integration has access to all team projects.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Project created
+      operationId: onProjectCreated
+      message:
+        $ref: '#/components/messages/ProjectCreated'
+
+  project.removed:
+    description: A project was removed. Sent only when the integration has access to all team projects.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Project removed
+      operationId: onProjectRemoved
+      message:
+        $ref: '#/components/messages/ProjectRemoved'
+
+  project.renamed:
+    description: A project was renamed. Sent only when the integration has access to all team projects.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Project renamed
+      operationId: onProjectRenamed
+      message:
+        $ref: '#/components/messages/ProjectRenamed'
+
+  project.env-variable.created:
+    description: A project environment variable was created. The value is not included in the payload.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Project environment variable created
+      operationId: onProjectEnvVariableCreated
+      message:
+        $ref: '#/components/messages/ProjectEnvVariableCreated'
+
+  project.env-variable.updated:
+    description: A project environment variable was updated. The value is not included in the payload.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Project environment variable updated
+      operationId: onProjectEnvVariableUpdated
+      message:
+        $ref: '#/components/messages/ProjectEnvVariableUpdated'
+
+  project.env-variable.deleted:
+    description: A project environment variable was deleted.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Project environment variable deleted
+      operationId: onProjectEnvVariableDeleted
+      message:
+        $ref: '#/components/messages/ProjectEnvVariableDeleted'
+
+  project.domain.created:
+    description: A domain was added to a project.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Project domain created
+      operationId: onProjectDomainCreated
+      message:
+        $ref: '#/components/messages/ProjectDomainCreated'
+
+  project.domain.deleted:
+    description: A domain was removed from a project.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Project domain deleted
+      operationId: onProjectDomainDeleted
+      message:
+        $ref: '#/components/messages/ProjectDomainDeleted'
+
+  project.domain.moved:
+    description: A domain was moved between projects.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Project domain moved
+      operationId: onProjectDomainMoved
+      message:
+        $ref: '#/components/messages/ProjectDomainMoved'
+
+  project.domain.verified:
+    description: A project domain was verified.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Project domain verified
+      operationId: onProjectDomainVerified
+      message:
+        $ref: '#/components/messages/ProjectDomainVerified'
+
+  project.domain.unverified:
+    description: A project domain became unverified.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Project domain unverified
+      operationId: onProjectDomainUnverified
+      message:
+        $ref: '#/components/messages/ProjectDomainUnverified'
+
+  project.domain.updated:
+    description: A project domain configuration was updated.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Project domain updated
+      operationId: onProjectDomainUpdated
+      message:
+        $ref: '#/components/messages/ProjectDomainUpdated'
+
+  project.rolling-release.started:
+    description: A rolling release was started.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Rolling release started
+      operationId: onProjectRollingReleaseStarted
+      message:
+        $ref: '#/components/messages/ProjectRollingReleaseStarted'
+
+  project.rolling-release.approved:
+    description: A rolling release stage was approved.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Rolling release approved
+      operationId: onProjectRollingReleaseApproved
+      message:
+        $ref: '#/components/messages/ProjectRollingReleaseApproved'
+
+  project.rolling-release.completed:
+    description: A rolling release completed successfully.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Rolling release completed
+      operationId: onProjectRollingReleaseCompleted
+      message:
+        $ref: '#/components/messages/ProjectRollingReleaseCompleted'
+
+  project.rolling-release.aborted:
+    description: A rolling release was aborted.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Rolling release aborted
+      operationId: onProjectRollingReleaseAborted
+      message:
+        $ref: '#/components/messages/ProjectRollingReleaseAborted'
+
+  flag.created:
+    description: A feature flag was created.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Feature flag created
+      operationId: onFlagCreated
+      message:
+        $ref: '#/components/messages/FlagCreated'
+
+  flag.updated:
+    description: A feature flag was updated.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Feature flag updated
+      operationId: onFlagUpdated
+      message:
+        $ref: '#/components/messages/FlagUpdated'
+
+  integration-configuration.removed:
+    description: An integration configuration was removed.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Integration configuration removed
+      operationId: onIntegrationConfigurationRemoved
+      message:
+        $ref: '#/components/messages/IntegrationConfigurationRemoved'
+
+  integration-configuration.permission-upgraded:
+    description: A user changed which projects an integration has access to.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Integration configuration permission upgraded
+      operationId: onIntegrationConfigurationPermissionUpgraded
+      message:
+        $ref: '#/components/messages/IntegrationConfigurationPermissionUpgraded'
+
+  integration-configuration.scope-change-confirmed:
+    description: A user confirmed pending scope changes for an integration.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Integration configuration scope change confirmed
+      operationId: onIntegrationConfigurationScopeChangeConfirmed
+      message:
+        $ref: '#/components/messages/IntegrationConfigurationScopeChangeConfirmed'
+
+  integration-configuration.transferred:
+    description: An integration installation was transferred to another team.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Integration configuration transferred
+      operationId: onIntegrationConfigurationTransferred
+      message:
+        $ref: '#/components/messages/IntegrationConfigurationTransferred'
+
+  integration-resource.project-connected:
+    description: A user connected an integration resource to a project.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Integration resource connected to project
+      operationId: onIntegrationResourceProjectConnected
+      message:
+        $ref: '#/components/messages/IntegrationResourceProjectConnected'
+
+  integration-resource.project-disconnected:
+    description: A user disconnected an integration resource from a project.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Integration resource disconnected from project
+      operationId: onIntegrationResourceProjectDisconnected
+      message:
+        $ref: '#/components/messages/IntegrationResourceProjectDisconnected'
+
+  marketplace.invoice.created:
+    description: A marketplace invoice was created and sent to the customer.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Marketplace invoice created
+      operationId: onMarketplaceInvoiceCreated
+      message:
+        $ref: '#/components/messages/MarketplaceInvoiceCreated'
+
+  marketplace.invoice.paid:
+    description: A marketplace invoice was paid.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Marketplace invoice paid
+      operationId: onMarketplaceInvoicePaid
+      message:
+        $ref: '#/components/messages/MarketplaceInvoicePaid'
+
+  marketplace.invoice.notpaid:
+    description: A marketplace invoice payment failed.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Marketplace invoice not paid
+      operationId: onMarketplaceInvoiceNotPaid
+      message:
+        $ref: '#/components/messages/MarketplaceInvoiceNotPaid'
+
+  marketplace.invoice.overdue:
+    description: A marketplace invoice was not paid after the grace period.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Marketplace invoice overdue
+      operationId: onMarketplaceInvoiceOverdue
+      message:
+        $ref: '#/components/messages/MarketplaceInvoiceOverdue'
+
+  marketplace.invoice.refunded:
+    description: A marketplace invoice was refunded.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Marketplace invoice refunded
+      operationId: onMarketplaceInvoiceRefunded
+      message:
+        $ref: '#/components/messages/MarketplaceInvoiceRefunded'
+
+  marketplace.member.changed:
+    description: A marketplace installation member was added, removed, or had their role changed.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Marketplace member changed
+      operationId: onMarketplaceMemberChanged
+      message:
+        $ref: '#/components/messages/MarketplaceMemberChanged'
+
+  alerts.triggered:
+    description: An observability alert was triggered.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Alert triggered
+      operationId: onAlertsTriggered
+      message:
+        $ref: '#/components/messages/AlertsTriggered'
+
+components:
+  messageTraits:
+    VercelWebhookHeaders:
+      headers:
+        type: object
+        required:
+          - content-type
+          - x-vercel-signature
+        properties:
+          content-type:
+            type: string
+            const: application/json
+            description: Vercel sends webhook bodies as JSON.
+          x-vercel-signature:
+            type: string
+            description: |
+              Hex-encoded HMAC-SHA1 of the raw request body computed with
+              the webhook's secret. Subscribers should recompute this value
+              over the raw body and compare using a constant-time
+              comparison.
+            example: 1d6789a4f5e6c0a4d5b9f2c3e4a5b6c7d8e9f0a1
+
+  messages:
+    DeploymentCreated:
+      name: deployment.created
+      title: Deployment created
+      summary: A new deployment is initiated.
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DeploymentCreatedEnvelope'
+
+    DeploymentReady:
+      name: deployment.ready
+      title: Deployment ready
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DeploymentReadyEnvelope'
+
+    DeploymentSucceeded:
+      name: deployment.succeeded
+      title: Deployment succeeded
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DeploymentSucceededEnvelope'
+
+    DeploymentError:
+      name: deployment.error
+      title: Deployment error
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DeploymentErrorEnvelope'
+
+    DeploymentCanceled:
+      name: deployment.canceled
+      title: Deployment canceled
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DeploymentCanceledEnvelope'
+
+    DeploymentPromoted:
+      name: deployment.promoted
+      title: Deployment promoted
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DeploymentPromotedEnvelope'
+
+    DeploymentRollback:
+      name: deployment.rollback
+      title: Deployment rollback accepted
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DeploymentRollbackEnvelope'
+
+    DeploymentCleanup:
+      name: deployment.cleanup
+      title: Deployment cleanup
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DeploymentCleanupEnvelope'
+
+    DeploymentCheckRerequested:
+      name: deployment.check-rerequested
+      title: Deployment check re-requested
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DeploymentCheckRerequestedEnvelope'
+
+    DeploymentIntegrationActionStart:
+      name: deployment.integration.action.start
+      title: Deployment integration action started
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DeploymentIntegrationActionStartEnvelope'
+
+    DeploymentIntegrationActionCancel:
+      name: deployment.integration.action.cancel
+      title: Deployment integration action canceled
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DeploymentIntegrationActionCancelEnvelope'
+
+    DeploymentIntegrationActionCleanup:
+      name: deployment.integration.action.cleanup
+      title: Deployment integration action cleanup
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DeploymentIntegrationActionCleanupEnvelope'
+
+    DomainCreated:
+      name: domain.created
+      title: Domain created
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DomainCreatedEnvelope'
+
+    DomainAutoRenewChanged:
+      name: domain.auto-renew-changed
+      title: Domain auto-renew changed
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DomainAutoRenewChangedEnvelope'
+
+    DomainCertificateAdd:
+      name: domain.certificate-add
+      title: Domain certificate added
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DomainCertificateAddEnvelope'
+
+    DomainCertificateAddFailed:
+      name: domain.certificate-add-failed
+      title: Domain certificate add failed
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DomainCertificateAddFailedEnvelope'
+
+    DomainCertificateDeleted:
+      name: domain.certificate-deleted
+      title: Domain certificate deleted
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DomainCertificateDeletedEnvelope'
+
+    DomainCertificateRenew:
+      name: domain.certificate-renew
+      title: Domain certificate renewed
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DomainCertificateRenewEnvelope'
+
+    DomainCertificateRenewFailed:
+      name: domain.certificate-renew-failed
+      title: Domain certificate renew failed
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DomainCertificateRenewFailedEnvelope'
+
+    DomainDnsRecordsChanged:
+      name: domain.dns-records-changed
+      title: Domain DNS records changed
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DomainDnsRecordsChangedEnvelope'
+
+    DomainRenewal:
+      name: domain.renewal
+      title: Domain renewed
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DomainRenewalEnvelope'
+
+    DomainRenewalFailed:
+      name: domain.renewal-failed
+      title: Domain renewal failed
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DomainRenewalFailedEnvelope'
+
+    DomainTransferInStarted:
+      name: domain.transfer-in-started
+      title: Domain transfer-in started
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DomainTransferInStartedEnvelope'
+
+    DomainTransferInCompleted:
+      name: domain.transfer-in-completed
+      title: Domain transfer-in completed
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DomainTransferInCompletedEnvelope'
+
+    DomainTransferInFailed:
+      name: domain.transfer-in-failed
+      title: Domain transfer-in failed
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/DomainTransferInFailedEnvelope'
+
+    ProjectCreated:
+      name: project.created
+      title: Project created
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/ProjectCreatedEnvelope'
+
+    ProjectRemoved:
+      name: project.removed
+      title: Project removed
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/ProjectRemovedEnvelope'
+
+    ProjectRenamed:
+      name: project.renamed
+      title: Project renamed
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/ProjectRenamedEnvelope'
+
+    ProjectEnvVariableCreated:
+      name: project.env-variable.created
+      title: Project environment variable created
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/ProjectEnvVariableCreatedEnvelope'
+
+    ProjectEnvVariableUpdated:
+      name: project.env-variable.updated
+      title: Project environment variable updated
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/ProjectEnvVariableUpdatedEnvelope'
+
+    ProjectEnvVariableDeleted:
+      name: project.env-variable.deleted
+      title: Project environment variable deleted
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/ProjectEnvVariableDeletedEnvelope'
+
+    ProjectDomainCreated:
+      name: project.domain.created
+      title: Project domain created
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/ProjectDomainCreatedEnvelope'
+
+    ProjectDomainDeleted:
+      name: project.domain.deleted
+      title: Project domain deleted
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/ProjectDomainDeletedEnvelope'
+
+    ProjectDomainMoved:
+      name: project.domain.moved
+      title: Project domain moved
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/ProjectDomainMovedEnvelope'
+
+    ProjectDomainVerified:
+      name: project.domain.verified
+      title: Project domain verified
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/ProjectDomainVerifiedEnvelope'
+
+    ProjectDomainUnverified:
+      name: project.domain.unverified
+      title: Project domain unverified
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/ProjectDomainUnverifiedEnvelope'
+
+    ProjectDomainUpdated:
+      name: project.domain.updated
+      title: Project domain updated
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/ProjectDomainUpdatedEnvelope'
+
+    ProjectRollingReleaseStarted:
+      name: project.rolling-release.started
+      title: Rolling release started
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/ProjectRollingReleaseEnvelope'
+
+    ProjectRollingReleaseApproved:
+      name: project.rolling-release.approved
+      title: Rolling release approved
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/ProjectRollingReleaseEnvelope'
+
+    ProjectRollingReleaseCompleted:
+      name: project.rolling-release.completed
+      title: Rolling release completed
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/ProjectRollingReleaseEnvelope'
+
+    ProjectRollingReleaseAborted:
+      name: project.rolling-release.aborted
+      title: Rolling release aborted
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/ProjectRollingReleaseEnvelope'
+
+    FlagCreated:
+      name: flag.created
+      title: Feature flag created
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/FlagCreatedEnvelope'
+
+    FlagUpdated:
+      name: flag.updated
+      title: Feature flag updated
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/FlagUpdatedEnvelope'
+
+    IntegrationConfigurationRemoved:
+      name: integration-configuration.removed
+      title: Integration configuration removed
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/IntegrationConfigurationRemovedEnvelope'
+
+    IntegrationConfigurationPermissionUpgraded:
+      name: integration-configuration.permission-upgraded
+      title: Integration configuration permission upgraded
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/IntegrationConfigurationPermissionUpgradedEnvelope'
+
+    IntegrationConfigurationScopeChangeConfirmed:
+      name: integration-configuration.scope-change-confirmed
+      title: Integration configuration scope change confirmed
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/IntegrationConfigurationScopeChangeConfirmedEnvelope'
+
+    IntegrationConfigurationTransferred:
+      name: integration-configuration.transferred
+      title: Integration configuration transferred
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/IntegrationConfigurationTransferredEnvelope'
+
+    IntegrationResourceProjectConnected:
+      name: integration-resource.project-connected
+      title: Integration resource connected to project
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/IntegrationResourceProjectConnectedEnvelope'
+
+    IntegrationResourceProjectDisconnected:
+      name: integration-resource.project-disconnected
+      title: Integration resource disconnected from project
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/IntegrationResourceProjectDisconnectedEnvelope'
+
+    MarketplaceInvoiceCreated:
+      name: marketplace.invoice.created
+      title: Marketplace invoice created
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/MarketplaceInvoiceEnvelope'
+
+    MarketplaceInvoicePaid:
+      name: marketplace.invoice.paid
+      title: Marketplace invoice paid
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/MarketplaceInvoiceEnvelope'
+
+    MarketplaceInvoiceNotPaid:
+      name: marketplace.invoice.notpaid
+      title: Marketplace invoice not paid
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/MarketplaceInvoiceEnvelope'
+
+    MarketplaceInvoiceOverdue:
+      name: marketplace.invoice.overdue
+      title: Marketplace invoice overdue
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/MarketplaceInvoiceEnvelope'
+
+    MarketplaceInvoiceRefunded:
+      name: marketplace.invoice.refunded
+      title: Marketplace invoice refunded
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/MarketplaceInvoiceRefundedEnvelope'
+
+    MarketplaceMemberChanged:
+      name: marketplace.member.changed
+      title: Marketplace member changed
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/MarketplaceMemberChangedEnvelope'
+
+    AlertsTriggered:
+      name: alerts.triggered
+      title: Alert triggered
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/VercelWebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/AlertsTriggeredEnvelope'
+
+  schemas:
+    WebhookEnvelope:
+      type: object
+      description: |
+        Common envelope for every Vercel webhook delivery. Subtypes
+        specialize the `type` and `payload` fields.
+      required:
+        - id
+        - type
+        - createdAt
+        - payload
+      properties:
+        id:
+          type: string
+          description: Vercel-assigned event delivery ID.
+        type:
+          type: string
+          description: Event type identifier.
+        createdAt:
+          type: integer
+          format: int64
+          description: JavaScript-style timestamp (milliseconds since epoch) when the event was generated.
+        region:
+          type:
+            - string
+            - 'null'
+          description: Region identifier associated with the event, if any.
+        payload:
+          type: object
+          description: Event-specific payload object.
+
+    TeamUserContext:
+      type: object
+      description: Common team and user context included in most payloads.
+      properties:
+        team:
+          type:
+            - object
+            - 'null'
+          properties:
+            id:
+              type: string
+              description: Team ID, or null for personal accounts.
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+              description: User ID of the actor associated with the event.
+
+    DeploymentSummary:
+      type: object
+      description: Deployment summary fields used across deployment events.
+      properties:
+        id:
+          type: string
+          description: Deployment ID.
+        meta:
+          type: object
+          description: Deployment meta map (e.g. git metadata) supplied at deployment time.
+          additionalProperties: true
+        url:
+          type: string
+          description: Deployment URL (the hostname of the deployment).
+        name:
+          type: string
+          description: Project / deployment name.
+
+    DeploymentLinks:
+      type: object
+      description: Dashboard URLs for the deployment and the parent project.
+      properties:
+        deployment:
+          type: string
+          format: uri
+          description: Vercel dashboard URL for the deployment.
+        project:
+          type: string
+          format: uri
+          description: Vercel dashboard URL for the project.
+
+    DeploymentBaseEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    deployment:
+                      $ref: '#/components/schemas/DeploymentSummary'
+                    links:
+                      $ref: '#/components/schemas/DeploymentLinks'
+                    target:
+                      type:
+                        - string
+                        - 'null'
+                      description: Deployment target (e.g. `production`, `staging`, or null).
+                    project:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Project ID.
+                    plan:
+                      type: string
+                      description: Plan name of the team/user owning the project.
+                    regions:
+                      type: array
+                      items:
+                        type: string
+                      description: Regions targeted by this deployment.
+
+    DeploymentCreatedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/DeploymentBaseEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: deployment.created
+            payload:
+              type: object
+              properties:
+                alias:
+                  type: array
+                  items:
+                    type: string
+                  description: List of aliases associated with the deployment.
+
+    DeploymentReadyEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/DeploymentBaseEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: deployment.ready
+
+    DeploymentSucceededEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/DeploymentBaseEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: deployment.succeeded
+
+    DeploymentErrorEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/DeploymentBaseEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: deployment.error
+
+    DeploymentCanceledEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/DeploymentBaseEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: deployment.canceled
+
+    DeploymentPromotedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/DeploymentBaseEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: deployment.promoted
+
+    DeploymentRollbackEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: deployment.rollback
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  required:
+                    - project
+                    - fromDeploymentId
+                    - toDeploymentId
+                  properties:
+                    project:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                    fromDeploymentId:
+                      type: string
+                      description: ID of the deployment being replaced.
+                    toDeploymentId:
+                      type: string
+                      description: ID of the deployment being restored.
+
+    DeploymentCleanupEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: deployment.cleanup
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    deployment:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        meta:
+                          type: object
+                          additionalProperties: true
+                        url:
+                          type: string
+                        name:
+                          type: string
+                        alias:
+                          type: array
+                          items:
+                            type: string
+                        target:
+                          type:
+                            - string
+                            - 'null'
+                        customEnvironmentId:
+                          type:
+                            - string
+                            - 'null'
+                        regions:
+                          type: array
+                          items:
+                            type: string
+                    project:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+
+    DeploymentCheckRerequestedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: deployment.check-rerequested
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    deployment:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                    check:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+
+    DeploymentIntegrationActionBase:
+      type: object
+      description: Shared payload for deployment integration action events.
+      properties:
+        configuration:
+          type: object
+          properties:
+            id:
+              type: string
+              description: Integration configuration ID.
+        installationId:
+          type: string
+          description: Marketplace installation ID, when applicable.
+        resourceId:
+          type: string
+          description: Integration resource ID, when applicable.
+        action:
+          type: string
+          description: Slug of the integration action.
+        deployment:
+          type: object
+          properties:
+            id:
+              type: string
+
+    DeploymentIntegrationActionStartEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: deployment.integration.action.start
+            payload:
+              $ref: '#/components/schemas/DeploymentIntegrationActionBase'
+
+    DeploymentIntegrationActionCancelEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: deployment.integration.action.cancel
+            payload:
+              $ref: '#/components/schemas/DeploymentIntegrationActionBase'
+
+    DeploymentIntegrationActionCleanupEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: deployment.integration.action.cleanup
+            payload:
+              $ref: '#/components/schemas/DeploymentIntegrationActionBase'
+
+    DomainCreatedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: domain.created
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    domain:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Domain name (e.g. `example.com`).
+                        delegated:
+                          type: boolean
+                          description: Whether the domain was delegated to Vercel.
+
+    DomainAutoRenewChangedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: domain.auto-renew-changed
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    domain:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                    previous:
+                      type: boolean
+                      description: Previous auto-renew value.
+                    next:
+                      type: boolean
+                      description: New auto-renew value.
+
+    DomainCertificateAddEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: domain.certificate-add
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    cert:
+                      type: object
+                      description: Certificate details object.
+                      additionalProperties: true
+
+    DomainCertificateAddFailedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: domain.certificate-add-failed
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    dnsNames:
+                      type: array
+                      items:
+                        type: string
+                      description: DNS names that failed to certify.
+
+    DomainCertificateDeletedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: domain.certificate-deleted
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    cert:
+                      type: object
+                      additionalProperties: true
+
+    DomainCertificateRenewEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: domain.certificate-renew
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    cert:
+                      type: object
+                      additionalProperties: true
+
+    DomainCertificateRenewFailedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: domain.certificate-renew-failed
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    dnsNames:
+                      type: array
+                      items:
+                        type: string
+
+    DomainDnsRecordsChangedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: domain.dns-records-changed
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    zone:
+                      type: string
+                      description: DNS zone whose records changed.
+                    changes:
+                      type: array
+                      items:
+                        type: object
+                        additionalProperties: true
+                      description: List of DNS changes.
+
+    DomainRenewalEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: domain.renewal
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    domain:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                    price:
+                      type: string
+                      description: Decimal price string.
+                    expirationDate:
+                      type: string
+                      format: date-time
+                    renewedAt:
+                      type: string
+                      format: date-time
+
+    DomainRenewalFailedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: domain.renewal-failed
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    domain:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                    errorReason:
+                      type: string
+                    failedAt:
+                      type: string
+                      format: date-time
+
+    DomainTransferInBase:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/TeamUserContext'
+        - type: object
+          properties:
+            domain:
+              type: object
+              properties:
+                name:
+                  type: string
+
+    DomainTransferInStartedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: domain.transfer-in-started
+            payload:
+              $ref: '#/components/schemas/DomainTransferInBase'
+
+    DomainTransferInCompletedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: domain.transfer-in-completed
+            payload:
+              $ref: '#/components/schemas/DomainTransferInBase'
+
+    DomainTransferInFailedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: domain.transfer-in-failed
+            payload:
+              $ref: '#/components/schemas/DomainTransferInBase'
+
+    ProjectIdentity:
+      type: object
+      description: Project identity fields used in project events.
+      properties:
+        project:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+
+    ProjectCreatedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: project.created
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - $ref: '#/components/schemas/ProjectIdentity'
+
+    ProjectRemovedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: project.removed
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - $ref: '#/components/schemas/ProjectIdentity'
+
+    ProjectRenamedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: project.renamed
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - $ref: '#/components/schemas/ProjectIdentity'
+                - type: object
+                  properties:
+                    previousName:
+                      type: string
+                      description: Previous project name.
+
+    ProjectEnvVariableBase:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/TeamUserContext'
+        - type: object
+          properties:
+            projectId:
+              type: string
+            envVarId:
+              type:
+                - string
+                - 'null'
+              description: Environment variable ID. May be null for delete events.
+
+    ProjectEnvVariableCreatedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: project.env-variable.created
+            payload:
+              $ref: '#/components/schemas/ProjectEnvVariableBase'
+
+    ProjectEnvVariableUpdatedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: project.env-variable.updated
+            payload:
+              $ref: '#/components/schemas/ProjectEnvVariableBase'
+
+    ProjectEnvVariableDeletedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: project.env-variable.deleted
+            payload:
+              $ref: '#/components/schemas/ProjectEnvVariableBase'
+
+    ProjectDomainClassification:
+      type: object
+      properties:
+        target:
+          type: string
+          enum:
+            - production
+            - preview
+        origin:
+          type: string
+          enum:
+            - default-stable
+            - default-redirect
+            - custom
+
+    ProjectDomainCreatedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: project.domain.created
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    project:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                    domain:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        classification:
+                          $ref: '#/components/schemas/ProjectDomainClassification'
+
+    ProjectDomainDeletedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: project.domain.deleted
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    project:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                    domain:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        classification:
+                          $ref: '#/components/schemas/ProjectDomainClassification'
+
+    ProjectDomainMovedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: project.domain.moved
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    domain:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                    from:
+                      type: object
+                      properties:
+                        projectId:
+                          type: string
+                    to:
+                      type: object
+                      properties:
+                        projectId:
+                          type: string
+                    isRedirect:
+                      type: boolean
+
+    ProjectDomainVerifiedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: project.domain.verified
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    project:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                    domain:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        classification:
+                          $ref: '#/components/schemas/ProjectDomainClassification'
+
+    ProjectDomainUnverifiedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: project.domain.unverified
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    project:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                    domain:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+
+    ProjectDomainUpdatedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: project.domain.updated
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    project:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                    previous:
+                      $ref: '#/components/schemas/ProjectDomainUpdateState'
+                    next:
+                      $ref: '#/components/schemas/ProjectDomainUpdateState'
+
+    ProjectDomainUpdateState:
+      type: object
+      properties:
+        domain:
+          type: string
+        redirect:
+          type:
+            - string
+            - 'null'
+        redirectStatusCode:
+          type:
+            - integer
+            - 'null'
+        gitBranch:
+          type:
+            - string
+            - 'null'
+
+    RollingReleaseObject:
+      type: object
+      properties:
+        projectId:
+          type: string
+        ownerId:
+          type: string
+        deploymentIds:
+          type: array
+          items:
+            type: string
+        state:
+          type: string
+          enum:
+            - ACTIVE
+            - COMPLETE
+            - ABORTED
+        activeStageIndex:
+          type: integer
+        default:
+          type: object
+          properties:
+            baseDeploymentId:
+              type: string
+            targetDeploymentId:
+              type: string
+            targetPercentage:
+              type: number
+            targetStartAt:
+              type: integer
+              description: Timestamp in milliseconds since epoch.
+            targetUpdatedAt:
+              type: integer
+              description: Timestamp in milliseconds since epoch.
+        config:
+          type: object
+          properties:
+            target:
+              type: string
+            stages:
+              type: array
+              items:
+                type: object
+                additionalProperties: true
+        writtenBy:
+          type: string
+
+    ProjectRollingReleaseEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - project.rolling-release.started
+                - project.rolling-release.approved
+                - project.rolling-release.completed
+                - project.rolling-release.aborted
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - $ref: '#/components/schemas/ProjectIdentity'
+                - type: object
+                  properties:
+                    rollingRelease:
+                      $ref: '#/components/schemas/RollingReleaseObject'
+                    prevRollingRelease:
+                      $ref: '#/components/schemas/RollingReleaseObject'
+
+    FlagObject:
+      type: object
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        projectId:
+          type: string
+        createdAt:
+          type: integer
+          description: Milliseconds since epoch.
+        updatedAt:
+          type: integer
+          description: Milliseconds since epoch.
+
+    FlagCreatedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: flag.created
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    flag:
+                      $ref: '#/components/schemas/FlagObject'
+
+    FlagUpdatedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: flag.updated
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    flag:
+                      $ref: '#/components/schemas/FlagObject'
+                    previousFlag:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        slug:
+                          type: string
+                        projectId:
+                          type: string
+                        createdAt:
+                          type: integer
+                          description: Milliseconds since epoch.
+
+    IntegrationConfigurationRemovedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: integration-configuration.removed
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    configuration:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        projectSelection:
+                          type: string
+                          enum:
+                            - all
+                            - selected
+                        projects:
+                          type: array
+                          items:
+                            type: string
+                          description: Project IDs the integration is scoped to.
+
+    IntegrationConfigurationPermissionUpgradedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: integration-configuration.permission-upgraded
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    configuration:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        projectSelection:
+                          type: string
+                          enum:
+                            - all
+                            - selected
+                        projects:
+                          type: array
+                          items:
+                            type: string
+                    projects:
+                      type: object
+                      properties:
+                        added:
+                          type: array
+                          items:
+                            type: string
+                          description: Project IDs added to the integration's scope.
+                        removed:
+                          type: array
+                          items:
+                            type: string
+                          description: Project IDs removed from the integration's scope.
+
+    IntegrationConfigurationScopeChangeConfirmedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: integration-configuration.scope-change-confirmed
+            payload:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/TeamUserContext'
+                - type: object
+                  properties:
+                    configuration:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        scopes:
+                          type: array
+                          items:
+                            type: string
+
+    IntegrationConfigurationTransferredEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: integration-configuration.transferred
+            payload:
+              type: object
+              properties:
+                configuration:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                installationId:
+                  type: string
+                previousTeamId:
+                  type: string
+                previousAccountId:
+                  type: string
+                  description: Previous marketplace account ID, for marketplace installations.
+                newTeamId:
+                  type: string
+                newAccountId:
+                  type: string
+                  description: New marketplace account ID, for marketplace installations.
+
+    IntegrationResourceProjectBase:
+      type: object
+      properties:
+        configuration:
+          type: object
+          properties:
+            id:
+              type: string
+        installationId:
+          type: string
+        resourceId:
+          type: string
+        project:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+        projectId:
+          type: string
+          description: Same as project.id; included by Vercel for convenience.
+        productionDomain:
+          type: string
+          description: Production domain of the project (e.g. `my-app.vercel.app`).
+        targets:
+          type: array
+          items:
+            type: string
+          description: Deployment targets affected by the connection change.
+
+    IntegrationResourceProjectConnectedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: integration-resource.project-connected
+            payload:
+              $ref: '#/components/schemas/IntegrationResourceProjectBase'
+
+    IntegrationResourceProjectDisconnectedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: integration-resource.project-disconnected
+            payload:
+              $ref: '#/components/schemas/IntegrationResourceProjectBase'
+
+    MarketplaceInvoiceBase:
+      type: object
+      properties:
+        configuration:
+          type: object
+          properties:
+            id:
+              type: string
+        installationId:
+          type: string
+        invoiceId:
+          type: string
+        externalInvoiceId:
+          type:
+            - string
+            - 'null'
+        period:
+          type: object
+          properties:
+            start:
+              type: string
+              format: date-time
+            end:
+              type: string
+              format: date-time
+        invoiceDate:
+          type: string
+          format: date-time
+        invoiceTotal:
+          type: string
+          description: Decimal string of the invoice total.
+
+    MarketplaceInvoiceEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - marketplace.invoice.created
+                - marketplace.invoice.paid
+                - marketplace.invoice.notpaid
+                - marketplace.invoice.overdue
+            payload:
+              $ref: '#/components/schemas/MarketplaceInvoiceBase'
+
+    MarketplaceInvoiceRefundedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: marketplace.invoice.refunded
+            payload:
+              type: object
+              properties:
+                configuration:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                installationId:
+                  type: string
+                invoiceId:
+                  type: string
+                externalInvoiceId:
+                  type:
+                    - string
+                    - 'null'
+                period:
+                  type: object
+                  properties:
+                    start:
+                      type: string
+                      format: date-time
+                    end:
+                      type: string
+                      format: date-time
+                amount:
+                  type: string
+                  description: Decimal string for the refunded amount.
+                reason:
+                  type: string
+
+    MarketplaceMemberChangedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: marketplace.member.changed
+            payload:
+              type: object
+              properties:
+                configuration:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                installationId:
+                  type: string
+                memberId:
+                  type: string
+                role:
+                  type: string
+                  enum:
+                    - ADMIN
+                    - USER
+                    - NONE
+                globalUserId:
+                  type: string
+                  description: Requires permission; only present when authorized.
+                userEmail:
+                  type: string
+                  description: Requires permission; only present when authorized.
+
+    AlertItem:
+      type: object
+      properties:
+        startedAt:
+          type: string
+          format: date-time
+        title:
+          type: string
+        unit:
+          type: string
+        formattedValues:
+          type: object
+          additionalProperties: true
+        count:
+          type: number
+        average:
+          type: number
+        stddev:
+          type: number
+        zscore:
+          type: number
+        zscoreThreshold:
+          type: number
+        alertId:
+          type: string
+        type:
+          type: string
+        metric:
+          type: string
+          description: Metric identifier (e.g. `edge_requests`).
+
+    AlertsTriggeredEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: alerts.triggered
+            payload:
+              type: object
+              properties:
+                teamId:
+                  type: string
+                projectId:
+                  type: string
+                startedAt:
+                  type: integer
+                  description: Milliseconds since epoch.
+                links:
+                  type: object
+                  properties:
+                    observability:
+                      type: string
+                      format: uri
+                projectSlug:
+                  type: string
+                teamSlug:
+                  type: string
+                groupId:
+                  type: string
+                  description: Optional grouping identifier.
+                alerts:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/AlertItem'

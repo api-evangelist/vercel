@@ -71,6 +71,32 @@ apis:
       a single endpoint at https://ai-gateway.vercel.sh/v1. It offers one key for hundreds of models, spend monitoring, automatic
       retries and fallbacks, embeddings support, and zero markup on token pricing. Compatible with the AI SDK, OpenAI SDK, and
       Anthropic SDK.
+  - aid: vercel:vercel-webhooks
+    name: Vercel Webhooks
+    tags:
+    - Webhooks
+    - Deployments
+    - Projects
+    - Domains
+    - Integrations
+    - Marketplace
+    - Events
+    humanURL: https://vercel.com/docs/webhooks
+    properties:
+    - url: https://vercel.com/docs/webhooks
+      type: Documentation
+    - url: https://vercel.com/docs/webhooks/webhooks-api
+      type: APIReference
+    - url: https://vercel.com/docs/headers/request-headers#x-vercel-signature
+      type: Security
+    - url: https://raw.githubusercontent.com/api-evangelist/vercel/refs/heads/main/asyncapi/vercel-webhooks-asyncapi.yml
+      type: AsyncAPI
+    description: Vercel Webhooks deliver platform events to a subscriber-configured HTTPS endpoint via HTTP POST with a JSON
+      body. Subscriptions are created as Account Webhooks (Team Settings) or through Vercel Integrations and can opt in to
+      deployment, project, project domain, project environment variable, project rolling release, domain, feature flag, integration
+      configuration, integration resource, marketplace invoice, marketplace member, and observability alert events. Every
+      delivery shares a common envelope (id, type, createdAt, region, payload) and is signed with HMAC-SHA1 using the webhook
+      secret, sent in the x-vercel-signature header.
   - aid: vercel:v0-platform-api
     name: V0 Platform API
     tags:
@@ -96,6 +122,7 @@ tags:
   - AI Gateways
   - Gateways
   - Observability
+  - Webhooks
 kind: contract
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party
@@ -239,7 +266,7 @@ common:
     url: https://github.com/vercel/next-devtools-mcp
     type: MCPServer
 created: '2025-02-08'
-modified: '2026-05-19'
+modified: '2026-05-30'
 position: Consuming
 segments:
   - Gateways
