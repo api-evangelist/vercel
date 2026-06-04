@@ -1,0 +1,86 @@
+arazzo: 1.0.1
+info:
+  title: Vercel AI Gateway Discover Model Then Embed
+  summary: List available models, confirm the embedding model is present, then create an embedding.
+  description: >-
+    A guarded embedding flow for the Vercel AI Gateway. The workflow lists the
+    models reachable through the gateway, confirms the requested embedding model id
+    is in the catalog, and only then creates an embedding for the supplied input.
+    This keeps embedding requests from being sent against an unavailable model.
+    Each step inlines its request and documents the success status.
+  version: 1.0.0
+sourceDescriptions:
+- name: aiGatewayApi
+  url: ../openapi/vercel-ai-gateway-openapi.yml
+  type: openapi
+workflows:
+- workflowId: discoverModelThenEmbed
+  summary: Verify an embedding model is in the catalog, then create an embedding.
+  description: >-
+    Lists gateway models, branches on whether the requested embedding model is
+    available, and on success creates an embedding returning the vector and token
+    usage.
+  inputs:
+    type: object
+    required:
+    - apiKey
+    - model
+    - input
+    properties:
+      apiKey:
+        type: string
+        description: Vercel AI Gateway API key (AI_GATEWAY_API_KEY) used as a Bearer token.
+      model:
+        type: string
+        description: "Embedding model id (e.g. openai/text-embedding-3-small)."
+      input:
+        type: string
+        description: The text to embed.
+  steps:
+  - stepId: listModels
+    description: List all models reachable through the gateway to confirm availability.
+    operationId: listModels
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      models: $response.body#/data
+    onSuccess:
+    - name: modelAvailable
+      type: goto
+      stepId: embed
+      criteria:
+      - context: $response.body
+        condition: $.data[?(@.id == '$inputs.model')]
+        type: jsonpath
+    - name: modelMissing
+      type: end
+      criteria:
+      - context: $response.body
+        condition: $.data[?(@.id == '$inputs.model')].length == 0
+        type: jsonpath
+  - stepId: embed
+    description: Create an embedding for the supplied input using the confirmed model.
+    operationId: createEmbedding
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        model: $inputs.model
+        input: $inputs.input
+        encoding_format: float
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      embedding: $response.body#/data/0/embedding
+      promptTokens: $response.body#/usage/prompt_tokens
+      totalTokens: $response.body#/usage/total_tokens
+  outputs:
+    embedding: $steps.embed.outputs.embedding
+    totalTokens: $steps.embed.outputs.totalTokens

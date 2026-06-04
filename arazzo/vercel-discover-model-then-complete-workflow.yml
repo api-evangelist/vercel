@@ -1,0 +1,94 @@
+arazzo: 1.0.1
+info:
+  title: Vercel AI Gateway Discover Model Then Complete
+  summary: List available models, confirm the requested one is present, then run a chat completion.
+  description: >-
+    A guarded chat-completion flow for the Vercel AI Gateway. The workflow first
+    lists the models reachable through the gateway and confirms the requested
+    model id appears in the catalog, then issues a chat completion against it. This
+    prevents spending a request against a model the account cannot reach. Each step
+    inlines its request and documents the success status.
+  version: 1.0.0
+sourceDescriptions:
+- name: aiGatewayApi
+  url: ../openapi/vercel-ai-gateway-openapi.yml
+  type: openapi
+workflows:
+- workflowId: discoverModelThenComplete
+  summary: Verify a model is in the gateway catalog, then create a chat completion.
+  description: >-
+    Lists gateway models, branches on whether the requested model is available,
+    and on success creates a chat completion returning the assistant message and
+    token usage.
+  inputs:
+    type: object
+    required:
+    - apiKey
+    - model
+    - prompt
+    properties:
+      apiKey:
+        type: string
+        description: Vercel AI Gateway API key (AI_GATEWAY_API_KEY) used as a Bearer token.
+      model:
+        type: string
+        description: "Model id in 'provider/model-name' form (e.g. anthropic/claude-opus-4.6)."
+      prompt:
+        type: string
+        description: The user message to send to the model.
+      maxTokens:
+        type: integer
+        description: Optional maximum number of tokens to generate.
+  steps:
+  - stepId: listModels
+    description: List all models reachable through the gateway to confirm availability.
+    operationId: listModels
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      models: $response.body#/data
+    onSuccess:
+    - name: modelAvailable
+      type: goto
+      stepId: complete
+      criteria:
+      - context: $response.body
+        condition: $.data[?(@.id == '$inputs.model')]
+        type: jsonpath
+    - name: modelMissing
+      type: end
+      criteria:
+      - context: $response.body
+        condition: $.data[?(@.id == '$inputs.model')].length == 0
+        type: jsonpath
+  - stepId: complete
+    description: Create a chat completion against the confirmed model.
+    operationId: createChatCompletion
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        model: $inputs.model
+        messages:
+        - role: user
+          content: $inputs.prompt
+        max_tokens: $inputs.maxTokens
+        stream: false
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      completionId: $response.body#/id
+      reply: $response.body#/choices/0/message/content
+      finishReason: $response.body#/choices/0/finish_reason
+      totalTokens: $response.body#/usage/total_tokens
+  outputs:
+    reply: $steps.complete.outputs.reply
+    finishReason: $steps.complete.outputs.finishReason
+    totalTokens: $steps.complete.outputs.totalTokens

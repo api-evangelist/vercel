@@ -1,0 +1,86 @@
+arazzo: 1.0.1
+info:
+  title: Vercel AI Gateway Embed Then Summarize
+  summary: Create an embedding for a document, then run a chat completion that summarizes it.
+  description: >-
+    A two-operation flow that combines the Vercel AI Gateway embedding and chat
+    endpoints. The workflow first embeds the supplied document text so the vector
+    is available for indexing or downstream retrieval, then issues a chat
+    completion that asks a model to summarize the same text. This is a common
+    retrieval-and-generate building block. Each step inlines its request and
+    documents the success status.
+  version: 1.0.0
+sourceDescriptions:
+- name: aiGatewayApi
+  url: ../openapi/vercel-ai-gateway-openapi.yml
+  type: openapi
+workflows:
+- workflowId: embedThenSummarize
+  summary: Embed a document, then summarize it with a chat completion.
+  description: >-
+    Creates an embedding for the document text and then asks a chat model to
+    summarize that same text, returning both the embedding and the summary.
+  inputs:
+    type: object
+    required:
+    - apiKey
+    - embeddingModel
+    - chatModel
+    - document
+    properties:
+      apiKey:
+        type: string
+        description: Vercel AI Gateway API key (AI_GATEWAY_API_KEY) used as a Bearer token.
+      embeddingModel:
+        type: string
+        description: "Embedding model id (e.g. openai/text-embedding-3-small)."
+      chatModel:
+        type: string
+        description: "Chat model id in 'provider/model-name' form."
+      document:
+        type: string
+        description: The document text to embed and summarize.
+  steps:
+  - stepId: embed
+    description: Create an embedding for the document text.
+    operationId: createEmbedding
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        model: $inputs.embeddingModel
+        input: $inputs.document
+        encoding_format: float
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      embedding: $response.body#/data/0/embedding
+  - stepId: summarize
+    description: Ask a chat model to summarize the same document text.
+    operationId: createChatCompletion
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        model: $inputs.chatModel
+        messages:
+        - role: system
+          content: You are a concise summarizer. Summarize the user's document in three sentences.
+        - role: user
+          content: $inputs.document
+        stream: false
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      summary: $response.body#/choices/0/message/content
+      totalTokens: $response.body#/usage/total_tokens
+  outputs:
+    embedding: $steps.embed.outputs.embedding
+    summary: $steps.summarize.outputs.summary
+    totalTokens: $steps.summarize.outputs.totalTokens

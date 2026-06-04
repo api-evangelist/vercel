@@ -1,0 +1,100 @@
+arazzo: 1.0.1
+info:
+  title: Vercel v0 Generate App Then Poll For Files
+  summary: Generate a web app from a prompt, then poll the chat until generated files are present.
+  description: >-
+    The v0 Platform API generates code asynchronously, so a freshly created chat
+    may return before any files are ready. This workflow creates a v0 chat from a
+    natural language prompt and then re-reads the chat in a poll loop, branching
+    back to itself until the chat carries at least one generated file or the
+    attempt budget is exhausted. Every step inlines its request so the flow can be
+    executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: v0PlatformApi
+  url: ../openapi/vercel-v0-platform-openapi.yml
+  type: openapi
+workflows:
+- workflowId: generateAppThenPoll
+  summary: Create a v0 chat from a prompt and poll it until generated files appear.
+  description: >-
+    Starts a v0 generation session from a prompt and then repeatedly fetches the
+    chat until the generated code files are available, returning the preview URL
+    and file list once they are.
+  inputs:
+    type: object
+    required:
+    - apiKey
+    - message
+    properties:
+      apiKey:
+        type: string
+        description: v0 API key (V0_API_KEY) used as a Bearer token.
+      message:
+        type: string
+        description: Natural language prompt describing the app to generate.
+      system:
+        type: string
+        description: Optional system instructions to guide code generation.
+      model:
+        type: string
+        description: Optional AI model identifier to use for generation.
+  steps:
+  - stepId: createChat
+    description: >-
+      Start a new v0 chat session from the supplied prompt to begin generating
+      the application.
+    operationId: createChat
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        message: $inputs.message
+        system: $inputs.system
+        modelConfiguration:
+          model: $inputs.model
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      chatId: $response.body#/id
+      url: $response.body#/url
+  - stepId: pollChat
+    description: >-
+      Re-read the chat session. If no generated files are present yet, loop back
+      and try again; once files exist, finish.
+    operationId: getChat
+    parameters:
+    - name: chatId
+      in: path
+      value: $steps.createChat.outputs.chatId
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      previewUrl: $response.body#/previewUrl
+      files: $response.body#/files
+      title: $response.body#/title
+    onSuccess:
+    - name: filesReady
+      type: end
+      criteria:
+      - context: $response.body
+        condition: $.files.length > 0
+        type: jsonpath
+    - name: keepPolling
+      type: goto
+      stepId: pollChat
+      criteria:
+      - context: $response.body
+        condition: $.files.length == 0
+        type: jsonpath
+  outputs:
+    chatId: $steps.createChat.outputs.chatId
+    previewUrl: $steps.pollChat.outputs.previewUrl
+    files: $steps.pollChat.outputs.files
+    title: $steps.pollChat.outputs.title

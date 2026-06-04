@@ -1,0 +1,80 @@
+arazzo: 1.0.1
+info:
+  title: Vercel v0 Generate Then Refine App
+  summary: Generate an app from a prompt, then send a follow-up refinement in the same chat.
+  description: >-
+    A two-turn v0 generation flow that mirrors how developers actually iterate.
+    The workflow creates a chat from an initial prompt to produce a first draft of
+    the application, then continues the same chat with a refinement instruction so
+    the generated code is revised in context. Each step inlines its request and
+    documents the success status so the flow can be read and executed on its own.
+  version: 1.0.0
+sourceDescriptions:
+- name: v0PlatformApi
+  url: ../openapi/vercel-v0-platform-openapi.yml
+  type: openapi
+workflows:
+- workflowId: generateThenRefineApp
+  summary: Create a v0 chat, then iterate on it with a follow-up refinement message.
+  description: >-
+    Generates an initial application from a prompt and immediately refines it by
+    continuing the same chat session, returning the revised preview URL and files.
+  inputs:
+    type: object
+    required:
+    - apiKey
+    - message
+    - refinement
+    properties:
+      apiKey:
+        type: string
+        description: v0 API key (V0_API_KEY) used as a Bearer token.
+      message:
+        type: string
+        description: Initial natural language prompt describing the app to generate.
+      refinement:
+        type: string
+        description: Follow-up instruction used to refine the generated app.
+  steps:
+  - stepId: createChat
+    description: Start a new v0 chat session that generates the first draft of the app.
+    operationId: createChat
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        message: $inputs.message
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      chatId: $response.body#/id
+      previewUrl: $response.body#/previewUrl
+  - stepId: refineChat
+    description: >-
+      Continue the same chat session with a refinement instruction so the
+      generated application is revised in context.
+    operationId: continueChat
+    parameters:
+    - name: chatId
+      in: path
+      value: $steps.createChat.outputs.chatId
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        message: $inputs.refinement
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      previewUrl: $response.body#/previewUrl
+      files: $response.body#/files
+      updatedAt: $response.body#/updatedAt
+  outputs:
+    chatId: $steps.createChat.outputs.chatId
+    previewUrl: $steps.refineChat.outputs.previewUrl
+    files: $steps.refineChat.outputs.files

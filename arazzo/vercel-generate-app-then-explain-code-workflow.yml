@@ -1,0 +1,103 @@
+arazzo: 1.0.1
+info:
+  title: Vercel Generate App Then Explain Code
+  summary: Generate an app with v0, fetch its files, then explain the code via the AI Gateway.
+  description: >-
+    A cross-API flow that links the v0 Platform generation pipeline with the AI
+    Gateway chat endpoint. The workflow creates a v0 chat from a prompt, reads the
+    chat back to capture the generated files, and then asks a model through the
+    Vercel AI Gateway to explain the generated code. It chains three real
+    operations across two Vercel APIs, each carrying its own Bearer token. Every
+    step inlines its request and documents the success status.
+  version: 1.0.0
+sourceDescriptions:
+- name: v0PlatformApi
+  url: ../openapi/vercel-v0-platform-openapi.yml
+  type: openapi
+- name: aiGatewayApi
+  url: ../openapi/vercel-ai-gateway-openapi.yml
+  type: openapi
+workflows:
+- workflowId: generateAppThenExplainCode
+  summary: Generate a v0 app, capture its files, then explain the code with the AI Gateway.
+  description: >-
+    Creates a v0 chat from a prompt, reads back the generated files, and asks an AI
+    Gateway chat model to explain the generated code, returning the explanation.
+  inputs:
+    type: object
+    required:
+    - v0ApiKey
+    - gatewayApiKey
+    - message
+    - chatModel
+    properties:
+      v0ApiKey:
+        type: string
+        description: v0 API key (V0_API_KEY) used as a Bearer token for the v0 Platform API.
+      gatewayApiKey:
+        type: string
+        description: AI Gateway API key (AI_GATEWAY_API_KEY) used as a Bearer token for the gateway.
+      message:
+        type: string
+        description: Natural language prompt describing the app to generate.
+      chatModel:
+        type: string
+        description: "AI Gateway chat model id in 'provider/model-name' form."
+  steps:
+  - stepId: createChat
+    description: Start a new v0 chat session to generate the application.
+    operationId: createChat
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.v0ApiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        message: $inputs.message
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      chatId: $response.body#/id
+  - stepId: getFiles
+    description: Read the chat back to capture the generated code files.
+    operationId: getChat
+    parameters:
+    - name: chatId
+      in: path
+      value: $steps.createChat.outputs.chatId
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.v0ApiKey
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      firstFilePath: $response.body#/files/0/path
+      firstFileContent: $response.body#/files/0/content
+  - stepId: explainCode
+    description: >-
+      Ask an AI Gateway chat model to explain the first generated code file.
+    operationId: createChatCompletion
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.gatewayApiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        model: $inputs.chatModel
+        messages:
+        - role: system
+          content: You are a senior engineer who explains source code clearly and concisely.
+        - role: user
+          content: $steps.getFiles.outputs.firstFileContent
+        stream: false
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      explanation: $response.body#/choices/0/message/content
+      totalTokens: $response.body#/usage/total_tokens
+  outputs:
+    chatId: $steps.createChat.outputs.chatId
+    filePath: $steps.getFiles.outputs.firstFilePath
+    explanation: $steps.explainCode.outputs.explanation

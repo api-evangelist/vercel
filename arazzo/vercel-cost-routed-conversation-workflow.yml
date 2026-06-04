@@ -1,0 +1,102 @@
+arazzo: 1.0.1
+info:
+  title: Vercel AI Gateway Cost-Routed Two-Turn Conversation
+  summary: Run a cost-sorted chat completion, then send a follow-up turn carrying the prior reply.
+  description: >-
+    A two-turn conversation flow for the Vercel AI Gateway that routes by cost. The
+    first step sends a chat completion with the gateway sort set to cost, and the
+    second step continues the conversation by replaying the user prompt, the
+    assistant reply captured from the first step, and a follow-up message so the
+    model answers with full context. Each step inlines its request and documents
+    the success status.
+  version: 1.0.0
+sourceDescriptions:
+- name: aiGatewayApi
+  url: ../openapi/vercel-ai-gateway-openapi.yml
+  type: openapi
+workflows:
+- workflowId: costRoutedConversation
+  summary: Two cost-routed chat completions chained into a single conversation.
+  description: >-
+    Issues a first cost-sorted chat completion, then sends a second completion that
+    includes the first assistant reply and a follow-up message to continue the
+    conversation.
+  inputs:
+    type: object
+    required:
+    - apiKey
+    - model
+    - prompt
+    - followUp
+    properties:
+      apiKey:
+        type: string
+        description: Vercel AI Gateway API key (AI_GATEWAY_API_KEY) used as a Bearer token.
+      model:
+        type: string
+        description: "Model id in 'provider/model-name' form."
+      prompt:
+        type: string
+        description: The initial user message.
+      followUp:
+        type: string
+        description: The follow-up user message for the second turn.
+  steps:
+  - stepId: firstTurn
+    description: >-
+      Send the first chat completion, sorting providers by cost via the gateway
+      routing options.
+    operationId: createChatCompletion
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        model: $inputs.model
+        messages:
+        - role: user
+          content: $inputs.prompt
+        stream: false
+        providerOptions:
+          gateway:
+            sort: cost
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      firstReply: $response.body#/choices/0/message/content
+  - stepId: secondTurn
+    description: >-
+      Continue the conversation by replaying the prior user and assistant turns
+      and appending the follow-up message, again sorting by cost.
+    operationId: createChatCompletion
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        model: $inputs.model
+        messages:
+        - role: user
+          content: $inputs.prompt
+        - role: assistant
+          content: $steps.firstTurn.outputs.firstReply
+        - role: user
+          content: $inputs.followUp
+        stream: false
+        providerOptions:
+          gateway:
+            sort: cost
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      secondReply: $response.body#/choices/0/message/content
+      finishReason: $response.body#/choices/0/finish_reason
+      totalTokens: $response.body#/usage/total_tokens
+  outputs:
+    firstReply: $steps.firstTurn.outputs.firstReply
+    secondReply: $steps.secondTurn.outputs.secondReply
+    totalTokens: $steps.secondTurn.outputs.totalTokens

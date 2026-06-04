@@ -1,0 +1,114 @@
+arazzo: 1.0.1
+info:
+  title: Vercel v0 Iterative App Build
+  summary: Generate an app, apply two sequential refinements, then read back the final chat.
+  description: >-
+    A multi-turn build loop for the v0 Platform API. The workflow creates a chat
+    from an initial prompt, applies two ordered refinement instructions by
+    continuing the same chat session, and finally re-reads the chat to capture the
+    settled preview URL and file set. It chains four real operations and inlines
+    each request so the full iteration sequence is self-describing.
+  version: 1.0.0
+sourceDescriptions:
+- name: v0PlatformApi
+  url: ../openapi/vercel-v0-platform-openapi.yml
+  type: openapi
+workflows:
+- workflowId: iterativeAppBuild
+  summary: Create a v0 chat and apply two refinements, then fetch the final state.
+  description: >-
+    Generates an app and iterates twice on it within one chat session, then reads
+    the chat to return the final preview URL and generated files.
+  inputs:
+    type: object
+    required:
+    - apiKey
+    - message
+    - firstRefinement
+    - secondRefinement
+    properties:
+      apiKey:
+        type: string
+        description: v0 API key (V0_API_KEY) used as a Bearer token.
+      message:
+        type: string
+        description: Initial natural language prompt describing the app to generate.
+      firstRefinement:
+        type: string
+        description: First follow-up refinement instruction.
+      secondRefinement:
+        type: string
+        description: Second follow-up refinement instruction.
+  steps:
+  - stepId: createChat
+    description: Start a new v0 chat session that generates the initial application.
+    operationId: createChat
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        message: $inputs.message
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      chatId: $response.body#/id
+  - stepId: firstRefine
+    description: Continue the chat with the first refinement instruction.
+    operationId: continueChat
+    parameters:
+    - name: chatId
+      in: path
+      value: $steps.createChat.outputs.chatId
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        message: $inputs.firstRefinement
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      previewUrl: $response.body#/previewUrl
+  - stepId: secondRefine
+    description: Continue the chat again with the second refinement instruction.
+    operationId: continueChat
+    parameters:
+    - name: chatId
+      in: path
+      value: $steps.createChat.outputs.chatId
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        message: $inputs.secondRefinement
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      previewUrl: $response.body#/previewUrl
+  - stepId: getFinal
+    description: Re-read the chat to capture the final settled preview URL and files.
+    operationId: getChat
+    parameters:
+    - name: chatId
+      in: path
+      value: $steps.createChat.outputs.chatId
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      previewUrl: $response.body#/previewUrl
+      files: $response.body#/files
+      title: $response.body#/title
+  outputs:
+    chatId: $steps.createChat.outputs.chatId
+    previewUrl: $steps.getFinal.outputs.previewUrl
+    files: $steps.getFinal.outputs.files
+    title: $steps.getFinal.outputs.title

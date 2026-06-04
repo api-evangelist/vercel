@@ -1,0 +1,91 @@
+arazzo: 1.0.1
+info:
+  title: Vercel Draft Spec With Gateway Then Build App
+  summary: Draft an app spec via the AI Gateway, then feed that spec into v0 to generate the app.
+  description: >-
+    A cross-API flow that uses the Vercel AI Gateway to expand a short idea into a
+    detailed build specification and then hands that specification to the v0
+    Platform API to generate the actual application. This chains a reasoning model
+    and a code-generation pipeline across two Vercel APIs, each carrying its own
+    Bearer token. Every step inlines its request and documents the success status.
+  version: 1.0.0
+sourceDescriptions:
+- name: aiGatewayApi
+  url: ../openapi/vercel-ai-gateway-openapi.yml
+  type: openapi
+- name: v0PlatformApi
+  url: ../openapi/vercel-v0-platform-openapi.yml
+  type: openapi
+workflows:
+- workflowId: draftSpecThenBuildApp
+  summary: Expand an idea into a spec via the gateway, then generate the app with v0.
+  description: >-
+    Asks an AI Gateway model to expand a short idea into a detailed build spec,
+    then sends that spec as the v0 generation prompt and returns the preview URL.
+  inputs:
+    type: object
+    required:
+    - gatewayApiKey
+    - v0ApiKey
+    - chatModel
+    - idea
+    properties:
+      gatewayApiKey:
+        type: string
+        description: AI Gateway API key (AI_GATEWAY_API_KEY) used as a Bearer token for the gateway.
+      v0ApiKey:
+        type: string
+        description: v0 API key (V0_API_KEY) used as a Bearer token for the v0 Platform API.
+      chatModel:
+        type: string
+        description: "AI Gateway chat model id in 'provider/model-name' form."
+      idea:
+        type: string
+        description: A short product idea to expand into a detailed build spec.
+  steps:
+  - stepId: draftSpec
+    description: >-
+      Ask an AI Gateway model to expand the short idea into a detailed app build
+      specification suitable for code generation.
+    operationId: createChatCompletion
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.gatewayApiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        model: $inputs.chatModel
+        messages:
+        - role: system
+          content: >-
+            You expand short product ideas into detailed, implementation-ready web
+            app build specifications. Respond with only the specification.
+        - role: user
+          content: $inputs.idea
+        stream: false
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      spec: $response.body#/choices/0/message/content
+  - stepId: buildApp
+    description: Send the generated specification to v0 as the generation prompt.
+    operationId: createChat
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.v0ApiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        message: $steps.draftSpec.outputs.spec
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      chatId: $response.body#/id
+      previewUrl: $response.body#/previewUrl
+      url: $response.body#/url
+  outputs:
+    spec: $steps.draftSpec.outputs.spec
+    chatId: $steps.buildApp.outputs.chatId
+    previewUrl: $steps.buildApp.outputs.previewUrl

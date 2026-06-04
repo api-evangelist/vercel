@@ -1,0 +1,88 @@
+arazzo: 1.0.1
+info:
+  title: Vercel AI Gateway Chat Completion With Provider Fallback
+  summary: Attempt a chat completion with a provider fallback chain, retrying on rate limit.
+  description: >-
+    A resilient chat-completion flow for the Vercel AI Gateway. The workflow sends
+    a chat completion configured with a gateway provider fallback order so the
+    gateway can route across providers, and on a 429 rate-limit response it loops
+    back to retry the same request. This pairs the gateway's built-in provider
+    routing with an explicit retry branch. Each step inlines its request and
+    documents the success status.
+  version: 1.0.0
+sourceDescriptions:
+- name: aiGatewayApi
+  url: ../openapi/vercel-ai-gateway-openapi.yml
+  type: openapi
+workflows:
+- workflowId: chatCompletionWithFallback
+  summary: Create a chat completion with a provider fallback chain and retry on rate limit.
+  description: >-
+    Issues a chat completion using a gateway provider fallback order, retrying the
+    request when the gateway returns a rate-limit status, and returns the assistant
+    reply on success.
+  inputs:
+    type: object
+    required:
+    - apiKey
+    - model
+    - prompt
+    - providerOrder
+    properties:
+      apiKey:
+        type: string
+        description: Vercel AI Gateway API key (AI_GATEWAY_API_KEY) used as a Bearer token.
+      model:
+        type: string
+        description: "Model id in 'provider/model-name' form."
+      prompt:
+        type: string
+        description: The user message to send to the model.
+      providerOrder:
+        type: array
+        items:
+          type: string
+        description: Ordered list of providers to try as the fallback chain.
+  steps:
+  - stepId: complete
+    description: >-
+      Create a chat completion with a gateway provider fallback order. On a
+      rate-limit response, loop back and retry the same request.
+    operationId: createChatCompletion
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        model: $inputs.model
+        messages:
+        - role: user
+          content: $inputs.prompt
+        stream: false
+        providerOptions:
+          gateway:
+            order: $inputs.providerOrder
+    successCriteria:
+    - condition: $statusCode == 200
+    onSuccess:
+    - name: completed
+      type: end
+      criteria:
+      - condition: $statusCode == 200
+    onFailure:
+    - name: retryOnRateLimit
+      type: goto
+      stepId: complete
+      criteria:
+      - condition: $statusCode == 429
+    outputs:
+      completionId: $response.body#/id
+      reply: $response.body#/choices/0/message/content
+      finishReason: $response.body#/choices/0/finish_reason
+      totalTokens: $response.body#/usage/total_tokens
+  outputs:
+    reply: $steps.complete.outputs.reply
+    finishReason: $steps.complete.outputs.finishReason
+    totalTokens: $steps.complete.outputs.totalTokens

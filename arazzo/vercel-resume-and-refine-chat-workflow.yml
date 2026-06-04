@@ -1,0 +1,76 @@
+arazzo: 1.0.1
+info:
+  title: Vercel v0 Resume And Refine Chat
+  summary: Fetch an existing chat to confirm it exists, then continue it with a refinement.
+  description: >-
+    A safe resume flow for the v0 Platform API. Before sending a follow-up
+    instruction the workflow first reads the target chat to confirm it exists and
+    capture its current preview, and only then continues the session with a
+    refinement. This avoids posting a refinement against a missing or stale chat.
+    Each step inlines its request and documents the success status.
+  version: 1.0.0
+sourceDescriptions:
+- name: v0PlatformApi
+  url: ../openapi/vercel-v0-platform-openapi.yml
+  type: openapi
+workflows:
+- workflowId: resumeAndRefineChat
+  summary: Confirm an existing v0 chat, then continue it with a refinement message.
+  description: >-
+    Reads an existing chat by id to verify it resolves, then applies a refinement
+    instruction and returns the updated preview URL and files.
+  inputs:
+    type: object
+    required:
+    - apiKey
+    - chatId
+    - refinement
+    properties:
+      apiKey:
+        type: string
+        description: v0 API key (V0_API_KEY) used as a Bearer token.
+      chatId:
+        type: string
+        description: The existing v0 chat session id to resume.
+      refinement:
+        type: string
+        description: Follow-up instruction used to refine the generated app.
+  steps:
+  - stepId: getChat
+    description: Read the existing chat to confirm it resolves before refining it.
+    operationId: getChat
+    parameters:
+    - name: chatId
+      in: path
+      value: $inputs.chatId
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      previewUrl: $response.body#/previewUrl
+      title: $response.body#/title
+  - stepId: refineChat
+    description: Continue the confirmed chat with the supplied refinement instruction.
+    operationId: continueChat
+    parameters:
+    - name: chatId
+      in: path
+      value: $inputs.chatId
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        message: $inputs.refinement
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      previewUrl: $response.body#/previewUrl
+      files: $response.body#/files
+      updatedAt: $response.body#/updatedAt
+  outputs:
+    previewUrl: $steps.refineChat.outputs.previewUrl
+    files: $steps.refineChat.outputs.files
