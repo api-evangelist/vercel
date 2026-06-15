@@ -1,0 +1,81 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Vercel v0 Platform API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Chats",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Chat",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://v0.dev/api/v1/chat",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Start a new v0 chat session to generate a web application from a natural language prompt. Returns generated code, a preview URL, and project details."
+        },
+        {
+          "info": {
+            "name": "Get Chat",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://v0.dev/api/v1/chat/:chatId",
+            "params": [
+              {
+                "name": "chatId",
+                "value": "",
+                "type": "path",
+                "description": "Chat session ID"
+              }
+            ]
+          },
+          "docs": "Returns details and generated code for an existing v0 chat session."
+        },
+        {
+          "info": {
+            "name": "Continue Chat",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://v0.dev/api/v1/chat/:chatId",
+            "params": [
+              {
+                "name": "chatId",
+                "value": "",
+                "type": "path",
+                "description": "Existing chat session ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Continue an existing v0 chat session with a follow-up message to iterate on the generated application."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

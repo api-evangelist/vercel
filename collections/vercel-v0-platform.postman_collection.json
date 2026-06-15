@@ -1,0 +1,753 @@
+{
+  "item": [
+    {
+      "id": "6dfa2bd0-3ac6-4ccc-ba90-725da7bc9f9f",
+      "name": "Chats",
+      "description": {
+        "content": "AI-powered app generation via chat sessions",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b26f8743-1a4c-44e6-896f-14c5821d43f9",
+          "name": "Create Chat",
+          "request": {
+            "name": "Create Chat",
+            "description": {
+              "content": "Start a new v0 chat session to generate a web application from a natural language prompt. Returns generated code, a preview URL, and project details.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "chat"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"<string>\",\n  \"system\": \"<string>\",\n  \"modelConfiguration\": {\n    \"model\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2a40f709-9f8f-4e6c-a5eb-14845aeaa545",
+              "name": "Chat response with generated code and preview",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "chat"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"Build a todo app with Next.js and Tailwind CSS with local storage persistence\",\n  \"system\": \"<string>\",\n  \"modelConfiguration\": {\n    \"model\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"url\": \"https://QPPWNlyVPztSOLytjbOiWNdjtEsxZo.wdmkloDhuTj.E+RHnxWULMK+JbHUI\",\n  \"previewUrl\": \"http://tbvhNTWuEde.ius0mv0A5stxHnVJs0UP12ceBuGlTse1EBm\",\n  \"files\": [\n    {\n      \"path\": \"string\",\n      \"content\": \"string\",\n      \"language\": \"string\"\n    },\n    {\n      \"path\": \"string\",\n      \"content\": \"string\",\n      \"language\": \"string\"\n    }\n  ],\n  \"title\": \"string\",\n  \"createdAt\": \"1954-06-23T23:10:13.005Z\",\n  \"updatedAt\": \"1964-07-25T07:48:29.640Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cc7ea3cd-244e-48f2-955f-e5da69c6b5d3",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "chat"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"Build a todo app with Next.js and Tailwind CSS with local storage persistence\",\n  \"system\": \"<string>\",\n  \"modelConfiguration\": {\n    \"model\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"code\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "55efefa5-1148-42aa-a50d-cfb526a65461",
+              "name": "Premium or Team plan required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "chat"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"Build a todo app with Next.js and Tailwind CSS with local storage persistence\",\n  \"system\": \"<string>\",\n  \"modelConfiguration\": {\n    \"model\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"code\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7313bf55-a7c4-44bd-bcca-bffe7a85acd6",
+              "name": "API rate limit exceeded",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "chat"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"Build a todo app with Next.js and Tailwind CSS with local storage persistence\",\n  \"system\": \"<string>\",\n  \"modelConfiguration\": {\n    \"model\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"code\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0042023e-8633-47f0-a520-4e2f31f409ae",
+          "name": "Continue Chat",
+          "request": {
+            "name": "Continue Chat",
+            "description": {
+              "content": "Continue an existing v0 chat session with a follow-up message to iterate on the generated application.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "chat",
+                ":chatId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "chatId",
+                  "description": "(Required) Existing chat session ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "dabe5812-6860-4711-b0af-99bcc0128692",
+              "name": "Updated chat response with revised code",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "chat",
+                    ":chatId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "chatId",
+                      "description": "(Required) Existing chat session ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"Add dark mode support and mobile responsive layout\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"url\": \"https://QPPWNlyVPztSOLytjbOiWNdjtEsxZo.wdmkloDhuTj.E+RHnxWULMK+JbHUI\",\n  \"previewUrl\": \"http://tbvhNTWuEde.ius0mv0A5stxHnVJs0UP12ceBuGlTse1EBm\",\n  \"files\": [\n    {\n      \"path\": \"string\",\n      \"content\": \"string\",\n      \"language\": \"string\"\n    },\n    {\n      \"path\": \"string\",\n      \"content\": \"string\",\n      \"language\": \"string\"\n    }\n  ],\n  \"title\": \"string\",\n  \"createdAt\": \"1954-06-23T23:10:13.005Z\",\n  \"updatedAt\": \"1964-07-25T07:48:29.640Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6717482c-cd31-4277-84dd-e07a8b03e85f",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "chat",
+                    ":chatId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "chatId",
+                      "description": "(Required) Existing chat session ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"Add dark mode support and mobile responsive layout\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"code\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "344d678d-0a1d-45d4-9075-8fcec0400d40",
+              "name": "Chat session not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "chat",
+                    ":chatId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "chatId",
+                      "description": "(Required) Existing chat session ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"Add dark mode support and mobile responsive layout\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"code\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "212aae7c-736e-4434-8b57-a419cebb0ebc",
+          "name": "Get Chat",
+          "request": {
+            "name": "Get Chat",
+            "description": {
+              "content": "Returns details and generated code for an existing v0 chat session.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "chat",
+                ":chatId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "chatId",
+                  "description": "(Required) Chat session ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f399f913-305a-4533-9937-8e527b23aea2",
+              "name": "Chat details and generated code",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "chat",
+                    ":chatId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "chatId",
+                      "description": "(Required) Chat session ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"url\": \"https://QPPWNlyVPztSOLytjbOiWNdjtEsxZo.wdmkloDhuTj.E+RHnxWULMK+JbHUI\",\n  \"previewUrl\": \"http://tbvhNTWuEde.ius0mv0A5stxHnVJs0UP12ceBuGlTse1EBm\",\n  \"files\": [\n    {\n      \"path\": \"string\",\n      \"content\": \"string\",\n      \"language\": \"string\"\n    },\n    {\n      \"path\": \"string\",\n      \"content\": \"string\",\n      \"language\": \"string\"\n    }\n  ],\n  \"title\": \"string\",\n  \"createdAt\": \"1954-06-23T23:10:13.005Z\",\n  \"updatedAt\": \"1964-07-25T07:48:29.640Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ce86360e-f191-4c9e-93fb-12b0f78b5393",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "chat",
+                    ":chatId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "chatId",
+                      "description": "(Required) Chat session ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"code\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e76572b0-0c50-4d85-89a1-e78f99ed7bcc",
+              "name": "Chat session not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "chat",
+                    ":chatId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "chatId",
+                      "description": "(Required) Chat session ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"code\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "8e1f04a2-ad5a-4069-8032-5f96a9a609ed",
+      "name": "Projects",
+      "description": {
+        "content": "Project management and deployment",
+        "type": "text/plain"
+      },
+      "item": [],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://v0.dev/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "5945b7cb-d78b-4656-8f8f-57aeb1c37f2a",
+    "name": "Vercel v0 Platform API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The v0 Platform API provides programmatic access to v0's AI-powered app generation pipeline. It is a REST interface wrapping v0's full code generation lifecycle from prompt to project to code files to deployment. Capabilities include generating full-stack web apps from natural language prompts, structured parsing of generated code, automatic error fixing, and linking with rendered previews. Requires a v0 API key and a Premium or Team plan.\n\nContact Support:\n Name: Vercel Support",
+      "type": "text/plain"
+    }
+  }
+}
