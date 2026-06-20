@@ -122,7 +122,7 @@ tags:
 - Observability
 - Webhooks
 kind: contract
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 access: 3rd-Party
 common:
 - type: ArazzoWorkflows
