@@ -125,42 +125,39 @@ kind: contract
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 access: 3rd-Party
 common:
-- type: ArazzoWorkflows
-  url: arazzo/
-  workflows:
-  - url: arazzo/vercel-chat-completion-with-fallback-workflow.yml
-    name: Vercel AI Gateway Chat Completion With Provider Fallback
-    summary: Attempt a chat completion with a provider fallback chain, retrying on rate limit.
-  - url: arazzo/vercel-cost-routed-conversation-workflow.yml
-    name: Vercel AI Gateway Cost-Routed Two-Turn Conversation
-    summary: Run a cost-sorted chat completion, then send a follow-up turn carrying the prior reply.
-  - url: arazzo/vercel-discover-model-then-complete-workflow.yml
-    name: Vercel AI Gateway Discover Model Then Complete
-    summary: List available models, confirm the requested one is present, then run a chat completion.
-  - url: arazzo/vercel-discover-model-then-embed-workflow.yml
-    name: Vercel AI Gateway Discover Model Then Embed
-    summary: List available models, confirm the embedding model is present, then create an embedding.
-  - url: arazzo/vercel-embed-then-summarize-workflow.yml
-    name: Vercel AI Gateway Embed Then Summarize
-    summary: Create an embedding for a document, then run a chat completion that summarizes it.
-  - url: arazzo/vercel-generate-app-then-explain-code-workflow.yml
-    name: Vercel Generate App Then Explain Code
-    summary: Generate an app with v0, fetch its files, then explain the code via the AI Gateway.
-  - url: arazzo/vercel-generate-app-then-poll-workflow.yml
-    name: Vercel v0 Generate App Then Poll For Files
-    summary: Generate a web app from a prompt, then poll the chat until generated files are present.
-  - url: arazzo/vercel-generate-then-refine-app-workflow.yml
-    name: Vercel v0 Generate Then Refine App
-    summary: Generate an app from a prompt, then send a follow-up refinement in the same chat.
-  - url: arazzo/vercel-iterative-app-build-workflow.yml
-    name: Vercel v0 Iterative App Build
-    summary: Generate an app, apply two sequential refinements, then read back the final chat.
-  - url: arazzo/vercel-prompt-with-gateway-then-build-app-workflow.yml
-    name: Vercel Draft Spec With Gateway Then Build App
-    summary: Draft an app spec via the AI Gateway, then feed that spec into v0 to generate the app.
-  - url: arazzo/vercel-resume-and-refine-chat-workflow.yml
-    name: Vercel v0 Resume And Refine Chat
-    summary: Fetch an existing chat to confirm it exists, then continue it with a refinement.
+- type: Arazzo
+  url: arazzo/vercel-chat-completion-with-fallback-workflow.yml
+  name: Vercel AI Gateway Chat Completion With Provider Fallback
+- type: Arazzo
+  url: arazzo/vercel-cost-routed-conversation-workflow.yml
+  name: Vercel AI Gateway Cost-Routed Two-Turn Conversation
+- type: Arazzo
+  url: arazzo/vercel-discover-model-then-complete-workflow.yml
+  name: Vercel AI Gateway Discover Model Then Complete
+- type: Arazzo
+  url: arazzo/vercel-discover-model-then-embed-workflow.yml
+  name: Vercel AI Gateway Discover Model Then Embed
+- type: Arazzo
+  url: arazzo/vercel-embed-then-summarize-workflow.yml
+  name: Vercel AI Gateway Embed Then Summarize
+- type: Arazzo
+  url: arazzo/vercel-generate-app-then-explain-code-workflow.yml
+  name: Vercel Generate App Then Explain Code
+- type: Arazzo
+  url: arazzo/vercel-generate-app-then-poll-workflow.yml
+  name: Vercel v0 Generate App Then Poll For Files
+- type: Arazzo
+  url: arazzo/vercel-generate-then-refine-app-workflow.yml
+  name: Vercel v0 Generate Then Refine App
+- type: Arazzo
+  url: arazzo/vercel-iterative-app-build-workflow.yml
+  name: Vercel v0 Iterative App Build
+- type: Arazzo
+  url: arazzo/vercel-prompt-with-gateway-then-build-app-workflow.yml
+  name: Vercel Draft Spec With Gateway Then Build App
+- type: Arazzo
+  url: arazzo/vercel-resume-and-refine-chat-workflow.yml
+  name: Vercel v0 Resume And Refine Chat
 - type: LinkedIn
   url: https://www.linkedin.com/company/vercel
 - url: https://vercel.com/marketplace
@@ -217,7 +214,7 @@ common:
   description: 'null'
 - url: https://vercel.com/signup
   name: Sign Up  Vercel
-  type: SignUp
+  type: Signup
   description: 'null'
 - url: https://github.com/vercel/vercel
   name: Vercel GitHub Repository
@@ -225,7 +222,7 @@ common:
   description: The main open-source Vercel repository, configured as a monorepo containing the CLI and multiple packages.
 - url: https://community.vercel.com/
   name: Vercel Community Forum
-  type: Forum
+  type: Forums
   description: The online community space for Vercel discussions, including help, feedback, showcase, and announcements.
 - url: https://www.vercel-status.com
   name: Vercel Status
@@ -253,7 +250,7 @@ common:
     variables from the terminal.
 - url: https://vercel.com/docs/ai-sdk
   name: Vercel AI SDK
-  type: SDK
+  type: SDKs
   description: >-
     TypeScript toolkit for building AI-powered applications with Next.js, Vue, Svelte, and Node.js, providing a
     unified API to call any LLM.

@@ -3,16 +3,19 @@
   "feeds": [
     {
       "source": "https://vercel.com/blog/rss.xml",
-      "error": "HTTPError"
+      "feed_url": "https://vercel.com/blog/rss.xml",
+      "title": "",
+      "saved": 23,
+      "method": "feed"
     },
     {
       "source": "https://vercel.com/blog",
-      "feed_url": "https://vercel.com/blog",
+      "feed_url": "https://vercel.com/blog/feed/",
       "title": "",
       "saved": 0,
-      "method": "none"
+      "method": "discovered"
     }
   ],
-  "post_count": 12,
-  "fetched": "2026-06-14T20:42:17Z"
+  "fetched": "2026-06-27T12:03:07Z",
+  "post_count": 52
 }
