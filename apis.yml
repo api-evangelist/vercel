@@ -125,6 +125,14 @@ kind: contract
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 access: 3rd-Party
 common:
+- type: TrustCenter
+  url: security/vercel-trust-center.yml
+- type: VulnerabilityDisclosure
+  url: security/vercel-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/vercel-domain-security.yml
+- type: Authentication
+  url: authentication/vercel-authentication.yml
 - type: Arazzo
   url: arazzo/vercel-chat-completion-with-fallback-workflow.yml
   name: Vercel AI Gateway Chat Completion With Provider Fallback

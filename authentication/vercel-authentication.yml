@@ -1,0 +1,14 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/vercel-ai-gateway-openapi.yml, openapi/vercel-v0-platform-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  description: Vercel AI Gateway API key (AI_GATEWAY_API_KEY)
+  sources:
+  - openapi/vercel-ai-gateway-openapi.yml
+  - openapi/vercel-v0-platform-openapi.yml
