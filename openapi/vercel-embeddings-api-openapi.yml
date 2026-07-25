@@ -1,0 +1,126 @@
+openapi: 3.1.0
+info:
+  title: Vercel AI Gateway Chat Embeddings API
+  description: The Vercel AI Gateway provides a unified API to access hundreds of AI models from multiple providers (Anthropic, OpenAI, Google, Meta, Mistral, and more) through a single endpoint. Features include one API key for hundreds of models, spend monitoring, automatic retries and fallbacks, provider routing by cost/latency/throughput, embeddings support, and zero markup on token pricing. Compatible with the AI SDK, OpenAI SDK, and Anthropic SDK.
+  version: 1.0.0
+  contact:
+    name: Vercel Support
+    url: https://vercel.com/help
+  termsOfService: https://vercel.com/legal/terms
+servers:
+- url: https://ai-gateway.vercel.sh
+  description: Vercel AI Gateway
+security:
+- BearerAuth: []
+tags:
+- name: Embeddings
+  description: Text embeddings
+paths:
+  /v1/embeddings:
+    post:
+      operationId: createEmbedding
+      summary: Create Embedding
+      description: Create text embeddings using any embedding model accessible via the Vercel AI Gateway. Compatible with the OpenAI Embeddings API.
+      tags:
+      - Embeddings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmbeddingRequest'
+      responses:
+        '200':
+          description: Embedding response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmbeddingResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid Bearer token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimitExceeded:
+      description: Rate limit or spend limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    EmbeddingRequest:
+      type: object
+      required:
+      - model
+      - input
+      properties:
+        model:
+          type: string
+          description: Embedding model identifier
+          example: openai/text-embedding-3-small
+        input:
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          description: Text to embed
+        encoding_format:
+          type: string
+          enum:
+          - float
+          - base64
+          default: float
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+            type:
+              type: string
+            code:
+              type: string
+    EmbeddingResponse:
+      type: object
+      properties:
+        object:
+          type: string
+          default: list
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              object:
+                type: string
+                default: embedding
+              index:
+                type: integer
+              embedding:
+                type: array
+                items:
+                  type: number
+        model:
+          type: string
+        usage:
+          type: object
+          properties:
+            prompt_tokens:
+              type: integer
+            total_tokens:
+              type: integer
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Vercel AI Gateway API key (AI_GATEWAY_API_KEY)

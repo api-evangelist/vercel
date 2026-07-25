@@ -1,36 +1,28 @@
 openapi: 3.1.0
 info:
-  title: Vercel v0 Platform API
-  description: >-
-    The v0 Platform API provides programmatic access to v0's AI-powered app
-    generation pipeline. It is a REST interface wrapping v0's full code generation
-    lifecycle from prompt to project to code files to deployment. Capabilities include
-    generating full-stack web apps from natural language prompts, structured parsing
-    of generated code, automatic error fixing, and linking with rendered previews.
-    Requires a v0 API key and a Premium or Team plan.
+  title: Vercel AI Gateway Chat Chats API
+  description: The Vercel AI Gateway provides a unified API to access hundreds of AI models from multiple providers (Anthropic, OpenAI, Google, Meta, Mistral, and more) through a single endpoint. Features include one API key for hundreds of models, spend monitoring, automatic retries and fallbacks, provider routing by cost/latency/throughput, embeddings support, and zero markup on token pricing. Compatible with the AI SDK, OpenAI SDK, and Anthropic SDK.
   version: 1.0.0
   contact:
     name: Vercel Support
     url: https://vercel.com/help
   termsOfService: https://vercel.com/legal/terms
 servers:
-  - url: https://v0.dev/api
-    description: v0 Platform API
+- url: https://ai-gateway.vercel.sh
+  description: Vercel AI Gateway
+security:
+- BearerAuth: []
 tags:
-  - name: Chats
-    description: AI-powered app generation via chat sessions
-  - name: Projects
-    description: Project management and deployment
+- name: Chats
+  description: AI-powered app generation via chat sessions
 paths:
   /v1/chat:
     post:
       operationId: createChat
       summary: Create Chat
-      description: >-
-        Start a new v0 chat session to generate a web application from a natural
-        language prompt. Returns generated code, a preview URL, and project details.
+      description: Start a new v0 chat session to generate a web application from a natural language prompt. Returns generated code, a preview URL, and project details.
       tags:
-        - Chats
+      - Chats
       requestBody:
         required: true
         content:
@@ -54,18 +46,16 @@ paths:
     post:
       operationId: continueChat
       summary: Continue Chat
-      description: >-
-        Continue an existing v0 chat session with a follow-up message to iterate
-        on the generated application.
+      description: Continue an existing v0 chat session with a follow-up message to iterate on the generated application.
       tags:
-        - Chats
+      - Chats
       parameters:
-        - name: chatId
-          in: path
-          required: true
-          description: Existing chat session ID
-          schema:
-            type: string
+      - name: chatId
+        in: path
+        required: true
+        description: Existing chat session ID
+        schema:
+          type: string
       requestBody:
         required: true
         content:
@@ -88,14 +78,14 @@ paths:
       summary: Get Chat
       description: Returns details and generated code for an existing v0 chat session.
       tags:
-        - Chats
+      - Chats
       parameters:
-        - name: chatId
-          in: path
-          required: true
-          description: Chat session ID
-          schema:
-            type: string
+      - name: chatId
+        in: path
+        required: true
+        description: Chat session ID
+        schema:
+          type: string
       responses:
         '200':
           description: Chat details and generated code
@@ -108,21 +98,62 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer
-      description: v0 API key (V0_API_KEY from v0.app settings)
+  responses:
+    PaymentRequired:
+      description: Premium or Team plan required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Chat session not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimitExceeded:
+      description: API rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    GeneratedFile:
+      type: object
+      properties:
+        path:
+          type: string
+          description: File path within the project (e.g., 'app/page.tsx')
+        content:
+          type: string
+          description: File content (source code)
+        language:
+          type: string
+          description: Programming language or file type
+    ContinueChatRequest:
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: Follow-up instruction or refinement request
+          example: Add dark mode support and mobile responsive layout
     CreateChatRequest:
       type: object
       required:
-        - message
+      - message
       properties:
         message:
           type: string
           description: Natural language prompt describing the app to generate
-          example: "Build a todo app with Next.js and Tailwind CSS with local storage persistence"
+          example: Build a todo app with Next.js and Tailwind CSS with local storage persistence
         system:
           type: string
           description: Optional system instructions to guide code generation
@@ -133,15 +164,16 @@ components:
             model:
               type: string
               description: AI model to use for generation
-    ContinueChatRequest:
+    Error:
       type: object
-      required:
-        - message
       properties:
-        message:
-          type: string
-          description: Follow-up instruction or refinement request
-          example: "Add dark mode support and mobile responsive layout"
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+            code:
+              type: string
     ChatResponse:
       type: object
       properties:
@@ -170,52 +202,8 @@ components:
         updatedAt:
           type: string
           format: date-time
-    GeneratedFile:
-      type: object
-      properties:
-        path:
-          type: string
-          description: File path within the project (e.g., 'app/page.tsx')
-        content:
-          type: string
-          description: File content (source code)
-        language:
-          type: string
-          description: Programming language or file type
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            message:
-              type: string
-            code:
-              type: string
-  responses:
-    Unauthorized:
-      description: Missing or invalid API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    PaymentRequired:
-      description: Premium or Team plan required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Chat session not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    RateLimitExceeded:
-      description: API rate limit exceeded
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-security:
-  - BearerAuth: []
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Vercel AI Gateway API key (AI_GATEWAY_API_KEY)
