@@ -11,64 +11,6 @@ apis:
   - url: graphql/vercel-graphql.md
     type: GraphQL
   description: Vercel is a developer cloud to build and deploy web applications.
-- aid: vercel:vercel-rest-api
-  name: Vercel REST API
-  tags:
-  - Access Groups
-  - Billing
-  - Certificates
-  - Deployments
-  - DNS
-  - Domains
-  - Edge Config
-  - Environment Variables
-  - Projects
-  - Teams
-  - Webhooks
-  humanURL: https://vercel.com/docs/rest-api/reference
-  properties:
-  - url: https://vercel.com/docs/rest-api/reference
-    type: Documentation
-  - url: https://openapi.vercel.sh/
-    type: OpenAPI
-  - url: https://vercel.com/docs/rest-api/reference#rate-limits
-    type: RateLimits
-  - url: https://vercel.com/docs/rest-api/reference#pagination
-    type: Pagination
-  - url: https://vercel.com/docs/rest-api/reference#versioning
-    type: Versioning
-  description: >-
-    The Vercel REST API provides programmatic access to the Vercel platform. All endpoints live under
-    https://api.vercel.com and follow REST architecture over SSL. The API covers deployments, domains, projects,
-    teams, DNS, certificates, edge config, environment variables, access groups, billing, security, webhooks, and
-    more. Authentication uses Bearer tokens via the Authorization header.
-- aid: vercel:vercel-ai-gateway-api
-  name: Vercel AI Gateway API
-  tags:
-  - AI
-  - AI Gateway
-  - LLM
-  - Machine Learning
-  - Models
-  humanURL: https://vercel.com/docs/ai-gateway
-  properties:
-  - url: https://vercel.com/docs/ai-gateway
-    type: Documentation
-  - url: https://vercel.com/docs/ai-gateway/getting-started
-    type: GettingStarted
-  - url: https://vercel.com/docs/ai-gateway/models-and-providers
-    type: Documentation
-  - url: https://vercel.com/docs/ai-gateway/sdks-and-apis/openai-compat
-    type: Documentation
-  - url: https://vercel.com/docs/ai-gateway/usage
-    type: UsageBilling
-  - url: https://raw.githubusercontent.com/api-evangelist/vercel/refs/heads/main/openapi/vercel-ai-gateway-openapi.yml
-    type: OpenAPI
-  description: >-
-    The Vercel AI Gateway provides a unified API to access hundreds of AI models from multiple providers through a
-    single endpoint at https://ai-gateway.vercel.sh/v1. It offers one key for hundreds of models, spend monitoring,
-    automatic retries and fallbacks, embeddings support, and zero markup on token pricing. Compatible with the AI SDK,
-    OpenAI SDK, and Anthropic SDK.
 - aid: vercel:vercel-webhooks
   name: Vercel Webhooks
   tags:
@@ -87,34 +29,141 @@ apis:
     type: APIReference
   - url: https://vercel.com/docs/headers/request-headers#x-vercel-signature
     type: Security
-  - url: https://raw.githubusercontent.com/api-evangelist/vercel/refs/heads/main/asyncapi/vercel-webhooks-asyncapi.yml
+  - url: >-
+      https://raw.githubusercontent.com/api-evangelist/vercel/refs/heads/main/asyncapi/vercel-webhooks-asyncapi.yml
     type: AsyncAPI
   description: >-
-    Vercel Webhooks deliver platform events to a subscriber-configured HTTPS endpoint via HTTP POST with a JSON body.
-    Subscriptions are created as Account Webhooks (Team Settings) or through Vercel Integrations and can opt in to
-    deployment, project, project domain, project environment variable, project rolling release, domain, feature flag,
-    integration configuration, integration resource, marketplace invoice, marketplace member, and observability alert
-    events. Every delivery shares a common envelope (id, type, createdAt, region, payload) and is signed with
-    HMAC-SHA1 using the webhook secret, sent in the x-vercel-signature header.
-- aid: vercel:v0-platform-api
-  name: V0 Platform API
+    Vercel Webhooks deliver platform events to a subscriber-configured HTTPS endpoint via HTTP POST with
+    a JSON body. Subscriptions are created as Account Webhooks (Team Settings) or through Vercel Integrations
+    and can opt in to deployment, project, project domain, project environment variable, project rolling
+    release, domain, feature flag, integration configuration, integration resource, marketplace invoice,
+    marketplace member, and observability alert events. Every delivery shares a common envelope (id, type,
+    createdAt, region, payload) and is signed with HMAC-SHA1 using the webhook secret, sent in the x-vercel-signature
+    header.
+- aid: vercel:vercel-chat-api
+  name: Vercel Chat API
+  description: Chat completions (OpenAI-compatible)
+  humanURL: ' https://vercel.com/docs'
   tags:
-  - AI
-  - App Builder
-  - Code Generation
-  humanURL: https://v0.dev/docs
+  - Chat
   properties:
-  - url: https://v0.dev/docs
-    type: Documentation
-  - url: https://github.com/vercel/v0-sdk
-    type: GitHubOrganization
-  - url: https://raw.githubusercontent.com/api-evangelist/vercel/refs/heads/main/openapi/vercel-v0-platform-openapi.yml
-    type: OpenAPI
-  description: >-
-    The v0 Platform API provides programmatic access to v0's AI-powered app generation pipeline. It is a REST
-    interface that wraps v0's full code generation lifecycle from prompt to project to code files to deployment.
-    Capabilities include generating full-stack web apps from natural language prompts, structured parsing of generated
-    code, automatic error fixing, and linking with rendered previews. A TypeScript SDK is available.
+  - type: OpenAPI
+    url: openapi/vercel-chat-api-openapi.yml
+  - type: Documentation
+    url: https://vercel.com/docs/rest-api/reference
+  - type: RateLimits
+    url: https://vercel.com/docs/rest-api/reference#rate-limits
+  - type: Pagination
+    url: https://vercel.com/docs/rest-api/reference#pagination
+  - type: Versioning
+    url: https://vercel.com/docs/rest-api/reference#versioning
+  - type: Documentation
+    url: https://vercel.com/docs/ai-gateway
+  - type: GettingStarted
+    url: https://vercel.com/docs/ai-gateway/getting-started
+  - type: Documentation
+    url: https://vercel.com/docs/ai-gateway/models-and-providers
+  - type: Documentation
+    url: https://vercel.com/docs/ai-gateway/sdks-and-apis/openai-compat
+  - type: UsageBilling
+    url: https://vercel.com/docs/ai-gateway/usage
+  - type: Documentation
+    url: https://v0.dev/docs
+  - type: GitHubOrganization
+    url: https://github.com/vercel/v0-sdk
+- aid: vercel:vercel-chats-api
+  name: Vercel Chats API
+  description: AI-powered app generation via chat sessions
+  humanURL: ' https://vercel.com/docs'
+  tags:
+  - Chats
+  properties:
+  - type: OpenAPI
+    url: openapi/vercel-chats-api-openapi.yml
+  - type: Documentation
+    url: https://vercel.com/docs/rest-api/reference
+  - type: RateLimits
+    url: https://vercel.com/docs/rest-api/reference#rate-limits
+  - type: Pagination
+    url: https://vercel.com/docs/rest-api/reference#pagination
+  - type: Versioning
+    url: https://vercel.com/docs/rest-api/reference#versioning
+  - type: Documentation
+    url: https://vercel.com/docs/ai-gateway
+  - type: GettingStarted
+    url: https://vercel.com/docs/ai-gateway/getting-started
+  - type: Documentation
+    url: https://vercel.com/docs/ai-gateway/models-and-providers
+  - type: Documentation
+    url: https://vercel.com/docs/ai-gateway/sdks-and-apis/openai-compat
+  - type: UsageBilling
+    url: https://vercel.com/docs/ai-gateway/usage
+  - type: Documentation
+    url: https://v0.dev/docs
+  - type: GitHubOrganization
+    url: https://github.com/vercel/v0-sdk
+- aid: vercel:vercel-embeddings-api
+  name: Vercel Embeddings API
+  description: Text embeddings
+  humanURL: ' https://vercel.com/docs'
+  tags:
+  - Embeddings
+  properties:
+  - type: OpenAPI
+    url: openapi/vercel-embeddings-api-openapi.yml
+  - type: Documentation
+    url: https://vercel.com/docs/rest-api/reference
+  - type: RateLimits
+    url: https://vercel.com/docs/rest-api/reference#rate-limits
+  - type: Pagination
+    url: https://vercel.com/docs/rest-api/reference#pagination
+  - type: Versioning
+    url: https://vercel.com/docs/rest-api/reference#versioning
+  - type: Documentation
+    url: https://vercel.com/docs/ai-gateway
+  - type: GettingStarted
+    url: https://vercel.com/docs/ai-gateway/getting-started
+  - type: Documentation
+    url: https://vercel.com/docs/ai-gateway/models-and-providers
+  - type: Documentation
+    url: https://vercel.com/docs/ai-gateway/sdks-and-apis/openai-compat
+  - type: UsageBilling
+    url: https://vercel.com/docs/ai-gateway/usage
+  - type: Documentation
+    url: https://v0.dev/docs
+  - type: GitHubOrganization
+    url: https://github.com/vercel/v0-sdk
+- aid: vercel:vercel-models-api
+  name: Vercel Models API
+  description: List available AI models
+  humanURL: ' https://vercel.com/docs'
+  tags:
+  - Models
+  properties:
+  - type: OpenAPI
+    url: openapi/vercel-models-api-openapi.yml
+  - type: Documentation
+    url: https://vercel.com/docs/rest-api/reference
+  - type: RateLimits
+    url: https://vercel.com/docs/rest-api/reference#rate-limits
+  - type: Pagination
+    url: https://vercel.com/docs/rest-api/reference#pagination
+  - type: Versioning
+    url: https://vercel.com/docs/rest-api/reference#versioning
+  - type: Documentation
+    url: https://vercel.com/docs/ai-gateway
+  - type: GettingStarted
+    url: https://vercel.com/docs/ai-gateway/getting-started
+  - type: Documentation
+    url: https://vercel.com/docs/ai-gateway/models-and-providers
+  - type: Documentation
+    url: https://vercel.com/docs/ai-gateway/sdks-and-apis/openai-compat
+  - type: UsageBilling
+    url: https://vercel.com/docs/ai-gateway/usage
+  - type: Documentation
+    url: https://v0.dev/docs
+  - type: GitHubOrganization
+    url: https://github.com/vercel/v0-sdk
 name: Vercel
 tags:
 - AI Gateways
@@ -122,9 +171,24 @@ tags:
 - Observability
 - Webhooks
 kind: contract
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/vercel.png
 access: 3rd-Party
 common:
+- type: PostmanWorkspace
+  url: https://www.postman.com/kinlaneapi/vercel/overview
 - type: AgenticAccess
   url: agentic-access/vercel-agentic-access.yml
 - type: TrustCenter
