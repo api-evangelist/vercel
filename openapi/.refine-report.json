@@ -1,0 +1,20 @@
+{
+  "provider": "vercel",
+  "sources": [
+    "vercel-chat-api-openapi.yml",
+    "vercel-chats-api-openapi.yml",
+    "vercel-embeddings-api-openapi.yml",
+    "vercel-models-api-openapi.yml"
+  ],
+  "outputs": [
+    "vercel-chat-api-openapi.yml",
+    "vercel-chats-api-openapi.yml",
+    "vercel-embeddings-api-openapi.yml",
+    "vercel-models-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

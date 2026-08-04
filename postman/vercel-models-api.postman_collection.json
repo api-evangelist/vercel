@@ -1,0 +1,166 @@
+{
+  "info": {
+    "_postman_id": "b71945f3-e865-4783-bea5-6cf374a93c7e",
+    "name": "Vercel AI Gateway Chat Models API",
+    "description": "The Vercel AI Gateway provides a unified API to access hundreds of AI models from multiple providers (Anthropic, OpenAI, Google, Meta, Mistral, and more) through a single endpoint. Features include one API key for hundreds of models, spend monitoring, automatic retries and fallbacks, provider routing by cost/latency/throughput, embeddings support, and zero markup on token pricing. Compatible with the AI SDK, OpenAI SDK, and Anthropic SDK.\n\nContact Support:\n Name: Vercel Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T03:26:55.000Z",
+    "updatedAt": "2026-07-28T03:26:55.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-b71945f3-e865-4783-bea5-6cf374a93c7e"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "models",
+          "item": [
+            {
+              "name": "List Models",
+              "id": "4affc8df-5272-41dd-989e-a30ef860edae",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/models",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "models"
+                  ]
+                },
+                "description": "Returns all available AI models accessible through the Vercel AI Gateway. Compatible with the OpenAI models API format."
+              },
+              "response": [
+                {
+                  "id": "f218638e-fab0-49b9-a4d7-9317d2d35630",
+                  "name": "List of available models",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/models",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "models"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"object\": \"model\",\n      \"created\": \"<integer>\",\n      \"owned_by\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"object\": \"model\",\n      \"created\": \"<integer>\",\n      \"owned_by\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T03:26:55.000Z",
+                  "updatedAt": "2026-07-28T03:26:55.000Z",
+                  "uid": "35240-f218638e-fab0-49b9-a4d7-9317d2d35630"
+                },
+                {
+                  "id": "37ab818b-887b-4260-ba54-0687d58c5d01",
+                  "name": "Missing or invalid Bearer token",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/models",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "models"
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"code\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-07-28T03:26:55.000Z",
+                  "updatedAt": "2026-07-28T03:26:55.000Z",
+                  "uid": "35240-37ab818b-887b-4260-ba54-0687d58c5d01"
+                }
+              ],
+              "createdAt": "2026-07-28T03:26:55.000Z",
+              "updatedAt": "2026-07-28T03:26:55.000Z",
+              "uid": "35240-4affc8df-5272-41dd-989e-a30ef860edae"
+            }
+          ],
+          "id": "96167c9e-944b-4d21-998d-bb95bb3f760b",
+          "createdAt": "2026-07-28T03:26:55.000Z",
+          "updatedAt": "2026-07-28T03:26:55.000Z",
+          "uid": "35240-96167c9e-944b-4d21-998d-bb95bb3f760b"
+        }
+      ],
+      "id": "d9b1c719-6234-4cc6-9960-c3c9827f758f",
+      "createdAt": "2026-07-28T03:26:55.000Z",
+      "updatedAt": "2026-07-28T03:26:55.000Z",
+      "uid": "35240-d9b1c719-6234-4cc6-9960-c3c9827f758f"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://ai-gateway.vercel.sh"
+    }
+  ]
+}

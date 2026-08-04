@@ -1,0 +1,265 @@
+{
+  "info": {
+    "_postman_id": "03bce4ae-a344-449f-8ff1-55e83a7f152c",
+    "name": "Vercel AI Gateway Chat Embeddings API",
+    "description": "The Vercel AI Gateway provides a unified API to access hundreds of AI models from multiple providers (Anthropic, OpenAI, Google, Meta, Mistral, and more) through a single endpoint. Features include one API key for hundreds of models, spend monitoring, automatic retries and fallbacks, provider routing by cost/latency/throughput, embeddings support, and zero markup on token pricing. Compatible with the AI SDK, OpenAI SDK, and Anthropic SDK.\n\nContact Support:\n Name: Vercel Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T03:26:54.000Z",
+    "updatedAt": "2026-07-28T03:26:54.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-03bce4ae-a344-449f-8ff1-55e83a7f152c"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "embeddings",
+          "item": [
+            {
+              "name": "Create Embedding",
+              "id": "c9488d91-3f8d-4057-8393-3d285943fddc",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"<string>\",\n  \"input\": \"<string>\",\n  \"encoding_format\": \"float\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/embeddings",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "embeddings"
+                  ]
+                },
+                "description": "Create text embeddings using any embedding model accessible via the Vercel AI Gateway. Compatible with the OpenAI Embeddings API."
+              },
+              "response": [
+                {
+                  "id": "84c27112-c355-4dcd-bbf5-9afbe762557d",
+                  "name": "Embedding response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"model\": \"<string>\",\n  \"input\": \"<string>\",\n  \"encoding_format\": \"float\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/embeddings",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "embeddings"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"object\": \"embedding\",\n      \"index\": \"<integer>\",\n      \"embedding\": [\n        \"<number>\",\n        \"<number>\"\n      ]\n    },\n    {\n      \"object\": \"embedding\",\n      \"index\": \"<integer>\",\n      \"embedding\": [\n        \"<number>\",\n        \"<number>\"\n      ]\n    }\n  ],\n  \"model\": \"<string>\",\n  \"usage\": {\n    \"prompt_tokens\": \"<integer>\",\n    \"total_tokens\": \"<integer>\"\n  }\n}",
+                  "createdAt": "2026-07-28T03:26:54.000Z",
+                  "updatedAt": "2026-07-28T03:26:54.000Z",
+                  "uid": "35240-84c27112-c355-4dcd-bbf5-9afbe762557d"
+                },
+                {
+                  "id": "73dd3418-8d4a-44fb-afce-e744988592c1",
+                  "name": "Missing or invalid Bearer token",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"model\": \"<string>\",\n  \"input\": \"<string>\",\n  \"encoding_format\": \"float\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/embeddings",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "embeddings"
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"code\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-07-28T03:26:54.000Z",
+                  "updatedAt": "2026-07-28T03:26:54.000Z",
+                  "uid": "35240-73dd3418-8d4a-44fb-afce-e744988592c1"
+                },
+                {
+                  "id": "39d36111-a547-4ecf-8bc2-69d32333073a",
+                  "name": "Rate limit or spend limit exceeded",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"model\": \"<string>\",\n  \"input\": \"<string>\",\n  \"encoding_format\": \"float\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/embeddings",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "embeddings"
+                      ]
+                    }
+                  },
+                  "status": "Too Many Requests",
+                  "code": 429,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"code\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-07-28T03:26:54.000Z",
+                  "updatedAt": "2026-07-28T03:26:54.000Z",
+                  "uid": "35240-39d36111-a547-4ecf-8bc2-69d32333073a"
+                }
+              ],
+              "createdAt": "2026-07-28T03:26:54.000Z",
+              "updatedAt": "2026-07-28T03:26:54.000Z",
+              "uid": "35240-c9488d91-3f8d-4057-8393-3d285943fddc"
+            }
+          ],
+          "id": "89720119-225e-4aa3-815c-081760e9f878",
+          "createdAt": "2026-07-28T03:26:54.000Z",
+          "updatedAt": "2026-07-28T03:26:54.000Z",
+          "uid": "35240-89720119-225e-4aa3-815c-081760e9f878"
+        }
+      ],
+      "id": "a5388e57-e482-4f7a-b343-5a99e90216f5",
+      "createdAt": "2026-07-28T03:26:54.000Z",
+      "updatedAt": "2026-07-28T03:26:54.000Z",
+      "uid": "35240-a5388e57-e482-4f7a-b343-5a99e90216f5"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://ai-gateway.vercel.sh"
+    }
+  ]
+}

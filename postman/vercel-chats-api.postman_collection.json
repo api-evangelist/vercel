@@ -1,0 +1,763 @@
+{
+  "info": {
+    "_postman_id": "0ec3da2a-cf0f-4103-b154-0d6aeeecc2f3",
+    "name": "Vercel AI Gateway Chat Chats API",
+    "description": "The Vercel AI Gateway provides a unified API to access hundreds of AI models from multiple providers (Anthropic, OpenAI, Google, Meta, Mistral, and more) through a single endpoint. Features include one API key for hundreds of models, spend monitoring, automatic retries and fallbacks, provider routing by cost/latency/throughput, embeddings support, and zero markup on token pricing. Compatible with the AI SDK, OpenAI SDK, and Anthropic SDK.\n\nContact Support:\n Name: Vercel Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T03:26:53.000Z",
+    "updatedAt": "2026-07-28T03:26:53.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-0ec3da2a-cf0f-4103-b154-0d6aeeecc2f3"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "chat",
+          "item": [
+            {
+              "name": "{chatId}",
+              "item": [
+                {
+                  "name": "Continue Chat",
+                  "id": "581c52c7-4a28-4632-bb30-5bcca03247bd",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"message\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/chat/:chatId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "chat",
+                        ":chatId"
+                      ],
+                      "variable": [
+                        {
+                          "id": "c779cca5-1d4f-4b7c-b026-583d36b86961",
+                          "key": "chatId",
+                          "value": "<string>",
+                          "description": "(Required) Existing chat session ID"
+                        }
+                      ]
+                    },
+                    "description": "Continue an existing v0 chat session with a follow-up message to iterate on the generated application."
+                  },
+                  "response": [
+                    {
+                      "id": "a1ce8f57-3168-426a-9463-4a96c01fbe29",
+                      "name": "Updated chat response with revised code",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"message\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/chat/:chatId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "chat",
+                            ":chatId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "chatId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"previewUrl\": \"<uri>\",\n  \"files\": [\n    {\n      \"path\": \"<string>\",\n      \"content\": \"<string>\",\n      \"language\": \"<string>\"\n    },\n    {\n      \"path\": \"<string>\",\n      \"content\": \"<string>\",\n      \"language\": \"<string>\"\n    }\n  ],\n  \"title\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"updatedAt\": \"<dateTime>\"\n}",
+                      "createdAt": "2026-07-28T03:26:53.000Z",
+                      "updatedAt": "2026-07-28T03:26:53.000Z",
+                      "uid": "35240-a1ce8f57-3168-426a-9463-4a96c01fbe29"
+                    },
+                    {
+                      "id": "6e1890b6-fb0c-4ed8-95f4-86e4c1266744",
+                      "name": "Missing or invalid API key",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"message\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/chat/:chatId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "chat",
+                            ":chatId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "chatId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"message\": \"<string>\",\n    \"code\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-07-28T03:26:53.000Z",
+                      "updatedAt": "2026-07-28T03:26:53.000Z",
+                      "uid": "35240-6e1890b6-fb0c-4ed8-95f4-86e4c1266744"
+                    },
+                    {
+                      "id": "baaf3486-0ecf-4441-a927-05002b8bba2e",
+                      "name": "Chat session not found",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"message\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/chat/:chatId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "chat",
+                            ":chatId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "chatId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"message\": \"<string>\",\n    \"code\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-07-28T03:26:53.000Z",
+                      "updatedAt": "2026-07-28T03:26:53.000Z",
+                      "uid": "35240-baaf3486-0ecf-4441-a927-05002b8bba2e"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T03:26:53.000Z",
+                  "updatedAt": "2026-07-28T03:26:53.000Z",
+                  "uid": "35240-581c52c7-4a28-4632-bb30-5bcca03247bd"
+                },
+                {
+                  "name": "Get Chat",
+                  "id": "aeaed68b-e9e0-4d7d-a5a8-e0f2b3a75994",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/chat/:chatId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "chat",
+                        ":chatId"
+                      ],
+                      "variable": [
+                        {
+                          "id": "2cc44641-532b-41eb-ae02-ce8a2e344cff",
+                          "key": "chatId",
+                          "value": "<string>",
+                          "description": "(Required) Chat session ID"
+                        }
+                      ]
+                    },
+                    "description": "Returns details and generated code for an existing v0 chat session."
+                  },
+                  "response": [
+                    {
+                      "id": "27457d7f-906f-420f-aff6-6d1da5337494",
+                      "name": "Chat details and generated code",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/chat/:chatId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "chat",
+                            ":chatId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "chatId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"previewUrl\": \"<uri>\",\n  \"files\": [\n    {\n      \"path\": \"<string>\",\n      \"content\": \"<string>\",\n      \"language\": \"<string>\"\n    },\n    {\n      \"path\": \"<string>\",\n      \"content\": \"<string>\",\n      \"language\": \"<string>\"\n    }\n  ],\n  \"title\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"updatedAt\": \"<dateTime>\"\n}",
+                      "createdAt": "2026-07-28T03:26:53.000Z",
+                      "updatedAt": "2026-07-28T03:26:53.000Z",
+                      "uid": "35240-27457d7f-906f-420f-aff6-6d1da5337494"
+                    },
+                    {
+                      "id": "a8fcf4b6-fc77-43f4-9060-6d0e4f73c0ea",
+                      "name": "Missing or invalid API key",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/chat/:chatId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "chat",
+                            ":chatId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "chatId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"message\": \"<string>\",\n    \"code\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-07-28T03:26:53.000Z",
+                      "updatedAt": "2026-07-28T03:26:53.000Z",
+                      "uid": "35240-a8fcf4b6-fc77-43f4-9060-6d0e4f73c0ea"
+                    },
+                    {
+                      "id": "b9ca3509-612a-48b8-8de1-85be2f223a40",
+                      "name": "Chat session not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/chat/:chatId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "chat",
+                            ":chatId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "chatId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"message\": \"<string>\",\n    \"code\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-07-28T03:26:53.000Z",
+                      "updatedAt": "2026-07-28T03:26:53.000Z",
+                      "uid": "35240-b9ca3509-612a-48b8-8de1-85be2f223a40"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T03:26:53.000Z",
+                  "updatedAt": "2026-07-28T03:26:53.000Z",
+                  "uid": "35240-aeaed68b-e9e0-4d7d-a5a8-e0f2b3a75994"
+                }
+              ],
+              "id": "5a9ec924-8b04-48d9-9edc-32cb4c0f1f17",
+              "createdAt": "2026-07-28T03:26:53.000Z",
+              "updatedAt": "2026-07-28T03:26:53.000Z",
+              "uid": "35240-5a9ec924-8b04-48d9-9edc-32cb4c0f1f17"
+            },
+            {
+              "name": "Create Chat",
+              "id": "8cc8d22c-acaf-4e25-97cf-55c7c85b51f9",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"<string>\",\n  \"system\": \"<string>\",\n  \"modelConfiguration\": {\n    \"model\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/chat",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "chat"
+                  ]
+                },
+                "description": "Start a new v0 chat session to generate a web application from a natural language prompt. Returns generated code, a preview URL, and project details."
+              },
+              "response": [
+                {
+                  "id": "58b0f661-dd4a-4c0a-a9ff-0f0bfe252927",
+                  "name": "Chat response with generated code and preview",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"message\": \"<string>\",\n  \"system\": \"<string>\",\n  \"modelConfiguration\": {\n    \"model\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/chat",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "chat"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"previewUrl\": \"<uri>\",\n  \"files\": [\n    {\n      \"path\": \"<string>\",\n      \"content\": \"<string>\",\n      \"language\": \"<string>\"\n    },\n    {\n      \"path\": \"<string>\",\n      \"content\": \"<string>\",\n      \"language\": \"<string>\"\n    }\n  ],\n  \"title\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"updatedAt\": \"<dateTime>\"\n}",
+                  "createdAt": "2026-07-28T03:26:53.000Z",
+                  "updatedAt": "2026-07-28T03:26:53.000Z",
+                  "uid": "35240-58b0f661-dd4a-4c0a-a9ff-0f0bfe252927"
+                },
+                {
+                  "id": "1492e465-5b05-48df-8048-7ade3e6f4207",
+                  "name": "Missing or invalid API key",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"message\": \"<string>\",\n  \"system\": \"<string>\",\n  \"modelConfiguration\": {\n    \"model\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/chat",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "chat"
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"message\": \"<string>\",\n    \"code\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-07-28T03:26:53.000Z",
+                  "updatedAt": "2026-07-28T03:26:53.000Z",
+                  "uid": "35240-1492e465-5b05-48df-8048-7ade3e6f4207"
+                },
+                {
+                  "id": "2cfb79fd-6c2f-417f-b217-f904a96288f0",
+                  "name": "Premium or Team plan required",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"message\": \"<string>\",\n  \"system\": \"<string>\",\n  \"modelConfiguration\": {\n    \"model\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/chat",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "chat"
+                      ]
+                    }
+                  },
+                  "status": "Payment Required",
+                  "code": 402,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"message\": \"<string>\",\n    \"code\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-07-28T03:26:53.000Z",
+                  "updatedAt": "2026-07-28T03:26:53.000Z",
+                  "uid": "35240-2cfb79fd-6c2f-417f-b217-f904a96288f0"
+                },
+                {
+                  "id": "7b182d52-c40d-44ce-8e98-153f43b08a44",
+                  "name": "API rate limit exceeded",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"message\": \"<string>\",\n  \"system\": \"<string>\",\n  \"modelConfiguration\": {\n    \"model\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/chat",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "chat"
+                      ]
+                    }
+                  },
+                  "status": "Too Many Requests",
+                  "code": 429,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"message\": \"<string>\",\n    \"code\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-07-28T03:26:53.000Z",
+                  "updatedAt": "2026-07-28T03:26:53.000Z",
+                  "uid": "35240-7b182d52-c40d-44ce-8e98-153f43b08a44"
+                }
+              ],
+              "createdAt": "2026-07-28T03:26:53.000Z",
+              "updatedAt": "2026-07-28T03:26:53.000Z",
+              "uid": "35240-8cc8d22c-acaf-4e25-97cf-55c7c85b51f9"
+            }
+          ],
+          "id": "e6802773-b2b1-42ad-904d-6364465870fc",
+          "createdAt": "2026-07-28T03:26:53.000Z",
+          "updatedAt": "2026-07-28T03:26:53.000Z",
+          "uid": "35240-e6802773-b2b1-42ad-904d-6364465870fc"
+        }
+      ],
+      "id": "741838fd-77ae-407b-9cf5-df3e7edca95b",
+      "createdAt": "2026-07-28T03:26:53.000Z",
+      "updatedAt": "2026-07-28T03:26:53.000Z",
+      "uid": "35240-741838fd-77ae-407b-9cf5-df3e7edca95b"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://ai-gateway.vercel.sh"
+    }
+  ]
+}

@@ -1,0 +1,278 @@
+{
+  "info": {
+    "_postman_id": "4536f8ba-f9d4-45d7-862e-26c5cf587b7c",
+    "name": "Vercel AI Gateway Chat API",
+    "description": "The Vercel AI Gateway provides a unified API to access hundreds of AI models from multiple providers (Anthropic, OpenAI, Google, Meta, Mistral, and more) through a single endpoint. Features include one API key for hundreds of models, spend monitoring, automatic retries and fallbacks, provider routing by cost/latency/throughput, embeddings support, and zero markup on token pricing. Compatible with the AI SDK, OpenAI SDK, and Anthropic SDK.\n\nContact Support:\n Name: Vercel Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T03:26:52.000Z",
+    "updatedAt": "2026-07-28T03:26:52.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-4536f8ba-f9d4-45d7-862e-26c5cf587b7c"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "chat",
+          "item": [
+            {
+              "name": "completions",
+              "item": [
+                {
+                  "name": "Create Chat Completion",
+                  "id": "da6dbdd1-1867-4a06-af5f-143263aea8eb",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"model\": \"<string>\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"<string>\",\n      \"name\": \"<string>\",\n      \"tool_call_id\": \"<string>\"\n    },\n    {\n      \"role\": \"system\",\n      \"content\": \"<string>\",\n      \"name\": \"<string>\",\n      \"tool_call_id\": \"<string>\"\n    }\n  ],\n  \"stream\": false,\n  \"temperature\": \"<number>\",\n  \"max_tokens\": \"<integer>\",\n  \"tools\": [\n    {\n      \"type\": \"function\",\n      \"function\": {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"parameters\": {}\n      }\n    },\n    {\n      \"type\": \"function\",\n      \"function\": {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"parameters\": {}\n      }\n    }\n  ],\n  \"tool_choice\": \"auto\",\n  \"providerOptions\": {\n    \"gateway\": {\n      \"order\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"sort\": \"ttft\"\n    }\n  },\n  \"provider\": {\n    \"sort\": \"cost\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/chat/completions",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "chat",
+                        "completions"
+                      ]
+                    },
+                    "description": "Create a chat completion using any model accessible via the Vercel AI Gateway. Supports streaming, tool calls, image inputs, and provider routing options. Compatible with the OpenAI Chat Completions API."
+                  },
+                  "response": [
+                    {
+                      "id": "90cd4dae-c0c7-40f4-836b-13b1e42fc03e",
+                      "name": "Chat completion response or SSE stream",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"model\": \"<string>\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"<string>\",\n      \"name\": \"<string>\",\n      \"tool_call_id\": \"<string>\"\n    },\n    {\n      \"role\": \"system\",\n      \"content\": \"<string>\",\n      \"name\": \"<string>\",\n      \"tool_call_id\": \"<string>\"\n    }\n  ],\n  \"stream\": false,\n  \"temperature\": \"<number>\",\n  \"max_tokens\": \"<integer>\",\n  \"tools\": [\n    {\n      \"type\": \"function\",\n      \"function\": {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"parameters\": {}\n      }\n    },\n    {\n      \"type\": \"function\",\n      \"function\": {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"parameters\": {}\n      }\n    }\n  ],\n  \"tool_choice\": \"auto\",\n  \"providerOptions\": {\n    \"gateway\": {\n      \"order\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"sort\": \"ttft\"\n    }\n  },\n  \"provider\": {\n    \"sort\": \"cost\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/chat/completions",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "chat",
+                            "completions"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"chat.completion\",\n  \"created\": \"<integer>\",\n  \"model\": \"<string>\",\n  \"choices\": [\n    {\n      \"index\": \"<integer>\",\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"<string>\",\n        \"name\": \"<string>\",\n        \"tool_call_id\": \"<string>\"\n      },\n      \"finish_reason\": \"tool_calls\"\n    },\n    {\n      \"index\": \"<integer>\",\n      \"message\": {\n        \"role\": \"user\",\n        \"content\": \"<string>\",\n        \"name\": \"<string>\",\n        \"tool_call_id\": \"<string>\"\n      },\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": \"<integer>\",\n    \"completion_tokens\": \"<integer>\",\n    \"total_tokens\": \"<integer>\"\n  }\n}",
+                      "createdAt": "2026-07-28T03:26:52.000Z",
+                      "updatedAt": "2026-07-28T03:26:52.000Z",
+                      "uid": "35240-90cd4dae-c0c7-40f4-836b-13b1e42fc03e"
+                    },
+                    {
+                      "id": "b3698526-2ca7-431d-a657-6fa7eb8d90c0",
+                      "name": "Missing or invalid Bearer token",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"model\": \"<string>\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"<string>\",\n      \"name\": \"<string>\",\n      \"tool_call_id\": \"<string>\"\n    },\n    {\n      \"role\": \"system\",\n      \"content\": \"<string>\",\n      \"name\": \"<string>\",\n      \"tool_call_id\": \"<string>\"\n    }\n  ],\n  \"stream\": false,\n  \"temperature\": \"<number>\",\n  \"max_tokens\": \"<integer>\",\n  \"tools\": [\n    {\n      \"type\": \"function\",\n      \"function\": {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"parameters\": {}\n      }\n    },\n    {\n      \"type\": \"function\",\n      \"function\": {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"parameters\": {}\n      }\n    }\n  ],\n  \"tool_choice\": \"auto\",\n  \"providerOptions\": {\n    \"gateway\": {\n      \"order\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"sort\": \"ttft\"\n    }\n  },\n  \"provider\": {\n    \"sort\": \"cost\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/chat/completions",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "chat",
+                            "completions"
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"code\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-07-28T03:26:52.000Z",
+                      "updatedAt": "2026-07-28T03:26:52.000Z",
+                      "uid": "35240-b3698526-2ca7-431d-a657-6fa7eb8d90c0"
+                    },
+                    {
+                      "id": "e9f99b45-90c7-4fc0-89eb-33aa4d82cb14",
+                      "name": "Rate limit or spend limit exceeded",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"model\": \"<string>\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"<string>\",\n      \"name\": \"<string>\",\n      \"tool_call_id\": \"<string>\"\n    },\n    {\n      \"role\": \"system\",\n      \"content\": \"<string>\",\n      \"name\": \"<string>\",\n      \"tool_call_id\": \"<string>\"\n    }\n  ],\n  \"stream\": false,\n  \"temperature\": \"<number>\",\n  \"max_tokens\": \"<integer>\",\n  \"tools\": [\n    {\n      \"type\": \"function\",\n      \"function\": {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"parameters\": {}\n      }\n    },\n    {\n      \"type\": \"function\",\n      \"function\": {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"parameters\": {}\n      }\n    }\n  ],\n  \"tool_choice\": \"auto\",\n  \"providerOptions\": {\n    \"gateway\": {\n      \"order\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"sort\": \"ttft\"\n    }\n  },\n  \"provider\": {\n    \"sort\": \"cost\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/chat/completions",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "chat",
+                            "completions"
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"code\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-07-28T03:26:52.000Z",
+                      "updatedAt": "2026-07-28T03:26:52.000Z",
+                      "uid": "35240-e9f99b45-90c7-4fc0-89eb-33aa4d82cb14"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T03:26:52.000Z",
+                  "updatedAt": "2026-07-28T03:26:52.000Z",
+                  "uid": "35240-da6dbdd1-1867-4a06-af5f-143263aea8eb"
+                }
+              ],
+              "id": "17f4617e-3760-426b-9242-a77bd18da4fc",
+              "createdAt": "2026-07-28T03:26:52.000Z",
+              "updatedAt": "2026-07-28T03:26:52.000Z",
+              "uid": "35240-17f4617e-3760-426b-9242-a77bd18da4fc"
+            }
+          ],
+          "id": "15798e48-680f-4c43-ae56-32c9d0114e3a",
+          "createdAt": "2026-07-28T03:26:52.000Z",
+          "updatedAt": "2026-07-28T03:26:52.000Z",
+          "uid": "35240-15798e48-680f-4c43-ae56-32c9d0114e3a"
+        }
+      ],
+      "id": "8f568856-5981-45cf-8991-b804ad7a3523",
+      "createdAt": "2026-07-28T03:26:52.000Z",
+      "updatedAt": "2026-07-28T03:26:52.000Z",
+      "uid": "35240-8f568856-5981-45cf-8991-b804ad7a3523"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://ai-gateway.vercel.sh"
+    }
+  ]
+}
