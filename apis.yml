@@ -6,8 +6,6 @@ apis:
   tags: []
   humanURL: ' https://vercel.com/docs'
   properties:
-  - url: ' https://vercel.com/docs'
-    type: Documentation
   - url: graphql/vercel-graphql.md
     type: GraphQL
   description: Vercel is a developer cloud to build and deploy web applications.
