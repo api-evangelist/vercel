@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Vercel AI Gateway Chat Embeddings API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Embeddings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Embedding",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ai-gateway.vercel.sh/v1/embeddings",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create text embeddings using any embedding model accessible via the Vercel AI Gateway. Compatible with the OpenAI Embeddings API."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
