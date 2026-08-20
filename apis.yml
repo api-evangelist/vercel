@@ -12,6 +12,14 @@ apis:
 - aid: vercel:vercel-webhooks
   name: Vercel Webhooks
   tags:
+  - Webhook
+  - Deployment
+  - Project
+  - Domains
+  - Integration
+  - Marketplace
+  - Event
+  tags_raw:
   - Webhooks
   - Deployments
   - Projects
@@ -164,6 +172,11 @@ apis:
     url: https://github.com/vercel/v0-sdk
 name: Vercel
 tags:
+- AI Gateways
+- Gateways
+- Observability
+- Webhook
+tags_raw:
 - AI Gateways
 - Gateways
 - Observability
