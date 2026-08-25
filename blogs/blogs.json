@@ -5,7 +5,7 @@
       "source": "https://vercel.com/blog/rss.xml",
       "feed_url": "https://vercel.com/blog/rss.xml",
       "title": "",
-      "saved": 36,
+      "saved": 0,
       "method": "feed"
     },
     {
@@ -23,6 +23,6 @@
       "method": "discovered"
     }
   ],
-  "fetched": "2026-08-15T12:11:08Z",
-  "post_count": 243
+  "fetched": "2026-08-22T20:20:02Z",
+  "post_count": 271
 }
