@@ -11,8 +11,8 @@ info:
     documents the success status.
   version: 1.0.0
 sourceDescriptions:
-- name: aiGatewayApi
-  url: ../openapi/vercel-ai-gateway-openapi.yml
+- name: chatApi
+  url: ../openapi/vercel-chat-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: chatCompletionWithFallback

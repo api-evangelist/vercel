@@ -10,11 +10,11 @@ info:
     Bearer token. Every step inlines its request and documents the success status.
   version: 1.0.0
 sourceDescriptions:
-- name: aiGatewayApi
-  url: ../openapi/vercel-ai-gateway-openapi.yml
+- name: chatApi
+  url: ../openapi/vercel-chat-api-openapi.yml
   type: openapi
-- name: v0PlatformApi
-  url: ../openapi/vercel-v0-platform-openapi.yml
+- name: chatsApi
+  url: ../openapi/vercel-chats-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: draftSpecThenBuildApp

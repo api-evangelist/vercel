@@ -10,8 +10,8 @@ info:
     documents the success status so the flow can be read and executed on its own.
   version: 1.0.0
 sourceDescriptions:
-- name: v0PlatformApi
-  url: ../openapi/vercel-v0-platform-openapi.yml
+- name: chatsApi
+  url: ../openapi/vercel-chats-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: generateThenRefineApp
