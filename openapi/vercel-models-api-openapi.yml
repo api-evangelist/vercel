@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Vercel AI Gateway Chat Models API
+  title: Vercel AI Gateway Models API
   description: The Vercel AI Gateway provides a unified API to access hundreds of AI models from multiple providers (Anthropic, OpenAI, Google, Meta, Mistral, and more) through a single endpoint. Features include one API key for hundreds of models, spend monitoring, automatic retries and fallbacks, provider routing by cost/latency/throughput, embeddings support, and zero markup on token pricing. Compatible with the AI SDK, OpenAI SDK, and Anthropic SDK.
   version: 1.0.0
   contact:
@@ -33,14 +33,22 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  responses:
-    Unauthorized:
-      description: Missing or invalid Bearer token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    Model:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Model identifier in format 'provider/model-name' (e.g., 'anthropic/claude-opus-4.6')
+        object:
+          type: string
+          default: model
+        created:
+          type: integer
+          description: Unix timestamp
+        owned_by:
+          type: string
+          description: Provider name
     Error:
       type: object
       properties:
@@ -63,21 +71,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Model'
-    Model:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Model identifier in format 'provider/model-name' (e.g., 'anthropic/claude-opus-4.6')
-        object:
-          type: string
-          default: model
-        created:
-          type: integer
-          description: Unix timestamp
-        owned_by:
-          type: string
-          description: Provider name
+  responses:
+    Unauthorized:
+      description: Missing or invalid Bearer token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     BearerAuth:
       type: http

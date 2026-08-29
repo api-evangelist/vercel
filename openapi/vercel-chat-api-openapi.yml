@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Vercel AI Gateway Chat API
   description: The Vercel AI Gateway provides a unified API to access hundreds of AI models from multiple providers (Anthropic, OpenAI, Google, Meta, Mistral, and more) through a single endpoint. Features include one API key for hundreds of models, spend monitoring, automatic retries and fallbacks, provider routing by cost/latency/throughput, embeddings support, and zero markup on token pricing. Compatible with the AI SDK, OpenAI SDK, and Anthropic SDK.
@@ -45,92 +45,56 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimitExceeded'
 components:
-  responses:
-    Unauthorized:
-      description: Missing or invalid Bearer token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    RateLimitExceeded:
-      description: Rate limit or spend limit exceeded
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    ProviderOptions:
+    Error:
       type: object
-      description: Gateway-specific routing options
       properties:
-        gateway:
+        error:
           type: object
           properties:
-            order:
-              type: array
-              items:
-                type: string
-              description: Ordered list of providers to try (fallback chain)
-            sort:
+            message:
               type: string
-              enum:
-              - cost
-              - ttft
-              - tps
-              description: Automatically sort providers by cost, time-to-first-token, or tokens-per-second
-    ChatCompletionRequest:
+            type:
+              type: string
+            code:
+              type: string
+    ChatCompletionResponse:
       type: object
-      required:
-      - model
-      - messages
       properties:
+        id:
+          type: string
+        object:
+          type: string
+          default: chat.completion
+        created:
+          type: integer
         model:
           type: string
-          description: Model ID in format 'provider/model-name' (e.g., 'anthropic/claude-opus-4.6', 'openai/gpt-4o')
-          example: anthropic/claude-opus-4.6
-        messages:
+        choices:
           type: array
           items:
-            $ref: '#/components/schemas/Message'
-          description: Conversation messages
-        stream:
-          type: boolean
-          default: false
-          description: Whether to stream the response using SSE
-        temperature:
-          type: number
-          minimum: 0
-          maximum: 2
-          description: Sampling temperature
-        max_tokens:
-          type: integer
-          description: Maximum tokens to generate
-        tools:
-          type: array
-          items:
-            $ref: '#/components/schemas/Tool'
-          description: Available tools for the model
-        tool_choice:
-          oneOf:
-          - type: string
-            enum:
-            - none
-            - auto
-            - required
-          - type: object
-          description: Tool selection strategy
-        providerOptions:
-          $ref: '#/components/schemas/ProviderOptions'
-        provider:
+            type: object
+            properties:
+              index:
+                type: integer
+              message:
+                $ref: '#/components/schemas/Message'
+              finish_reason:
+                type: string
+                enum:
+                - stop
+                - length
+                - tool_calls
+                - content_filter
+        usage:
           type: object
           properties:
-            sort:
-              type: string
-              enum:
-              - cost
-              - ttft
-              - tps
-              description: Provider sorting strategy shorthand
+            prompt_tokens:
+              type: integer
+            completion_tokens:
+              type: integer
+            total_tokens:
+              type: integer
     Tool:
       type: object
       properties:
@@ -204,55 +168,91 @@ components:
         tool_call_id:
           type: string
           description: Tool call ID (for tool messages)
-    ChatCompletionResponse:
+    ChatCompletionRequest:
       type: object
+      required:
+      - model
+      - messages
       properties:
-        id:
-          type: string
-        object:
-          type: string
-          default: chat.completion
-        created:
-          type: integer
         model:
           type: string
-        choices:
+          description: Model ID in format 'provider/model-name' (e.g., 'anthropic/claude-opus-4.6', 'openai/gpt-4o')
+          example: anthropic/claude-opus-4.6
+        messages:
           type: array
           items:
-            type: object
-            properties:
-              index:
-                type: integer
-              message:
-                $ref: '#/components/schemas/Message'
-              finish_reason:
-                type: string
-                enum:
-                - stop
-                - length
-                - tool_calls
-                - content_filter
-        usage:
+            $ref: '#/components/schemas/Message'
+          description: Conversation messages
+        stream:
+          type: boolean
+          default: false
+          description: Whether to stream the response using SSE
+        temperature:
+          type: number
+          minimum: 0
+          maximum: 2
+          description: Sampling temperature
+        max_tokens:
+          type: integer
+          description: Maximum tokens to generate
+        tools:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tool'
+          description: Available tools for the model
+        tool_choice:
+          oneOf:
+          - type: string
+            enum:
+            - none
+            - auto
+            - required
+          - type: object
+          description: Tool selection strategy
+        providerOptions:
+          $ref: '#/components/schemas/ProviderOptions'
+        provider:
           type: object
           properties:
-            prompt_tokens:
-              type: integer
-            completion_tokens:
-              type: integer
-            total_tokens:
-              type: integer
-    Error:
+            sort:
+              type: string
+              enum:
+              - cost
+              - ttft
+              - tps
+              description: Provider sorting strategy shorthand
+    ProviderOptions:
       type: object
+      description: Gateway-specific routing options
       properties:
-        error:
+        gateway:
           type: object
           properties:
-            message:
+            order:
+              type: array
+              items:
+                type: string
+              description: Ordered list of providers to try (fallback chain)
+            sort:
               type: string
-            type:
-              type: string
-            code:
-              type: string
+              enum:
+              - cost
+              - ttft
+              - tps
+              description: Automatically sort providers by cost, time-to-first-token, or tokens-per-second
+  responses:
+    Unauthorized:
+      description: Missing or invalid Bearer token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimitExceeded:
+      description: Rate limit or spend limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     BearerAuth:
       type: http

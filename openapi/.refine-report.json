@@ -1,20 +1,27 @@
 {
   "provider": "vercel",
   "sources": [
-    "vercel-chat-api-openapi.yml",
-    "vercel-chats-api-openapi.yml",
-    "vercel-embeddings-api-openapi.yml",
-    "vercel-models-api-openapi.yml"
+    "_original/vercel-ai-gateway-openapi.yml",
+    "_original/vercel-v0-platform-openapi.yml"
   ],
   "outputs": [
     "vercel-chat-api-openapi.yml",
-    "vercel-chats-api-openapi.yml",
     "vercel-embeddings-api-openapi.yml",
-    "vercel-models-api-openapi.yml"
+    "vercel-models-api-openapi.yml",
+    "vercel-chats-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "vercel-ai-gateway-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "vercel-v0-platform-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0"
+  ],
+  "skipped": [
+    "vercel-chat-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "vercel-chats-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "vercel-embeddings-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "vercel-models-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
