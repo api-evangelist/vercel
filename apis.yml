@@ -173,6 +173,7 @@ apis:
 name: Vercel
 tags:
 - AI Gateways
+- Developer Tools
 - Gateways
 - Observability
 - Webhook
