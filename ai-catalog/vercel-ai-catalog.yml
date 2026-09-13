@@ -51,6 +51,7 @@ conformance:
       ARD permits extension types without core registration.'
     - '[Vercel documentation graph] Media type ''application/json'' is a valid application extension media
       type. ARD permits extension types without core registration.'
+  did_web: null
 catalog:
   host_display_name: Vercel
   host_identifier: https://vercel.com
