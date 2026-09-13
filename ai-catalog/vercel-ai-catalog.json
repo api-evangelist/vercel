@@ -1,0 +1,60 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "Vercel",
+    "identifier": "https://vercel.com",
+    "documentationUrl": "https://vercel.com/docs/agent-resources"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:vercel.com:metadata:mcp-oauth",
+      "displayName": "Vercel MCP OAuth metadata",
+      "type": "application/json",
+      "url": "https://mcp.vercel.com/.well-known/oauth-protected-resource",
+      "description": "OAuth protected-resource metadata for connecting clients to Vercel MCP.",
+      "tags": [
+        "mcp",
+        "oauth",
+        "authorization",
+        "metadata"
+      ]
+    },
+    {
+      "identifier": "urn:air:vercel.com:api:rest",
+      "displayName": "Vercel REST API",
+      "type": "application/json",
+      "url": "https://vercel.com/openapi.json",
+      "description": "The OpenAPI 3.0 description for the public Vercel REST API.",
+      "tags": [
+        "api",
+        "openapi",
+        "deployments",
+        "projects"
+      ]
+    },
+    {
+      "identifier": "urn:air:vercel.com:docs:agent-resources",
+      "displayName": "Vercel agent resources",
+      "type": "text/markdown",
+      "url": "https://vercel.com/docs/agent-resources.md",
+      "description": "Machine-readable documentation for Vercel agent resources, including MCP, skills, and Markdown access.",
+      "tags": [
+        "documentation",
+        "skills",
+        "llms"
+      ]
+    },
+    {
+      "identifier": "urn:air:vercel.com:docs:graph",
+      "displayName": "Vercel documentation graph",
+      "type": "application/json",
+      "url": "https://vercel.com/docs/graph.json",
+      "description": "Cross-site documentation graph with page links, prerequisites, semantic neighbors, and related pages.",
+      "tags": [
+        "documentation",
+        "graph",
+        "discovery"
+      ]
+    }
+  ]
+}
