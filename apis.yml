@@ -172,7 +172,7 @@ apis:
     url: https://github.com/vercel/v0-sdk
 name: Vercel
 tags:
-- AI Gateways
+- AI Gateway
 - Gateways
 - Observability
 - Webhook
