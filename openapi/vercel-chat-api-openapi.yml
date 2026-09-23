@@ -46,128 +46,6 @@ paths:
           $ref: '#/components/responses/RateLimitExceeded'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            message:
-              type: string
-            type:
-              type: string
-            code:
-              type: string
-    ChatCompletionResponse:
-      type: object
-      properties:
-        id:
-          type: string
-        object:
-          type: string
-          default: chat.completion
-        created:
-          type: integer
-        model:
-          type: string
-        choices:
-          type: array
-          items:
-            type: object
-            properties:
-              index:
-                type: integer
-              message:
-                $ref: '#/components/schemas/Message'
-              finish_reason:
-                type: string
-                enum:
-                - stop
-                - length
-                - tool_calls
-                - content_filter
-        usage:
-          type: object
-          properties:
-            prompt_tokens:
-              type: integer
-            completion_tokens:
-              type: integer
-            total_tokens:
-              type: integer
-    Tool:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - function
-        function:
-          type: object
-          properties:
-            name:
-              type: string
-            description:
-              type: string
-            parameters:
-              type: object
-              description: JSON Schema for function parameters
-    Message:
-      type: object
-      required:
-      - role
-      - content
-      properties:
-        role:
-          type: string
-          enum:
-          - system
-          - user
-          - assistant
-          - tool
-          description: Message role
-        content:
-          oneOf:
-          - type: string
-            description: Text content
-          - type: array
-            description: Multi-modal content array
-            items:
-              oneOf:
-              - type: object
-                description: Text content part
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - text
-                  text:
-                    type: string
-              - type: object
-                description: Image content part
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - image_url
-                  image_url:
-                    type: object
-                    properties:
-                      url:
-                        type: string
-                        description: Image URL or base64 data URI
-                      detail:
-                        type: string
-                        enum:
-                        - auto
-                        - low
-                        - high
-        name:
-          type: string
-          description: Optional name for the message author
-        tool_call_id:
-          type: string
-          description: Tool call ID (for tool messages)
     ChatCompletionRequest:
       type: object
       required:
@@ -240,15 +118,137 @@ components:
               - ttft
               - tps
               description: Automatically sort providers by cost, time-to-first-token, or tokens-per-second
+    ChatCompletionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        object:
+          type: string
+          default: chat.completion
+        created:
+          type: integer
+        model:
+          type: string
+        choices:
+          type: array
+          items:
+            type: object
+            properties:
+              index:
+                type: integer
+              message:
+                $ref: '#/components/schemas/Message'
+              finish_reason:
+                type: string
+                enum:
+                - stop
+                - length
+                - tool_calls
+                - content_filter
+        usage:
+          type: object
+          properties:
+            prompt_tokens:
+              type: integer
+            completion_tokens:
+              type: integer
+            total_tokens:
+              type: integer
+    Message:
+      type: object
+      required:
+      - role
+      - content
+      properties:
+        role:
+          type: string
+          enum:
+          - system
+          - user
+          - assistant
+          - tool
+          description: Message role
+        content:
+          oneOf:
+          - type: string
+            description: Text content
+          - type: array
+            description: Multi-modal content array
+            items:
+              oneOf:
+              - type: object
+                description: Text content part
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - text
+                  text:
+                    type: string
+              - type: object
+                description: Image content part
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - image_url
+                  image_url:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                        description: Image URL or base64 data URI
+                      detail:
+                        type: string
+                        enum:
+                        - auto
+                        - low
+                        - high
+        name:
+          type: string
+          description: Optional name for the message author
+        tool_call_id:
+          type: string
+          description: Tool call ID (for tool messages)
+    Tool:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - function
+        function:
+          type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+            parameters:
+              type: object
+              description: JSON Schema for function parameters
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+            type:
+              type: string
+            code:
+              type: string
   responses:
-    Unauthorized:
-      description: Missing or invalid Bearer token
+    RateLimitExceeded:
+      description: Rate limit or spend limit exceeded
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    RateLimitExceeded:
-      description: Rate limit or spend limit exceeded
+    Unauthorized:
+      description: Missing or invalid Bearer token
       content:
         application/json:
           schema:

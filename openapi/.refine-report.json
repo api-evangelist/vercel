@@ -16,7 +16,8 @@
   "notes": [
     "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "vercel-ai-gateway-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "vercel-v0-platform-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0"
+    "vercel-v0-platform-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "vercel-chat-api-openapi.yml: previously refined output, superseded by openapi/_original/",

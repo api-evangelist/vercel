@@ -99,16 +99,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            message:
-              type: string
-            code:
-              type: string
     ContinueChatRequest:
       type: object
       required:
@@ -118,6 +108,34 @@ components:
           type: string
           description: Follow-up instruction or refinement request
           example: Add dark mode support and mobile responsive layout
+    ChatResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Chat session unique identifier
+        url:
+          type: string
+          format: uri
+          description: URL to the v0 chat in the browser
+        previewUrl:
+          type: string
+          format: uri
+          description: URL to the rendered preview of the generated app
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeneratedFile'
+          description: Generated code files
+        title:
+          type: string
+          description: Auto-generated title for the chat
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
     CreateChatRequest:
       type: object
       required:
@@ -149,35 +167,23 @@ components:
         language:
           type: string
           description: Programming language or file type
-    ChatResponse:
+    Error:
       type: object
       properties:
-        id:
-          type: string
-          description: Chat session unique identifier
-        url:
-          type: string
-          format: uri
-          description: URL to the v0 chat in the browser
-        previewUrl:
-          type: string
-          format: uri
-          description: URL to the rendered preview of the generated app
-        files:
-          type: array
-          items:
-            $ref: '#/components/schemas/GeneratedFile'
-          description: Generated code files
-        title:
-          type: string
-          description: Auto-generated title for the chat
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+            code:
+              type: string
   responses:
+    RateLimitExceeded:
+      description: API rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     NotFound:
       description: Chat session not found
       content:
@@ -192,12 +198,6 @@ components:
             $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Missing or invalid API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    RateLimitExceeded:
-      description: API rate limit exceeded
       content:
         application/json:
           schema:
