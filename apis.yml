@@ -4,10 +4,8 @@ apis:
 - aid: vercel:vercel
   name: Vercel
   tags: []
-  humanURL: ' https://vercel.com/docs'
+  humanURL: https://vercel.com/docs
   properties:
-  - url: graphql/vercel-graphql.md
-    type: GraphQL
   description: Vercel is a developer cloud to build and deploy web applications.
 - aid: vercel:vercel-webhooks
   name: Vercel Webhooks
@@ -49,7 +47,7 @@ apis:
 - aid: vercel:vercel-chat-api
   name: Vercel Chat API
   description: Chat completions (OpenAI-compatible)
-  humanURL: ' https://vercel.com/docs'
+  humanURL: https://vercel.com/docs
   tags:
   - Chat
   properties:
@@ -80,7 +78,7 @@ apis:
 - aid: vercel:vercel-chats-api
   name: Vercel Chats API
   description: AI-powered app generation via chat sessions
-  humanURL: ' https://vercel.com/docs'
+  humanURL: https://vercel.com/docs
   tags:
   - Chats
   properties:
@@ -111,7 +109,7 @@ apis:
 - aid: vercel:vercel-embeddings-api
   name: Vercel Embeddings API
   description: Text embeddings
-  humanURL: ' https://vercel.com/docs'
+  humanURL: https://vercel.com/docs
   tags:
   - Embeddings
   properties:
@@ -142,7 +140,7 @@ apis:
 - aid: vercel:vercel-models-api
   name: Vercel Models API
   description: List available AI models
-  humanURL: ' https://vercel.com/docs'
+  humanURL: https://vercel.com/docs
   tags:
   - Models
   properties:
