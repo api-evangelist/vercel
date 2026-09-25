@@ -1,0 +1,262 @@
+# Vendor facets — Vercel. A deployment platform and edge network: hosting itself earns nothing
+# on the Kin Score. What Vercel adds is enabling tooling — mcp-handler for a provider's OWN MCP
+# server on its own domain, a protected-resource-metadata helper, arbitrary /.well-known routes —
+# and every point there is the provider's work, not Vercel's. The one surface Vercel's template
+# generates for a customer (vercel.shop forwarding Shopify's UCP) grades `platform`.
+vendor: vercel
+name: Vercel
+website: https://vercel.com
+areas:
+- mcp-hosting
+- hosting
+registry_keys:
+- vercel
+rubric_schema_version: 0.22.0
+generated: '2026-09-25'
+features_refreshed: '2026-09-25'
+basis: measured
+summary: >-
+  Hosting on Vercel moves no Kin Score check by itself. What it does is make a provider's own agent surfaces
+  cheap to ship: mcp-handler runs an MCP server the provider writes on the provider's own domain, with
+  a helper that serves /.well-known/oauth-protected-resource, and any llms.txt or .well-known file is
+  just a route or a static file. Those points are earned by the provider's server and files, graded on
+  what the provider builds; the only surface Vercel's own code generates for a customer, the vercel.shop
+  template forwarding Shopify's UCP, is a platform surface and grades `platform`.
+features:
+- id: mcp-handler
+  name: mcp-handler (MCP server adapter for Vercel Functions)
+  description: >-
+    An open-source package that turns a Next.js route (e.g. /api/mcp) into a Streamable HTTP MCP server
+    running on Vercel Functions under the customer's own domain; the provider writes every tool.
+  source: https://vercel.com/docs/mcp/deploy-mcp-servers-to-vercel
+  tier: all
+- id: mcp-auth-prm
+  name: withMcpAuth + protectedResourceHandler
+  description: >-
+    mcp-handler helpers that verify bearer tokens against the provider's own authorization server and
+    serve RFC 9728 metadata at /.well-known/oauth-protected-resource; Vercel issues no tokens and runs
+    no authorization server.
+  source: https://vercel.com/docs/mcp/deploy-mcp-servers-to-vercel
+  tier: all
+- id: well-known-routes
+  name: Arbitrary /.well-known routes
+  description: >-
+    An app/.well-known/<name>/route directory serves any well-known document the provider writes (the
+    docs use oauth-protected-resource as the worked example).
+  source: https://vercel.com/docs/mcp/deploy-mcp-servers-to-vercel
+  tier: all
+- id: agent-readable-guide
+  name: Agent-readable site guidance (llms.txt, markdown mirrors)
+  description: >-
+    A knowledge-base guide telling customers to author a lean llms.txt index and advertise Markdown mirrors;
+    Vercel does not generate llms.txt for a customer site.
+  source: https://vercel.com/kb/guide/make-your-documentation-readable-by-ai-agents
+  tier: all
+- id: markdown-negotiation
+  name: Markdown content negotiation pattern
+  description: >-
+    A documented rewrite + route-handler pattern (used on Vercel's own docs) that returns text/markdown
+    from the same URL when a client sends Accept text/markdown, with Vary Accept.
+  source: https://vercel.com/docs/agent-resources/markdown-access
+  tier: all
+- id: vercel-shop
+  name: vercel.shop storefront template (Shopify)
+  description: >-
+    A Shopify storefront template the customer deploys that generates /llms.txt, markdown negotiation
+    and JSON-LD from store data, and forwards Shopify's UCP at /.well-known/ucp and /api/ucp/mcp.
+  source: https://docs.vercel.shop/docs/anatomy/aeo-geo
+  tier: open-source
+- id: web-bot-auth
+  name: Bot verification with Web Bot Auth
+  description: >-
+    Vercel's bot protection verifies inbound automated traffic by HTTP Message Signatures (Web Bot Auth)
+    as well as IP and reverse DNS.
+  source: https://vercel.com/changelog/vercels-bot-verification-now-supports-web-bot-auth
+  tier: unknown
+maps:
+- feature: mcp-handler
+  check: mcp_server
+  layer: agent_readiness
+  grade: verified
+  conditional: true
+  condition: >-
+    Only if the provider has an API or data to expose and writes the server's tools itself — mcp-handler
+    is a transport adapter, and the docs' example tool rolls a die. A server built this way is the provider's
+    own server on the provider's domain.
+  note: >-
+    The credit is for the provider's work, not Vercel's: a first-party server that answers the probe reaches
+    `verified` (1.0). A deployment on a *.vercel.app host rather than the provider's domain still counts
+    as the provider's server, but 0.23.0's mcp_endpoint_discoverable will read the endpoint's address.
+  points: 12
+  baseline_pass_rate: 0.22
+  cohort_pct: 39.4
+  control_pct: 21.5
+  delta_pp: 17.9
+- feature: mcp-auth-prm
+  check: protected_resource_metadata
+  layer: agent_readiness
+  grade: verified
+  conditional: true
+  condition: >-
+    Only if the provider already operates an OAuth authorization server — the helper publishes metadata
+    naming it; it cannot supply one.
+  provider_must: Configure authServerUrls and resourceUrl with its real issuer and MCP URL.
+  points: 5
+  baseline_pass_rate: 0.133
+  cohort_pct: 22.0
+  control_pct: 13.0
+  delta_pp: 9.0
+- feature: well-known-routes
+  check: well_known_published
+  layer: composite
+  provider_must: >-
+    Write and serve an api-catalog linkset, security.txt or protected-resource document under /.well-known
+    on its own domain; Vercel serves whatever route the provider writes, nothing by default.
+  catalog_pass_rate: 0.005
+  facet: discoverability
+  points: 6
+  baseline_pass_rate: 0.018
+  cohort_pct: 2.4
+  control_pct: 1.8
+  delta_pp: 0.6
+- feature: well-known-routes
+  check: well_known_catalog
+  layer: agent_readiness
+  provider_must: >-
+    Publish the well-known documents AND declare them (WellKnown / APICatalog) in common[] of its apis.yml
+    — the dimension reads the pointer, not the host.
+  points: 4
+  baseline_pass_rate: 0.061
+  cohort_pct: 7.9
+  control_pct: 6.1
+  delta_pp: 1.8
+- feature: agent-readable-guide
+  check: llms_txt_published
+  layer: composite
+  provider_must: >-
+    Write the llms.txt itself and ship it as a static file or route. Vercel generates none; the vercel.shop
+    template's generated file would be derived (0.25), not the provider's own.
+  catalog_pass_rate: 0.351
+  facet: discoverability
+  points: 4
+  baseline_pass_rate: 0.65
+  cohort_pct: 78.0
+  control_pct: 64.7
+  delta_pp: 13.3
+- feature: vercel-shop
+  check: agentic_commerce
+  layer: agent_readiness
+  grade: platform
+  conditional: true
+  condition: Only for a Shopify merchant who deploys the vercel.shop template.
+  note: >-
+    The /.well-known/ucp profile sits on the merchant's own domain, so a literal read of the grade rule
+    says `self`; it is Shopify's UCP forwarded through the template — one shape across every store — so
+    `platform` (0.25) is the honest grade, and 0.23.0's platform-generated class reads it that way.
+  points: 5
+  baseline_pass_rate: 0.002
+  cohort_pct: 0.0
+  control_pct: 0.2
+  delta_pp: -0.2
+earns_nothing:
+- feature: web-bot-auth
+  check: consent_identity
+  why: >-
+    Vercel verifies signatures on INBOUND bot traffic at its edge; the dimension reads a provider-declared
+    AIPREF / ContentSignal / WebBotAuth posture, and edge verification publishes nothing.
+- feature: markdown-negotiation
+  check: llms_txt_published
+  why: >-
+    Serving text/markdown on Accept is a different surface from llms.txt; no check reads content negotiation.
+out_of_reach:
+  checks:
+  - contract_present
+  - spec_presence
+  - sdk_count_1
+  - cli_present
+  - change_log_present
+  - status_page_present
+  - agent_card
+  note: >-
+    A host serves what the provider builds; it cannot author the provider's contract, SDKs, changelog
+    or agent card, and Vercel's own CLI, MCP and AI SDK describe Vercel, not the customer.
+unscored_practice:
+- feature: markdown-negotiation
+  why: >-
+    Accept text/markdown twins with Vary Accept are a real agent-facing practice that no 0.22.0 check
+    reads.
+surface:
+  discoverability:
+    reachable: 10.0
+    total: 54
+  agent_readiness:
+    reachable: 22.2
+    total: 139
+hard_rule: >-
+  A model, not a score. Adopting this vendor changes a provider's Kin Score only when the provider publishes
+  the resulting artifacts on its own surface; nothing here writes a score, and no sponsorship or partnership
+  can.
+method: searched
+source:
+- https://docs.vercel.shop/docs/anatomy/aeo-geo
+- https://vercel.com/changelog/vercels-bot-verification-now-supports-web-bot-auth
+- https://vercel.com/docs/agent-resources/markdown-access
+- https://vercel.com/docs/mcp/deploy-mcp-servers-to-vercel
+- https://vercel.com/kb/guide/make-your-documentation-readable-by-ai-agents
+measured:
+  cohort:
+    method: vendors-catalog.json detections (CNAME / header / URL shape / markup), never a name match
+    detected: 259
+    in_baseline: 127
+  control:
+    basis: providers earning contract_present + documentation_present + api_reference_present, minus the
+      cohort
+    n: 5089
+  metric: >-
+    cohort_pct / control_pct = mean share of the check's points earned (derived and platform credit weighted),
+    x100
+  measured_on: '2026-09-25'
+  composite_mean:
+    cohort: 50.0
+    control: 48.0
+  agent_readiness_mean:
+    cohort: 36.0
+    control: 32.4
+  status: measured
+  caveat: >-
+    A cohort delta is association, not cause: customers choose a vendor for reasons that also move their
+    score. Read it beside the capability map, never instead of it.
+simulation:
+  simulated_on: '2026-09-25'
+  rubric: 0.23.0
+  population: providers publishing a contract (contract_present earned), replayable exactly
+  providers: 8977
+  providers_unreplayable: 987
+  providers_moved: 8920
+  conditional_rows: excluded (they depend on what the API already does)
+  composite_lift:
+    median: 1.2
+    p75: 1.8
+    p90: 1.9
+    max: 1.9
+    mean_among_movers: 1.5
+  agent_readiness_lift:
+    median: 2.9
+    p75: 2.9
+    p90: 3.3
+    max: 3.4
+    mean_among_movers: 2.9
+  facet_lift_median_among_movers:
+    discoverability: 11.1
+  composite_band_moves:
+    thin -> developing: 548
+    developing -> strong: 243
+    emerging -> thin: 136
+    strong -> exemplar: 85
+    minimal -> emerging: 1
+  agent_readiness_band_moves:
+    agent-aware -> agent-ready: 1012
+    agent-ready -> agent-native: 112
+  method: >-
+    each provider's own kin/checks file, the vendor's maps at their stated credit, the scorer's composite
+    formula; from -> to, nothing written

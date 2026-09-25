@@ -209,6 +209,8 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/vercel.png
 access: 3rd-Party
 common:
+- type: VendorFacets
+  url: vendor-facets/vercel-vendor-facets.yml
 - type: Website
   url: https://www.vercel.com/
 - type: PostmanWorkspace
