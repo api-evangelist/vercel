@@ -174,11 +174,17 @@ tags:
 - Gateways
 - Observability
 - Webhook
+- Serverless
+- Hosting
+- Deployment
 tags_raw:
 - AI Gateways
 - Gateways
 - Observability
 - Webhooks
+- Serverless
+- Hosting
+- Deployment
 kind: contract
 deliveryModel:
   model: saas

@@ -108,6 +108,16 @@ components:
           type: string
           description: Follow-up instruction or refinement request
           example: Add dark mode support and mobile responsive layout
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+            code:
+              type: string
     ChatResponse:
       type: object
       properties:
@@ -167,23 +177,7 @@ components:
         language:
           type: string
           description: Programming language or file type
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            message:
-              type: string
-            code:
-              type: string
   responses:
-    RateLimitExceeded:
-      description: API rate limit exceeded
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     NotFound:
       description: Chat session not found
       content:
@@ -198,6 +192,12 @@ components:
             $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimitExceeded:
+      description: API rate limit exceeded
       content:
         application/json:
           schema:

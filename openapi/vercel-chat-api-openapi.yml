@@ -46,78 +46,18 @@ paths:
           $ref: '#/components/responses/RateLimitExceeded'
 components:
   schemas:
-    ChatCompletionRequest:
+    Error:
       type: object
-      required:
-      - model
-      - messages
       properties:
-        model:
-          type: string
-          description: Model ID in format 'provider/model-name' (e.g., 'anthropic/claude-opus-4.6', 'openai/gpt-4o')
-          example: anthropic/claude-opus-4.6
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-          description: Conversation messages
-        stream:
-          type: boolean
-          default: false
-          description: Whether to stream the response using SSE
-        temperature:
-          type: number
-          minimum: 0
-          maximum: 2
-          description: Sampling temperature
-        max_tokens:
-          type: integer
-          description: Maximum tokens to generate
-        tools:
-          type: array
-          items:
-            $ref: '#/components/schemas/Tool'
-          description: Available tools for the model
-        tool_choice:
-          oneOf:
-          - type: string
-            enum:
-            - none
-            - auto
-            - required
-          - type: object
-          description: Tool selection strategy
-        providerOptions:
-          $ref: '#/components/schemas/ProviderOptions'
-        provider:
+        error:
           type: object
           properties:
-            sort:
+            message:
               type: string
-              enum:
-              - cost
-              - ttft
-              - tps
-              description: Provider sorting strategy shorthand
-    ProviderOptions:
-      type: object
-      description: Gateway-specific routing options
-      properties:
-        gateway:
-          type: object
-          properties:
-            order:
-              type: array
-              items:
-                type: string
-              description: Ordered list of providers to try (fallback chain)
-            sort:
+            type:
               type: string
-              enum:
-              - cost
-              - ttft
-              - tps
-              description: Automatically sort providers by cost, time-to-first-token, or tokens-per-second
+            code:
+              type: string
     ChatCompletionResponse:
       type: object
       properties:
@@ -211,6 +151,59 @@ components:
         tool_call_id:
           type: string
           description: Tool call ID (for tool messages)
+    ChatCompletionRequest:
+      type: object
+      required:
+      - model
+      - messages
+      properties:
+        model:
+          type: string
+          description: Model ID in format 'provider/model-name' (e.g., 'anthropic/claude-opus-4.6', 'openai/gpt-4o')
+          example: anthropic/claude-opus-4.6
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+          description: Conversation messages
+        stream:
+          type: boolean
+          default: false
+          description: Whether to stream the response using SSE
+        temperature:
+          type: number
+          minimum: 0
+          maximum: 2
+          description: Sampling temperature
+        max_tokens:
+          type: integer
+          description: Maximum tokens to generate
+        tools:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tool'
+          description: Available tools for the model
+        tool_choice:
+          oneOf:
+          - type: string
+            enum:
+            - none
+            - auto
+            - required
+          - type: object
+          description: Tool selection strategy
+        providerOptions:
+          $ref: '#/components/schemas/ProviderOptions'
+        provider:
+          type: object
+          properties:
+            sort:
+              type: string
+              enum:
+              - cost
+              - ttft
+              - tps
+              description: Provider sorting strategy shorthand
     Tool:
       type: object
       properties:
@@ -228,27 +221,34 @@ components:
             parameters:
               type: object
               description: JSON Schema for function parameters
-    Error:
+    ProviderOptions:
       type: object
+      description: Gateway-specific routing options
       properties:
-        error:
+        gateway:
           type: object
           properties:
-            message:
+            order:
+              type: array
+              items:
+                type: string
+              description: Ordered list of providers to try (fallback chain)
+            sort:
               type: string
-            type:
-              type: string
-            code:
-              type: string
+              enum:
+              - cost
+              - ttft
+              - tps
+              description: Automatically sort providers by cost, time-to-first-token, or tokens-per-second
   responses:
-    RateLimitExceeded:
-      description: Rate limit or spend limit exceeded
+    Unauthorized:
+      description: Missing or invalid Bearer token
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid Bearer token
+    RateLimitExceeded:
+      description: Rate limit or spend limit exceeded
       content:
         application/json:
           schema:

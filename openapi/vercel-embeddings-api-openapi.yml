@@ -42,29 +42,18 @@ paths:
           $ref: '#/components/responses/RateLimitExceeded'
 components:
   schemas:
-    EmbeddingRequest:
+    Error:
       type: object
-      required:
-      - model
-      - input
       properties:
-        model:
-          type: string
-          description: Embedding model identifier
-          example: openai/text-embedding-3-small
-        input:
-          oneOf:
-          - type: string
-          - type: array
-            items:
+        error:
+          type: object
+          properties:
+            message:
               type: string
-          description: Text to embed
-        encoding_format:
-          type: string
-          enum:
-          - float
-          - base64
-          default: float
+            type:
+              type: string
+            code:
+              type: string
     EmbeddingResponse:
       type: object
       properties:
@@ -94,27 +83,38 @@ components:
               type: integer
             total_tokens:
               type: integer
-    Error:
+    EmbeddingRequest:
       type: object
+      required:
+      - model
+      - input
       properties:
-        error:
-          type: object
-          properties:
-            message:
+        model:
+          type: string
+          description: Embedding model identifier
+          example: openai/text-embedding-3-small
+        input:
+          oneOf:
+          - type: string
+          - type: array
+            items:
               type: string
-            type:
-              type: string
-            code:
-              type: string
+          description: Text to embed
+        encoding_format:
+          type: string
+          enum:
+          - float
+          - base64
+          default: float
   responses:
-    RateLimitExceeded:
-      description: Rate limit or spend limit exceeded
+    Unauthorized:
+      description: Missing or invalid Bearer token
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid Bearer token
+    RateLimitExceeded:
+      description: Rate limit or spend limit exceeded
       content:
         application/json:
           schema:
