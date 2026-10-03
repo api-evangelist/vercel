@@ -34,16 +34,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    ModelsResponse:
-      type: object
-      properties:
-        object:
-          type: string
-          default: list
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Model'
     Error:
       type: object
       properties:
@@ -71,6 +61,16 @@ components:
         owned_by:
           type: string
           description: Provider name
+    ModelsResponse:
+      type: object
+      properties:
+        object:
+          type: string
+          default: list
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Model'
   responses:
     Unauthorized:
       description: Missing or invalid Bearer token

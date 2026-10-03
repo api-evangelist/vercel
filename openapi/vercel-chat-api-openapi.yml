@@ -46,18 +46,6 @@ paths:
           $ref: '#/components/responses/RateLimitExceeded'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            message:
-              type: string
-            type:
-              type: string
-            code:
-              type: string
     ChatCompletionResponse:
       type: object
       properties:
@@ -95,62 +83,37 @@ components:
               type: integer
             total_tokens:
               type: integer
-    Message:
+    Error:
       type: object
-      required:
-      - role
-      - content
       properties:
-        role:
-          type: string
-          enum:
-          - system
-          - user
-          - assistant
-          - tool
-          description: Message role
-        content:
-          oneOf:
-          - type: string
-            description: Text content
-          - type: array
-            description: Multi-modal content array
-            items:
-              oneOf:
-              - type: object
-                description: Text content part
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - text
-                  text:
-                    type: string
-              - type: object
-                description: Image content part
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - image_url
-                  image_url:
-                    type: object
-                    properties:
-                      url:
-                        type: string
-                        description: Image URL or base64 data URI
-                      detail:
-                        type: string
-                        enum:
-                        - auto
-                        - low
-                        - high
-        name:
-          type: string
-          description: Optional name for the message author
-        tool_call_id:
-          type: string
-          description: Tool call ID (for tool messages)
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+            type:
+              type: string
+            code:
+              type: string
+    ProviderOptions:
+      type: object
+      description: Gateway-specific routing options
+      properties:
+        gateway:
+          type: object
+          properties:
+            order:
+              type: array
+              items:
+                type: string
+              description: Ordered list of providers to try (fallback chain)
+            sort:
+              type: string
+              enum:
+              - cost
+              - ttft
+              - tps
+              description: Automatically sort providers by cost, time-to-first-token, or tokens-per-second
     ChatCompletionRequest:
       type: object
       required:
@@ -221,34 +184,71 @@ components:
             parameters:
               type: object
               description: JSON Schema for function parameters
-    ProviderOptions:
+    Message:
       type: object
-      description: Gateway-specific routing options
+      required:
+      - role
+      - content
       properties:
-        gateway:
-          type: object
-          properties:
-            order:
-              type: array
-              items:
-                type: string
-              description: Ordered list of providers to try (fallback chain)
-            sort:
-              type: string
-              enum:
-              - cost
-              - ttft
-              - tps
-              description: Automatically sort providers by cost, time-to-first-token, or tokens-per-second
+        role:
+          type: string
+          enum:
+          - system
+          - user
+          - assistant
+          - tool
+          description: Message role
+        content:
+          oneOf:
+          - type: string
+            description: Text content
+          - type: array
+            description: Multi-modal content array
+            items:
+              oneOf:
+              - type: object
+                description: Text content part
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - text
+                  text:
+                    type: string
+              - type: object
+                description: Image content part
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - image_url
+                  image_url:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                        description: Image URL or base64 data URI
+                      detail:
+                        type: string
+                        enum:
+                        - auto
+                        - low
+                        - high
+        name:
+          type: string
+          description: Optional name for the message author
+        tool_call_id:
+          type: string
+          description: Tool call ID (for tool messages)
   responses:
-    Unauthorized:
-      description: Missing or invalid Bearer token
+    RateLimitExceeded:
+      description: Rate limit or spend limit exceeded
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    RateLimitExceeded:
-      description: Rate limit or spend limit exceeded
+    Unauthorized:
+      description: Missing or invalid Bearer token
       content:
         application/json:
           schema:

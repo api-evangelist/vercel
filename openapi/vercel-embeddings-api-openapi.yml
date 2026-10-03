@@ -42,6 +42,29 @@ paths:
           $ref: '#/components/responses/RateLimitExceeded'
 components:
   schemas:
+    EmbeddingRequest:
+      type: object
+      required:
+      - model
+      - input
+      properties:
+        model:
+          type: string
+          description: Embedding model identifier
+          example: openai/text-embedding-3-small
+        input:
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          description: Text to embed
+        encoding_format:
+          type: string
+          enum:
+          - float
+          - base64
+          default: float
     Error:
       type: object
       properties:
@@ -83,38 +106,15 @@ components:
               type: integer
             total_tokens:
               type: integer
-    EmbeddingRequest:
-      type: object
-      required:
-      - model
-      - input
-      properties:
-        model:
-          type: string
-          description: Embedding model identifier
-          example: openai/text-embedding-3-small
-        input:
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          description: Text to embed
-        encoding_format:
-          type: string
-          enum:
-          - float
-          - base64
-          default: float
   responses:
-    Unauthorized:
-      description: Missing or invalid Bearer token
+    RateLimitExceeded:
+      description: Rate limit or spend limit exceeded
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    RateLimitExceeded:
-      description: Rate limit or spend limit exceeded
+    Unauthorized:
+      description: Missing or invalid Bearer token
       content:
         application/json:
           schema:
