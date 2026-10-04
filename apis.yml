@@ -5,7 +5,7 @@ apis:
   name: Vercel
   tags: []
   humanURL: https://vercel.com/docs
-  properties:
+  properties: null
   description: Vercel is a developer cloud to build and deploy web applications.
 - aid: vercel:vercel-webhooks
   name: Vercel Webhooks
@@ -44,37 +44,6 @@ apis:
     marketplace member, and observability alert events. Every delivery shares a common envelope (id, type,
     createdAt, region, payload) and is signed with HMAC-SHA1 using the webhook secret, sent in the x-vercel-signature
     header.
-- aid: vercel:vercel-chat-api
-  name: Vercel Chat API
-  description: Chat completions (OpenAI-compatible)
-  humanURL: https://vercel.com/docs
-  tags:
-  - Chat
-  properties:
-  - type: OpenAPI
-    url: openapi/vercel-chat-api-openapi.yml
-  - type: Documentation
-    url: https://vercel.com/docs/rest-api/reference
-  - type: RateLimits
-    url: https://vercel.com/docs/rest-api/reference#rate-limits
-  - type: Pagination
-    url: https://vercel.com/docs/rest-api/reference#pagination
-  - type: Versioning
-    url: https://vercel.com/docs/rest-api/reference#versioning
-  - type: Documentation
-    url: https://vercel.com/docs/ai-gateway
-  - type: GettingStarted
-    url: https://vercel.com/docs/ai-gateway/getting-started
-  - type: Documentation
-    url: https://vercel.com/docs/ai-gateway/models-and-providers
-  - type: Documentation
-    url: https://vercel.com/docs/ai-gateway/sdks-and-apis/openai-compat
-  - type: UsageBilling
-    url: https://vercel.com/docs/ai-gateway/usage
-  - type: Documentation
-    url: https://v0.dev/docs
-  - type: GitHubOrganization
-    url: https://github.com/vercel/v0-sdk
 - aid: vercel:vercel-chats-api
   name: Vercel Chats API
   description: AI-powered app generation via chat sessions
@@ -146,6 +115,37 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/vercel-models-api-openapi.yml
+  - type: Documentation
+    url: https://vercel.com/docs/rest-api/reference
+  - type: RateLimits
+    url: https://vercel.com/docs/rest-api/reference#rate-limits
+  - type: Pagination
+    url: https://vercel.com/docs/rest-api/reference#pagination
+  - type: Versioning
+    url: https://vercel.com/docs/rest-api/reference#versioning
+  - type: Documentation
+    url: https://vercel.com/docs/ai-gateway
+  - type: GettingStarted
+    url: https://vercel.com/docs/ai-gateway/getting-started
+  - type: Documentation
+    url: https://vercel.com/docs/ai-gateway/models-and-providers
+  - type: Documentation
+    url: https://vercel.com/docs/ai-gateway/sdks-and-apis/openai-compat
+  - type: UsageBilling
+    url: https://vercel.com/docs/ai-gateway/usage
+  - type: Documentation
+    url: https://v0.dev/docs
+  - type: GitHubOrganization
+    url: https://github.com/vercel/v0-sdk
+- aid: vercel:vercel-chat-completions-api
+  name: Vercel Chat Completions API
+  description: Chat completions (OpenAI-compatible)
+  humanURL: https://vercel.com/docs
+  tags:
+  - Chat Completions
+  properties:
+  - type: OpenAPI
+    url: openapi/vercel-chat-completions-api-openapi.yml
   - type: Documentation
     url: https://vercel.com/docs/rest-api/reference
   - type: RateLimits

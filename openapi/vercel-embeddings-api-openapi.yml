@@ -65,18 +65,6 @@ components:
           - float
           - base64
           default: float
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            message:
-              type: string
-            type:
-              type: string
-            code:
-              type: string
     EmbeddingResponse:
       type: object
       properties:
@@ -106,6 +94,18 @@ components:
               type: integer
             total_tokens:
               type: integer
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+            type:
+              type: string
+            code:
+              type: string
   responses:
     RateLimitExceeded:
       description: Rate limit or spend limit exceeded

@@ -34,18 +34,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            message:
-              type: string
-            type:
-              type: string
-            code:
-              type: string
     Model:
       type: object
       properties:
@@ -61,6 +49,18 @@ components:
         owned_by:
           type: string
           description: Provider name
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+            type:
+              type: string
+            code:
+              type: string
     ModelsResponse:
       type: object
       properties:
