@@ -215,6 +215,10 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/vercel.png
 access: 3rd-Party
 common:
+- type: Plans
+  url: plans/vercel-plans-pricing.yml
+- type: FinOps
+  url: finops/vercel-finops.yml
 - type: VendorFacets
   url: vendor-facets/vercel-vendor-facets.yml
 - type: Website
