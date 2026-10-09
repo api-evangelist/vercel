@@ -221,3 +221,50 @@ plans:
       - name: Multi-region failover
       - name: Dedicated infrastructure
       - name: 99.99% SLA
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  - hybrid
+  - subscription
+  units:
+  - compute
+  - data
+  - money
+  - period
+  - request
+  - seat
+  plans:
+  - name: Hobby
+    access: freemium
+    model: free
+    model_how: derived
+    units:
+    - compute
+    - data
+    - other
+    - request
+    periods:
+    - month
+  - name: Pro
+    access: paid
+    model: hybrid
+    model_how: derived
+    units:
+    - compute
+    - data
+    - money
+    - other
+    - request
+    - seat
+    periods:
+    - month
+  - name: Enterprise
+    access: enterprise
+    model: subscription
+    model_how: derived
+    units:
+    - period
+    periods:
+    - year
