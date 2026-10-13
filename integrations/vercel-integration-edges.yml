@@ -2,6 +2,7 @@ generated: '2026-10-13'
 method: searched
 checked:
 - https://aws.amazon.com/marketplace/
+- https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json
 marketplace_apps: []
 edges:
 - partner_name: AWS Marketplace
@@ -21,3 +22,41 @@ edges:
   seller_name: Vercel
   detected_by: sweep-cloud-marketplaces.py
   detected: '2026-10-13'
+- partner_name: LiteLLM
+  partner: litellm
+  partner_match: router
+  channel: partner-built
+  direction: partner-built
+  type: coverage
+  relationship: system-coverage
+  evidence: https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json
+  coverage_role:
+  - provider
+  router_signals:
+    provider:
+      models: 99
+      router_ids:
+      - vercel_ai_gateway
+      tools_share: 0.75
+      structured_output_share: 0.41
+  matched_by: verified-token-table
+  detected_by: sweep-model-routing.py
+  first_seen: '2026-10-13'
+- partner_name: OpenAI
+  partner: openai
+  partner_match: domain
+  type: contract
+  channel: provider-built
+  relationship: compatible
+  direction: provider-built
+  evidence: https://github.com/api-evangelist/vercel/blob/main/openapi/vercel-chat-completions-api-openapi.yml#L17
+  contract_reference:
+    repo: vercel
+    spec_file: vercel-chat-completions-api-openapi.yml
+    property: description
+    value: OpenAI-compatible
+    note: 'vercel declares OpenAI compatibility: ''description: Chat completions (OpenAI-compatible)'''
+    detected_by: sweep-model-routing.py
+    detected: '2026-10-13'
+  detected_by: sweep-model-routing.py
+  first_seen: '2026-10-13'
