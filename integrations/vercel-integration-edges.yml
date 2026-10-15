@@ -8,6 +8,7 @@ checked:
 - https://github.com/cncf/landscape
 - https://github.com/marketplace?type=actions
 - https://registry.modelcontextprotocol.io/v0/servers
+- sanity/integrations/sanity-integration-edges.yml
 - stripe/integrations/stripe-integration-edges.yml
 marketplace_apps: []
 edges:
@@ -190,5 +191,22 @@ edges:
     detected: '2026-10-15'
   detected_by: sweep-cloud-native.py
   first_seen: '2026-10-15'
+- partner_name: Sanity (own)
+  partner: sanity
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.sanity.io/technology-partners/vercel
+  mirror_of: sanity/integrations/sanity-integration-edges.yml
+  apps:
+  - Vercel
+  listing_count: 1
+  detected: '2026-10-15'
+  detected_by: mirror-platform-listings.py
+  category: Sanity technology partner
 source:
 - https://github.com/marketplace?type=actions
