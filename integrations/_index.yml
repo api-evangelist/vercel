@@ -76,3 +76,16 @@
     detected: '2026-10-14'
   status: not-a-workflow
   arazzo: null
+- slug: vercel-stripe-own
+  label: Stripe (own)
+  partner: stripe
+  partner_name: Stripe (own)
+  category: developer_tools, productivity
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.stripe.com/apps/vercel
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null

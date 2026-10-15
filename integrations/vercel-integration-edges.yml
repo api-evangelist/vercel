@@ -5,6 +5,7 @@ checked:
 - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json
 - https://github.com/marketplace?type=actions
 - https://registry.modelcontextprotocol.io/v0/servers
+- stripe/integrations/stripe-integration-edges.yml
 marketplace_apps: []
 edges:
 - partner_name: AWS Marketplace
@@ -24,6 +25,41 @@ edges:
   seller_name: Vercel
   detected_by: sweep-cloud-marketplaces.py
   detected: '2026-10-13'
+- partner_name: GitHub Marketplace (actions)
+  partner: github-actions
+  partner_match: aggregator
+  type: marketplace
+  marketplace: github-actions
+  channel: partner-built
+  relationship: platform-app
+  direction: third-party
+  evidence: https://github.com/marketplace/actions/vercel-ai
+  listing_count: 2
+  apps:
+  - vercel-ai
+  - Setup Turborepo Remote Cache
+  publisher_name: Vercel
+  badges:
+  - Verified creator
+  detected_by: sweep-devtools.py
+  detected: '2026-10-14'
+- partner_name: Stripe (own)
+  partner: stripe
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://marketplace.stripe.com/apps/vercel
+  mirror_of: stripe/integrations/stripe-integration-edges.yml
+  apps:
+  - Vercel
+  listing_count: 1
+  detected: '2026-10-15'
+  detected_by: mirror-platform-listings.py
+  category: developer_tools, productivity
 - partner_name: LiteLLM
   partner: litellm
   partner_match: router
@@ -59,27 +95,9 @@ edges:
     value: OpenAI-compatible
     note: 'vercel declares OpenAI compatibility: ''description: Chat completions (OpenAI-compatible)'''
     detected_by: sweep-model-routing.py
-    detected: '2026-10-13'
+    detected: '2026-10-15'
   detected_by: sweep-model-routing.py
   first_seen: '2026-10-13'
-- partner_name: GitHub Marketplace (actions)
-  partner: github-actions
-  partner_match: aggregator
-  type: marketplace
-  marketplace: github-actions
-  channel: partner-built
-  relationship: platform-app
-  direction: third-party
-  evidence: https://github.com/marketplace/actions/vercel-ai
-  listing_count: 2
-  apps:
-  - vercel-ai
-  - Setup Turborepo Remote Cache
-  publisher_name: Vercel
-  badges:
-  - Verified creator
-  detected_by: sweep-devtools.py
-  detected: '2026-10-14'
 - partner_name: MCP Registry
   partner: mcp
   partner_match: register
@@ -95,7 +113,7 @@ edges:
     registered_name: com.vercel/vercel-mcp
     register_id: com.vercel/vercel-mcp
     detected_by: sweep-agent-tools.py
-    detected: '2026-10-14'
+    detected: '2026-10-15'
   mcp_registry:
     servers:
     - com.vercel/vercel-mcp
