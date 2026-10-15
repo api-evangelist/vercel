@@ -15,6 +15,31 @@
   relationship: distribution-channel
   status: not-a-workflow
   arazzo: null
+- slug: vercel-github-marketplace-actions
+  label: GitHub Marketplace (actions)
+  partner: github-actions
+  partner_name: GitHub Marketplace (actions)
+  type: marketplace
+  marketplace: github-actions
+  channel: partner-built
+  evidence: https://github.com/marketplace/actions/vercel-ai
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: vercel-stripe-own
+  label: Stripe (own)
+  partner: stripe
+  partner_name: Stripe (own)
+  category: developer_tools, productivity
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.stripe.com/apps/vercel
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
 - slug: vercel-litellm
   label: LiteLLM
   partner: litellm
@@ -42,19 +67,7 @@
     value: OpenAI-compatible
     note: 'vercel declares OpenAI compatibility: ''description: Chat completions (OpenAI-compatible)'''
     detected_by: sweep-model-routing.py
-    detected: '2026-10-13'
-  status: not-a-workflow
-  arazzo: null
-- slug: vercel-github-marketplace-actions
-  label: GitHub Marketplace (actions)
-  partner: github-actions
-  partner_name: GitHub Marketplace (actions)
-  type: marketplace
-  marketplace: github-actions
-  channel: partner-built
-  evidence: https://github.com/marketplace/actions/vercel-ai
-  source: edge
-  relationship: platform-app
+    detected: '2026-10-15'
   status: not-a-workflow
   arazzo: null
 - slug: vercel-mcp-registry
@@ -73,19 +86,66 @@
     registered_name: com.vercel/vercel-mcp
     register_id: com.vercel/vercel-mcp
     detected_by: sweep-agent-tools.py
-    detected: '2026-10-14'
+    detected: '2026-10-15'
   status: not-a-workflow
   arazzo: null
-- slug: vercel-stripe-own
-  label: Stripe (own)
-  partner: stripe
-  partner_name: Stripe (own)
-  category: developer_tools, productivity
-  type: marketplace
-  marketplace: own
-  channel: partner-built
-  evidence: https://marketplace.stripe.com/apps/vercel
+- slug: vercel-cncf-cloud-native-landscape
+  label: CNCF (Cloud Native Landscape)
+  partner: cncf
+  partner_name: CNCF (Cloud Native Landscape)
+  category: Cloud native landscape
+  type: register
+  channel: standard-directory
+  evidence: https://github.com/cncf/landscape/blob/3a7d378b1824b82e729a453bb03fa6f1e37557e1/landscape.yml
   source: edge
-  relationship: platform-app
+  relationship: standard-participant
+  contract_reference:
+    register: CNCF Cloud Native Landscape (github.com/cncf/landscape landscape.yml @3a7d378b18)
+    spec_file: null
+    standard: Cloud Native (CNCF)
+    role: landscape-listed
+    registered_name: Vercel
+    registered_names:
+    - Vercel
+    website: https://vercel.com/
+    matched_domain: vercel.com
+    matched_by: domain
+    member_tier: null
+    joined: null
+    end_user: false
+    cncf_projects: []
+    landscape_categories:
+    - Serverless / Hosted Platform
+    landscape_entries: 1
+    signal_note: 'participation only: a landscape listing is standard-participant evidence, not depth. Entries,
+      categories, tier and projects are CONTEXT, never read (breadth is not credit)'
+    detected_by: sweep-cloud-native.py
+    detected: '2026-10-15'
+  status: not-a-workflow
+  arazzo: null
+- slug: vercel-finops-foundation-focus
+  label: FinOps Foundation (FOCUS)
+  partner: finops-foundation
+  partner_name: FinOps Foundation (FOCUS)
+  category: FOCUS billing data
+  type: register
+  channel: standard-directory
+  evidence: https://focus.finops.org/docs/implementation/data-generators/vercel/
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: FOCUS data generators (focus.finops.org/data-generators)
+    spec_file: null
+    standard: FOCUS (FinOps Open Cost and Usage Specification)
+    role: focus-data-generator
+    registered_name: Vercel
+    matched_domain: vercel.com
+    matched_by: domain
+    focus_version_supported: '1.3'
+    page_domains:
+      vercel.com: 1
+    signal_note: 'participation only: the version is context, never read'
+    detected_by: sweep-cloud-native.py
+    detected: '2026-10-15'
   status: not-a-workflow
   arazzo: null
