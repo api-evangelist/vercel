@@ -172,7 +172,7 @@
     app_slug: vercel
     beta: false
     builder: unknown (not in the directory record)
-  status: pending-generation
+  status: not-a-workflow
   arazzo: null
 - slug: vercel-pipedream
   label: Pipedream
@@ -198,7 +198,7 @@
     actions: true
     sources: true
     builder: Pipedream repo (component)
-  status: pending-generation
+  status: not-a-workflow
   arazzo: null
 - slug: vercel-sanity-own
   label: Sanity (own)
