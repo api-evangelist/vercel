@@ -99,25 +99,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    CreateChatRequest:
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-          description: Natural language prompt describing the app to generate
-          example: Build a todo app with Next.js and Tailwind CSS with local storage persistence
-        system:
-          type: string
-          description: Optional system instructions to guide code generation
-        modelConfiguration:
-          type: object
-          description: Model configuration options
-          properties:
-            model:
-              type: string
-              description: AI model to use for generation
     ContinueChatRequest:
       type: object
       required:
@@ -155,16 +136,25 @@ components:
         updatedAt:
           type: string
           format: date-time
-    Error:
+    CreateChatRequest:
       type: object
+      required:
+      - message
       properties:
-        error:
+        message:
+          type: string
+          description: Natural language prompt describing the app to generate
+          example: Build a todo app with Next.js and Tailwind CSS with local storage persistence
+        system:
+          type: string
+          description: Optional system instructions to guide code generation
+        modelConfiguration:
           type: object
+          description: Model configuration options
           properties:
-            message:
+            model:
               type: string
-            code:
-              type: string
+              description: AI model to use for generation
     GeneratedFile:
       type: object
       properties:
@@ -177,13 +167,17 @@ components:
         language:
           type: string
           description: Programming language or file type
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+            code:
+              type: string
   responses:
-    RateLimitExceeded:
-      description: API rate limit exceeded
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     PaymentRequired:
       description: Premium or Team plan required
       content:
@@ -192,6 +186,12 @@ components:
             $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimitExceeded:
+      description: API rate limit exceeded
       content:
         application/json:
           schema:
