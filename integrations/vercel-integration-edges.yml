@@ -7,6 +7,7 @@ checked:
 - https://focus.finops.org/data-generators/
 - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json
 - https://github.com/PipedreamHQ/pipedream/tree/94800dd6de6640b942c65ea7ee655f71ac56d438/components/
+- https://github.com/PipedreamHQ/pipedream/tree/d5872355ef27b4efa769f05352f2820c299a456e/components/
 - https://github.com/cncf/k8s-conformance
 - https://github.com/cncf/landscape
 - https://github.com/marketplace?type=actions
@@ -69,6 +70,101 @@ edges:
   detected: '2026-10-15'
   detected_by: mirror-platform-listings.py
   category: developer_tools, productivity
+- partner_name: Sanity (own)
+  partner: sanity
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.sanity.io/technology-partners/vercel
+  mirror_of: sanity/integrations/sanity-integration-edges.yml
+  apps:
+  - Vercel
+  listing_count: 1
+  detected: '2026-10-15'
+  detected_by: mirror-platform-listings.py
+  category: Sanity technology partner
+- partner_name: Slack (own)
+  partner: slack
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://slack.com/marketplace/A024HTHQZ47-vercel
+  mirror_of: slack/integrations/slack-integration-edges.yml
+  apps:
+  - Vercel
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: Slack app
+- partner_name: MCP Registry
+  partner: mcp
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://registry.modelcontextprotocol.io/v0/servers?search=com.vercel
+  contract_reference:
+    register: registry.modelcontextprotocol.io
+    spec_file: null
+    role: mcp-server-listing
+    registered_name: com.vercel/vercel-mcp
+    register_id: com.vercel/vercel-mcp
+    detected_by: sweep-agent-tools.py
+    detected: '2026-10-19'
+  mcp_registry:
+    servers:
+    - com.vercel/vercel-mcp
+    hosted_remote: 1
+    local_package: 0
+    transports:
+      streamable-http: 1
+    auth_declared: 0
+    catalog_declared: true
+    namespace_domains:
+    - vercel.com
+  matched_by:
+  - namespace-domain
+  detected_by: sweep-agent-tools.py
+  first_seen: '2026-10-14'
+- partner_name: Airbyte
+  partner: airbyte
+  partner_match: aggregator
+  type: marketplace
+  marketplace: airbyte-registry
+  channel: elt-connector
+  relationship: ipaas-bridge
+  direction: third-party
+  evidence: https://docs.airbyte.com/integrations/sources/vercel
+  category: null
+  contract_reference:
+    register: Airbyte connector registry (connectors.airbyte.com cloud_registry.json + oss_registry.json)
+    spec_file: null
+    role: elt-connector:airbyte-community
+    registered_name: Vercel
+    matched_domain: vercel.com
+    matched_by: domain
+    detected_by: sweep-data-integration.py
+    detected: '2026-10-18'
+    signal_note: one edge per (provider, platform); connectors, streams, packages and usage are context, never read
+    connectors:
+    - airbyte/source-vercel
+    support_level:
+    - community
+    release_stage:
+    - alpha
+    in_cloud: true
+    builder: unknown (community connector; contributor not in the record)
+  detected_by: sweep-data-integration.py
+  first_seen: '2026-10-18'
 - partner_name: LiteLLM
   partner: litellm
   partner_match: router
@@ -104,51 +200,20 @@ edges:
     value: OpenAI-compatible
     note: 'vercel declares OpenAI compatibility: ''description: Chat completions (OpenAI-compatible)'''
     detected_by: sweep-model-routing.py
-    detected: '2026-10-15'
+    detected: '2026-10-19'
   detected_by: sweep-model-routing.py
   first_seen: '2026-10-13'
-- partner_name: MCP Registry
-  partner: mcp
-  partner_match: register
-  type: register
-  channel: standard-directory
-  relationship: standard-participant
-  direction: partner-built
-  evidence: https://registry.modelcontextprotocol.io/v0/servers?search=com.vercel
-  contract_reference:
-    register: registry.modelcontextprotocol.io
-    spec_file: null
-    role: mcp-server-listing
-    registered_name: com.vercel/vercel-mcp
-    register_id: com.vercel/vercel-mcp
-    detected_by: sweep-agent-tools.py
-    detected: '2026-10-15'
-  mcp_registry:
-    servers:
-    - com.vercel/vercel-mcp
-    hosted_remote: 1
-    local_package: 0
-    transports:
-      streamable-http: 1
-    auth_declared: 0
-    catalog_declared: true
-    namespace_domains:
-    - vercel.com
-  matched_by:
-  - namespace-domain
-  detected_by: sweep-agent-tools.py
-  first_seen: '2026-10-14'
 - partner_name: CNCF (Cloud Native Landscape)
   partner: cncf
   partner_match: register
   type: register
   direction: partner-built
   category: Cloud native landscape
-  evidence: https://github.com/cncf/landscape/blob/3a7d378b1824b82e729a453bb03fa6f1e37557e1/landscape.yml
+  evidence: https://github.com/cncf/landscape/blob/42dd4cd91dad8ec8558ac02467a43f0805b9957a/landscape.yml
   channel: standard-directory
   relationship: standard-participant
   contract_reference:
-    register: CNCF Cloud Native Landscape (github.com/cncf/landscape landscape.yml @3a7d378b18)
+    register: CNCF Cloud Native Landscape (github.com/cncf/landscape landscape.yml @42dd4cd91d)
     spec_file: null
     standard: Cloud Native (CNCF)
     role: landscape-listed
@@ -168,7 +233,7 @@ edges:
     signal_note: 'participation only: a landscape listing is standard-participant evidence, not depth. Entries,
       categories, tier and projects are CONTEXT, never read (breadth is not credit)'
     detected_by: sweep-cloud-native.py
-    detected: '2026-10-15'
+    detected: '2026-10-19'
   detected_by: sweep-cloud-native.py
   first_seen: '2026-10-15'
 - partner_name: FinOps Foundation (FOCUS)
@@ -193,7 +258,7 @@ edges:
       vercel.com: 1
     signal_note: 'participation only: the version is context, never read'
     detected_by: sweep-cloud-native.py
-    detected: '2026-10-15'
+    detected: '2026-10-19'
   detected_by: sweep-cloud-native.py
   first_seen: '2026-10-15'
 - partner_name: Zapier
@@ -229,7 +294,7 @@ edges:
   channel: open-source-node
   relationship: ipaas-bridge
   direction: third-party
-  evidence: https://github.com/PipedreamHQ/pipedream/tree/94800dd6de6640b942c65ea7ee655f71ac56d438/components/vercel_token_auth
+  evidence: https://github.com/PipedreamHQ/pipedream/tree/d5872355ef27b4efa769f05352f2820c299a456e/components/vercel_token_auth
   category: null
   contract_reference:
     register: Pipedream components (PipedreamHQ/pipedream components/)
@@ -247,69 +312,5 @@ edges:
     builder: Pipedream repo (component)
   detected_by: sweep-workflow-automation.py
   first_seen: '2026-10-15'
-- partner_name: Sanity (own)
-  partner: sanity
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://www.sanity.io/technology-partners/vercel
-  mirror_of: sanity/integrations/sanity-integration-edges.yml
-  apps:
-  - Vercel
-  listing_count: 1
-  detected: '2026-10-15'
-  detected_by: mirror-platform-listings.py
-  category: Sanity technology partner
-- partner_name: Airbyte
-  partner: airbyte
-  partner_match: aggregator
-  type: marketplace
-  marketplace: airbyte-registry
-  channel: elt-connector
-  relationship: ipaas-bridge
-  direction: third-party
-  evidence: https://docs.airbyte.com/integrations/sources/vercel
-  category: null
-  contract_reference:
-    register: Airbyte connector registry (connectors.airbyte.com cloud_registry.json + oss_registry.json)
-    spec_file: null
-    role: elt-connector:airbyte-community
-    registered_name: Vercel
-    matched_domain: vercel.com
-    matched_by: domain
-    detected_by: sweep-data-integration.py
-    detected: '2026-10-18'
-    signal_note: one edge per (provider, platform); connectors, streams, packages and usage are context, never read
-    connectors:
-    - airbyte/source-vercel
-    support_level:
-    - community
-    release_stage:
-    - alpha
-    in_cloud: true
-    builder: unknown (community connector; contributor not in the record)
-  detected_by: sweep-data-integration.py
-  first_seen: '2026-10-18'
-- partner_name: Slack (own)
-  partner: slack
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://slack.com/marketplace/A024HTHQZ47-vercel
-  mirror_of: slack/integrations/slack-integration-edges.yml
-  apps:
-  - Vercel
-  listing_count: 1
-  detected: '2026-10-18'
-  detected_by: mirror-platform-listings.py
-  category: Slack app
 source:
 - https://github.com/marketplace?type=actions
