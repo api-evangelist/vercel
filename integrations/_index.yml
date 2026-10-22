@@ -2002,3 +2002,45 @@
   relationship: platform-app
   status: not-a-workflow
   arazzo: null
+- slug: vercel-apis-guru-openapi-directory
+  label: APIs.guru OpenAPI Directory
+  partner: apis-guru
+  partner_name: APIs.guru OpenAPI Directory
+  category: API definition directory listing (OpenAPI)
+  type: register
+  channel: standard-directory
+  evidence: https://apis.guru/
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: APIs.guru OpenAPI Directory
+    spec_file: null
+    standard: APIs.guru OpenAPI Directory
+    role: listed-in-directory
+    directory_provider: vercel.com
+    matched_domain: vercel.com
+    matched_by: domain
+    apis_listed: 1
+    version_count: 1
+    first_added: '2023-02-20'
+    last_updated: '2023-03-06'
+    origin_publisher_hosted: false
+    origin_hosts:
+    - openapi.vercel.sh
+    categories:
+    - hosting
+    own_openapi_files: 4
+    listings:
+    - key: vercel.com
+      title: Vercel API
+      preferred: 0.0.1
+      versions: 1
+      swagger_url: https://api.apis.guru/v2/specs/vercel.com/0.0.1/openapi.json
+      origin_url: https://openapi.vercel.sh
+      openapi_version: 3.1.0
+    signal_note: 'participation only: a community directory listing (APIs.guru collects definitions; the provider
+      did not file them). Signals: version_count, apis_listed, origin_publisher_hosted.'
+    detected_by: sweep-openapi-directory-apis-guru.py
+    detected: '2026-10-22'
+  status: not-a-workflow
+  arazzo: null
